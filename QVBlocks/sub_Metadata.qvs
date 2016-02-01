@@ -1,0 +1,21 @@
+///$tab SUB Meta
+Sub Meta (vTable)
+
+let vSubEnd = now();
+let vSubTime = Interval('$(vSubStart)' - '$(vSubEnd)');
+
+Metadata:
+Load
+	'$(vSubStart)'			as Meta_Start
+,	'$(vSubEnd)'			as Meta_End
+,	'$(vSubTime)'			as Meta_Time
+,	'$(vTable)'				as Meta_Table
+,	NoOfRows('$(vTable)') 	as Meta_NoOfRows
+,	NoOfFields('$(vTable)')	as Meta_NoOfCols
+,	'ALL_META'				as ALL_META
+AutoGenerate 1;
+
+end sub;
+
+//Set vSubStart Now, in case the user forgets to set it later.
+let vSubStart = now();
