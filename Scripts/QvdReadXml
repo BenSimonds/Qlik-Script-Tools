@@ -2,11 +2,19 @@ import sys
 import os
 import xml.etree.ElementTree as ET
 
-with open('Short.qvd') as file:
+
+with open('Short.qvd') as input_data:
+    inputlines = []
+    # Reads text until the end of the block:
+    for line in input_data:  # This keeps reading the file
+        inputlines.append(line)  # Line is extracted (or block_of_lines.append(line), etc.)
+        if line.strip() == '</QvdTableHeader>':
+            break
+    
     #Need to chop off the end.
-    inputxml = ''.join([x.strip('\n').strip() for x in file.readlines() if x.strip('\n').strip()[0] == '<'])
+    inputxml = ''.join(inputlines)
     #if x.strip('    ')[1] == '<']
-    #print(inputxml)
+    print(inputxml)
 tree = ET.fromstring(inputxml)
 
 #print(tree.tag)
