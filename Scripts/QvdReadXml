@@ -21,7 +21,7 @@ tree = ET.fromstring(inputxml)
 #print(tree.tag)
 fields = tree.findall('.//FieldName')
 table = tree.find('.//TableName').text
-prefix = table
+prefix = table[0:2].upper()
 print(table)
 print([f.text for f in fields])
 
