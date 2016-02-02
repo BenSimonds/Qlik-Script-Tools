@@ -9,4 +9,6 @@ with open('Short.qvd') as file:
     #print(inputxml)
 tree = ET.fromstring(inputxml)
 
-print(tree.tag)
+#print(tree.tag)
+fields = tree.findall('.//FieldName')
+print([f.text for f in fields])
