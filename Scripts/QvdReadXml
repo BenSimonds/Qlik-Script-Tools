@@ -2,8 +2,9 @@ import sys
 import os
 import xml.etree.ElementTree as ET
 
+filename = 'Short.qvd' 
 
-with open('Short.qvd') as input_data:
+with open(filename) as input_data:
     inputlines = []
     # Reads text until the end of the block:
     for line in input_data:  # This keeps reading the file
@@ -19,4 +20,18 @@ tree = ET.fromstring(inputxml)
 
 #print(tree.tag)
 fields = tree.findall('.//FieldName')
+table = tree.find('.//TableName').text
+prefix = table
+print(table)
 print([f.text for f in fields])
+
+#Build a little load statement.
+with open('Output.qvs','w') as output:
+    output.write(table + ':\n')
+    output.write('Load\n')
+    for field in [f.text for f in fields]:
+        output.write('\t' + field + ' as ' + prefix + '_' + field + ',\n')
+    output.write("\t'ALL_" + table.upper() + "' as ALL_" + table.upper() + '\n')
+    output.write("from " + filename + ' (qvd);\n')
+    
+    
