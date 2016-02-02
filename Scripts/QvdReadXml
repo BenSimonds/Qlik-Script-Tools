@@ -1,0 +1,12 @@
+import sys
+import os
+import xml.etree.ElementTree as ET
+
+with open('Short.qvd') as file:
+    #Need to chop off the end.
+    inputxml = ''.join([x.strip('\n').strip() for x in file.readlines() if x.strip('\n').strip()[0] == '<'])
+    #if x.strip('    ')[1] == '<']
+    #print(inputxml)
+tree = ET.fromstring(inputxml)
+
+print(tree.tag)
