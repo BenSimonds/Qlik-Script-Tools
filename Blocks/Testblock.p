@@ -12,7 +12,7 @@ S'BlockType'
 p5
 sS'name'
 p6
-S'Main'
+S'Testblock'
 p7
 sS'description'
 p8
