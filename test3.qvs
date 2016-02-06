@@ -1,0 +1,44 @@
+
+///$tab SUB Meta
+Sub Meta (vTable)
+
+let vSubEnd = now();
+let vSubTime = Interval('$(vSubStart)' - '$(vSubEnd)');
+
+Metadata:
+Load
+	'$(vSubStart)'			as Meta_Start
+,	'$(vSubEnd)'			as Meta_End
+,	'$(vSubTime)'			as Meta_Time
+,	'$(vTable)'				as Meta_Table
+,	NoOfRows('$(vTable)') 	as Meta_NoOfRows
+,	NoOfFields('$(vTable)')	as Meta_NoOfCols
+,	'ALL_META'				as ALL_META
+AutoGenerate 1;
+
+end sub;
+
+//Set vSubStart Now, in case the user forgets to set it later.
+let vSubStart = now();
+
+//---SUB START----//
+let vSubStart = now();
+//---SUB START----//
+
+EmployeeHeirarchy:
+Load
+	AncestorID	as	EMAncestorID,
+	%Salesperson ID	as	EM%Salesperson ID,
+	Salesperson	as	EMSalesperson,
+	AncestorName	as	EMAncestorName,
+	Sales Person Title	as	EMSales Person Title,
+	Sales Person First Name	as	EMSales Person First Name,
+	Sales Person Last Name	as	EMSales Person Last Name,
+	Heirarchy	as	EMHeirarchy,
+ALL_EMPLOYEEHEIRARCHY	as	ALL_EMPLOYEEHEIRARCHY
+from [/Users/ben/Copy/Repositories/Qlik-Script-Tools/qvd/TestEmployees.qvd]
+;
+
+//---SUB START----//
+let vSubStart = now();
+//---SUB START----//

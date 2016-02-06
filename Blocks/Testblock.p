@@ -4,7 +4,7 @@ p0
 (dp1
 S'text'
 p2
-S"///$tab Main\nSET ThousandSep=',';\nSET DecimalSep='.';\nSET MoneyThousandSep=',';\nSET MoneyDecimalSep='.';\nSET MoneyFormat='\xc2\xa3#,##0.00;-\xc2\xa3#,##0.00';\nSET TimeFormat='hh:mm:ss';\nSET DateFormat='DD/MM/YYYY';\nSET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';\nSET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';\nSET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';\n"
+S"\n///$tab Main\nSET ThousandSep=',';\nSET DecimalSep='.';\nSET MoneyThousandSep=',';\nSET MoneyDecimalSep='.';\nSET MoneyFormat='\xc2\xa3#,##0.00;-\xc2\xa3#,##0.00';\nSET TimeFormat='hh:mm:ss';\nSET DateFormat='DD/MM/YYYY';\nSET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';\nSET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';\nSET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';\n"
 p3
 sS'type'
 p4

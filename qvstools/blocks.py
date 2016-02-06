@@ -1,5 +1,7 @@
 #Module for storing blocks.
 import pickle
+import xml.etree.ElementTree as ET
+import sys, os
 
 class Block:
 	def __init__(self,b_name,b_description,b_type,b_text):
@@ -21,7 +23,7 @@ class BlockLibrary:
 
 	def addtextblock(self,b_name,b_description,b_type,b_textfile):
 		"""Adds a block from a text file given the rest of the inputs."""
-		with open('blocks/source/'+b_textfile,'r') as b_text:
+		with open(b_textfile,'r') as b_text:
 			self.blocks[b_name] = Block(b_name,b_description,b_type,b_text.read())	
 
 		
@@ -37,7 +39,7 @@ class BlockLibrary:
 		with open('blocks/'+block+'.p','wb') as blockfile:
 			pickle.dump(self.blocks[block],blockfile)	
 
-	def writeblock(self,block,intofile,replacelist):
+	def writeblock(self,block,intofile,replacelist=[],mode='a'):
 		"""Appends a block to a file."""
 		print('Writing block {0} to file.'.format(block))
 		#Replace @1 notation in block with user specified text.
@@ -45,6 +47,62 @@ class BlockLibrary:
 		for i  in range(0,len(replacelist)):
 			blocktext = blocktext.replace('@' + str(i),replacelist[i]) #This doesnt seem to be working...
 		#Write output to file.		
-		with open(intofile,'a') as outputfile:
+		with open(intofile,mode) as outputfile:
 			outputfile.write(blocktext)
 		return
+
+	def addqvdblock(self,qvd):
+		"""Takes a qvd object and writes a simple load statement for it.
+		Load Statement example:
+
+		TableName:
+		Load
+			ID	as _KEY_ID //(optional)
+		,	A	as TA_A
+		,	B	as TA_B
+		,	C	as TA_C
+		From [Filepath.qvd] (qvd);
+		"""
+		
+		blocktext = '\n'
+		blocktext = blocktext + qvd.table + ':\nLoad\n'
+		#Optionalkeyload would go here.
+		for field in qvd.fields:
+			blocktext = blocktext + '\t' + field + '\tas\t' + qvd.tablePrefix + field + ',\n'
+		blocktext = blocktext + 'ALL_' + qvd.table.upper() + '\tas\t' + 'ALL_' + qvd.table.upper() + '\n'
+		blocktext = blocktext + 'from [' + qvd.abspath + ']\n'
+		blocktext = blocktext + ';\n'
+		self.blocks['QVD_' + qvd.table] = Block(
+			'QVD_' + qvd.table, 
+			'Generated qvd block. QVD File: ' + qvd.abspath,
+			'QVD',
+			blocktext
+			)
+
+
+class QVD:
+	"""Takes a qvd file and makes a python class with its xml header info."""
+
+	def __init__(self,qvdfile):
+		self.qvdheader = self.loadqvdfile(qvdfile)
+
+		#Turn fields and table name into some useful attributes of the class.
+		self.fields = [e.text for e in self.qvdheader.findall('.//FieldName')]
+		self.table 	= ''.join([c for c in self.qvdheader.find('.//TableName').text if not c.isspace()])
+		self.tablePrefix = self.table[0:2].upper()
+		self.filename = os.path.basename(qvdfile)
+		self.abspath = os.path.abspath(qvdfile)
+
+	def loadqvdfile(self, infile):
+		with open(infile,'r') as qvdfile:
+			xmlLines = []
+			for line in qvdfile:
+				xmlLines.append(line)
+				if line.strip() == '</QvdTableHeader>':
+					break
+		return ET.fromstring(''.join(xmlLines))
+
+
+
+		
+
