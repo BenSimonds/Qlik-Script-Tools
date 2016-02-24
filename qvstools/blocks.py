@@ -1,7 +1,7 @@
 #Module for storing blocks.
 import pickle
 import xml.etree.ElementTree as ET
-import sys, os
+import sys, os, unicodedata
 
 class Block:
 	def __init__(self,b_name,b_description,b_type,b_text):
@@ -79,7 +79,6 @@ class BlockLibrary:
 			blocktext
 			)
 
-
 class QVD:
 	"""Takes a qvd file and makes a python class with its xml header info."""
 
@@ -94,15 +93,17 @@ class QVD:
 		self.abspath = os.path.abspath(qvdfile)
 
 	def loadqvdfile(self, infile):
-		with open(infile,'r') as qvdfile:
-			xmlLines = []
-			for line in qvdfile:
-				xmlLines.append(line)
-				if line.strip() == '</QvdTableHeader>':
-					break
-		return ET.fromstring(''.join(xmlLines))
-
-
-
-		
+		with open(infile,'rb') as qvdfile:
+			endphrase =  '</QvdTableHeader>'
+			filedata = ''
+			while filedata[-len(endphrase):] != endphrase: 
+				byte = qvdfile.read(1)
+				try:
+					x = unicodedata.category(byte.decode("utf-8",'ignore'))
+				except TypeError:
+					print('Unexpected end of file...')
+					break	
+				else:
+					filedata += byte.decode("utf-8",'ignore')		
+		return ET.fromstring(filedata) 
 
