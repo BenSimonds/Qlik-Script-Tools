@@ -1,4 +1,7 @@
-from nose.tools import *
+try:
+	from nose.tools import *
+except ImportError:
+	pass
 from qvstools.blocks import Block, BlockLibrary, QVD
 
 def setup():
@@ -53,7 +56,8 @@ def test_QVD():
 def test_QVD_write():
 	print('Testing QVD load script writing.')
 	#Load a qvd.
-	testqvd = QVD('qvd/TestEmployees.qvd')
+	tablename = 'Blah'
+	testqvd = QVD('qvd/TestEmployees.qvd',tablename=tablename,prefix='XX')
 	#create a block library:
 	myblocklib = BlockLibrary('Test')
 	#Generate a block from my qvd.
@@ -64,9 +68,8 @@ def test_QVD_write():
 
 	myblocklib.writeblock('DEF_META','test3.qvs',[],'w')
 	myblocklib.writeblock('INIT_META','test3.qvs',[])
-	myblocklib.writeblock('QVD_EmployeeHeirarchy','test3.qvs',[])
-	myblocklib.writeblock('INIT_META','test3.qvs',['EmployeeHeirarchy'])
-
+	myblocklib.writeblock('QVD_' + tablename,'test3.qvs',[])
+	myblocklib.writeblock('INIT_META','test3.qvs',[tablename])
 
 
 # print(myblocks.blocks.keys())
