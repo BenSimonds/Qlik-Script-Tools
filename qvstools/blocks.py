@@ -68,9 +68,9 @@ class BlockLibrary:
 		blocktext = blocktext + qvd.table + ':\nLoad\n'
 		#Optionalkeyload would go here.
 		for field in qvd.fields:
-			blocktext = blocktext + '\t' + field + '\tas\t' + qvd.tablePrefix + field + ',\n'
-		blocktext = blocktext + 'ALL_' + qvd.table.upper() + '\tas\t' + 'ALL_' + qvd.table.upper() + '\n'
-		blocktext = blocktext + 'from [' + qvd.abspath + ']\n'
+			blocktext = blocktext + '\t[' + field + ']\tas\t[' + qvd.tablePrefix + field + '],\n'
+		blocktext = blocktext + '\t' + "'ALL_" + qvd.table.upper() + "'\tas\t" + 'ALL_' + qvd.table.upper() + '\n'
+		blocktext = blocktext + 'from [' + qvd.abspath + '] (qvd)\n'
 		blocktext = blocktext + ';\n'
 		self.blocks['QVD_' + qvd.table] = Block(
 			'QVD_' + qvd.table, 
@@ -82,15 +82,24 @@ class BlockLibrary:
 class QVD:
 	"""Takes a qvd file and makes a python class with its xml header info."""
 
-	def __init__(self,qvdfile):
+	def __init__(self,qvdfile,tablename=False,prefix=False):
 		self.qvdheader = self.loadqvdfile(qvdfile)
+		
+		def setprops(qvdfile,tablename,prefix):
+			#Turn fields and table name into some useful attributes of the class.
+			self.fields = [e.text for e in self.qvdheader.findall('.//FieldName')]
+			if tablename:
+				self.table = tablename
+			else:
+				self.table 	= ''.join([c for c in self.qvdheader.find('.//TableName').text if not c.isspace()])
+			if prefix:
+				self.tablePrefix = prefix + '_'
+			else:
+				self.tablePrefix = self.table[0:2].upper() + '_'
+			self.filename = os.path.basename(qvdfile)
+			self.abspath = os.path.abspath(qvdfile)
 
-		#Turn fields and table name into some useful attributes of the class.
-		self.fields = [e.text for e in self.qvdheader.findall('.//FieldName')]
-		self.table 	= ''.join([c for c in self.qvdheader.find('.//TableName').text if not c.isspace()])
-		self.tablePrefix = self.table[0:2].upper()
-		self.filename = os.path.basename(qvdfile)
-		self.abspath = os.path.abspath(qvdfile)
+		setprops(qvdfile,tablename,prefix)
 
 	def loadqvdfile(self, infile):
 		with open(infile,'rb') as qvdfile:
