@@ -11,34 +11,34 @@ class TestBlock(unittest.TestCase):
 	def test_Block(self):
 		print("Testing Block Class")
 		goodblock = Block('good block','good description','good type','good text')
-		assert_equal(goodblock.name, 'good block')
-		assert_equal(goodblock.description,'good description')
-		assert_equal(goodblock.type, 'good type')
-		assert_equal(goodblock.text, 'good text')
+		self.assertEqual(goodblock.name, 'good block')
+		self.assertEqual(goodblock.description,'good description')
+		self.assertEqual(goodblock.type, 'good type')
+		self.assertEqual(goodblock.text, 'good text')
 
 	def test_BlockLibrary(self):
 		print('Testing Block Library Class')
 		#Create a block lib.
 		myblocklib = BlockLibrary('Test')
-		assert_equal(myblocklib.name,'Test')
+		self.assertEqual(myblocklib.name,'Test')
 		#Add a block from a text file.
 		myblocklib.addtextblock('Testblock','Test of Main block','BlockType','blocks/source/tab_Main.qvs')
-		assert_equal(myblocklib.blocks['Testblock'].name,'Testblock')
-		assert_equal(myblocklib.blocks['Testblock'].description, 'Test of Main block')
-		assert_equal(myblocklib.blocks['Testblock'].type, 'BlockType')
-		assert_equal(myblocklib.blocks['Testblock'].text, open('blocks/source/tab_Main.qvs','r').read())
-		assert_equal(set(myblocklib.blocks['Testblock'].replacelist), set(['@0','@1','@2']))
+		self.assertEqual(myblocklib.blocks['Testblock'].name,'Testblock')
+		self.assertEqual(myblocklib.blocks['Testblock'].description, 'Test of Main block')
+		self.assertEqual(myblocklib.blocks['Testblock'].type, 'BlockType')
+		self.assertEqual(myblocklib.blocks['Testblock'].text, open('blocks/source/tab_Main.qvs','r').read())
+		self.assertEqual(set(myblocklib.blocks['Testblock'].replacelist), set([('@0','Test Replace definition 0'),('@1','Test Replace definition 1'),('@2','Test Replace definition 2')]))
 		#Pickle that block.
 		myblocklib.pickleblock('Testblock')
 		#Remove it from the library.
 		myblocklib.removeblock('Testblock')
-		assert_equal(len(myblocklib.blocks.keys()),0)
+		self.assertEqual(len(myblocklib.blocks.keys()),0)
 		#Unpickle that block.
-		myblocklib.addpickledblock('Testblock')
+		myblocklib.addpickledblock('blocks/Testblock.p')
 		#Test that block still has the same contents.
-		assert_equal(myblocklib.blocks['Testblock'].text,open('blocks/source/tab_Main.qvs','r').read())
+		self.assertEqual(myblocklib.blocks['Testblock'].text,open('blocks/source/tab_Main.qvs','r').read())
 		#Test write a block
-		myblocklib.writeblock('Testblock','test.qvs',[])
+		myblocklib.writeblock('Testblock','test.qvs',['foo','bar','bad'])
 		#Test string replacement.
 		myblocklib.addtextblock('TestReplaceBlock','TestReplaceBlock','ReplaceType','blocks/source/block_CallMeta.qvs')
 		myblocklib.writeblock('TestReplaceBlock','test2.qvs',['TestTableName'])
@@ -65,7 +65,7 @@ class TestBlock(unittest.TestCase):
 		myblocklib.writeblock('DEF_META','test3.qvs',[],'w')
 		myblocklib.writeblock('INIT_META','test3.qvs',[])
 		myblocklib.writeblock('QVD_' + tablename,'test3.qvs',[])
-		myblocklib.writeblock('INIT_META','test3.qvs',[tablename])
+		myblocklib.writeblock('CALL_META','test3.qvs',[tablename])
 
 if __name__ == '__main__':
-	unittest.main()
+        unittest.main()
