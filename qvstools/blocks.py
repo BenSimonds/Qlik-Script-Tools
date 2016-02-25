@@ -1,137 +1,71 @@
-#Module for storing blocks.
-import pickle
-import xml.etree.ElementTree as ET
-import sys, os, unicodedata, re
+import unittest
+from qvstools.blocks import Block, BlockLibrary, QVD
 
-class Block:
-	def __init__(self,b_name,b_description,b_type,b_text,b_replacelist=[]):
-		self.name = b_name
-		self.description = b_description
-		self.type = b_type
-		self.text = b_text
-		self.replacelist = b_replacelist
+class TestBlock(unittest.TestCase):
+	def setUp(self):
+		print ("SETUP!")
 
-		
-class BlockLibrary:
-	"""This adds an easy way to bundle together the qvblocks scripts in a single file."""
+	def tearDowm(self):
+		print ("TEAR DOWN!")
 
-	def __init__(self,name,load_defaults=False):
-		self.name = name
-		if load_defaults:
-			for pfile in ['Blocks' + f for f in os.listdir('Blocks') if f.startswith(Default_)]:
-				addpickledblock(pfile)
-		else:
-			self.blocks = {}
+	def test_Block(self):
+		print("Testing Block Class")
+		goodblock = Block('good block','good description','good type','good text')
+		self.assertEqual(goodblock.name, 'good block')
+		self.assertEqual(goodblock.description,'good description')
+		self.assertEqual(goodblock.type, 'good type')
+		self.assertEqual(goodblock.text, 'good text')
 
-	def addpickledblock(self,blockfile):
-		self.blocks[block] = pickle.load(open(blockfile,'rb'))
-
-	def addtextblock(self,b_name,b_description,b_type,b_textfile):
-		"""Adds a block from a text file given the rest of the inputs."""
-		with open(b_textfile,'r') as textfile:
-			b_text = textfile.read()
-			b_replacelist = re.findall(r"//\((@[\d]),\s?\'([\w\s,.?!()$]*)\'\)",b_text) #Returns a list of tuples. 
-			#self.replacelist = list(set(re.findall(r'@[\d]',self.text))) #List of items to be replaced. 
-			
-			self.blocks[b_name] = Block(b_name,b_description,b_type,b_text,b_replacelist)	
-
-		
-		# for bf in [f for f in os.listdir('Blocks')]:
-		# 	block = pickle.load(open('Blocks/'+bf,'rb'))
-		# 	self.blocks[block.name] = block
-		# ###
-	
-	def removeblock(self,block):
-		del self.blocks[block]
-
-	def pickleblock(self,block):
-		with open('Blocks/'+block+'.p','wb') as blockfile:
-			pickle.dump(self.blocks[block],blockfile)
-
-	def writeblock(self,blockname,intofile,replacelist=[],mode='a'):
-		"""Appends a block to a file."""
-		block = self.blocks[blockname]
-		#Check that replacelist length is correct for block.
-		if len(replacelist) != len(block.replacelist):
-			raise NameError('Replacelist requires {0} items but supplied {1}.'.format(len(block.replacelist),len(replacelist)))
-			return
-		print('Writing block {0} to file.'.format(blockname))
-		#Replace @1 notation in block with user specified text.
-		blocktext = block.text
-		for i  in range(0,len(replacelist)):
-			blocktext = blocktext.replace('@' + str(i),replacelist[i]) #This doesnt seem to be working...
-		#Write output to file.		
-		with open(intofile,mode) as outputfile:
-			outputfile.write(blocktext)
-		return
-
-	def addqvdblock(self,qvd):
-		"""Takes a qvd object and writes a simple load statement for it.
-		Load Statement example:
-
-		TableName:
-		Load
-			ID	as _KEY_ID //(optional)
-		,	A	as TA_A
-		,	B	as TA_B
-		,	C	as TA_C
-		From [Filepath.qvd] (qvd);
-		"""
-		
-		blocktext = '\n'
-		blocktext = blocktext + qvd.table + ':\nLoad\n'
-		#Optionalkeyload would go here.
-		for field in qvd.fields:
-			blocktext = blocktext + '\t[' + field + ']\tas\t[' + qvd.tablePrefix + field + '],\n'
-		blocktext = blocktext + '\t' + "'ALL_" + qvd.table.upper() + "'\tas\t" + 'ALL_' + qvd.table.upper() + '\n'
-		blocktext = blocktext + 'from [' + qvd.abspath + '] (qvd)\n'
-		blocktext = blocktext + ';\n'
-		self.blocks['QVD_' + qvd.table] = Block(
-			'QVD_' + qvd.table, 
-			'Generated qvd block. QVD File: ' + qvd.abspath,
-			'QVD',
-			blocktext
-			)
-
-class QVD:
-	"""Takes a qvd file and makes a python class with its xml header info."""
-
-	def __init__(self,qvdfile,tablename=False,prefix=False):
-		self.qvdheader = self.loadqvdfile(qvdfile)
-		
-		def setprops(qvdfile,tablename,prefix):
-			#Turn fields and table name into some useful attributes of the class.
-			##First do attributes that will be used in the script, here we can transform them to be more useful.
-			self.fields = [e.text for e in self.qvdheader.findall('.//FieldName')]
-			if tablename:
-				self.table = tablename
-			else:
-				self.table 	= ''.join([c for c in self.qvdheader.find('.//TableName').text if not c.isspace()])
-			if prefix:
-				self.tablePrefix = prefix + '_'
-			else:
-				self.tablePrefix = self.table[0:2].upper() + '_'
-			self.filename = os.path.basename(qvdfile)
-			self.abspath = os.path.abspath(qvdfile)
-			##Second covert some of the xml items into attributes directly. These are more for information purposes. Here we preserve Names from the
-			self.CreatorDoc = self.qvdheader.find('.//CreatorDoc').text
-			self.CreateUtcTime = self.qvdheader.find('.//CreateUtcTime').text
-
-		setprops(qvdfile,tablename,prefix)
-
-	def loadqvdfile(self, infile):
-		with open(infile,'rb') as qvdfile:
-			endphrase =  '</QvdTableHeader>'
-			filedata = ''
-			while filedata[-len(endphrase):] != endphrase: 
-				byte = qvdfile.read(1)
-				try:
-					x = unicodedata.category(byte.decode("utf-8",'ignore'))
-				except TypeError:
-					print('Unexpected end of file...')
-					break	
-				else:
-					filedata += byte.decode("utf-8",'ignore')		
-		return ET.fromstring(filedata)
+	def test_BlockLibrary(self):
+		print('Testing Block Library Class')
+		#Create a block lib.
+		myblocklib = BlockLibrary('Test')
+		self.assertEqual(myblocklib.name,'Test')
+		#Add a block from a text file.
+		myblocklib.addtextblock('Testblock','Test of Main block','BlockType','blocks/source/tab_Main.qvs')
+		self.assertEqual(myblocklib.blocks['Testblock'].name,'Testblock')
+		self.assertEqual(myblocklib.blocks['Testblock'].description, 'Test of Main block')
+		self.assertEqual(myblocklib.blocks['Testblock'].type, 'BlockType')
+		self.assertEqual(myblocklib.blocks['Testblock'].text, open('blocks/source/tab_Main.qvs','r').read())
+		self.assertEqual(set(myblocklib.blocks['Testblock'].replacelist), set([('@0','Test Replace definition 0'),('@1','Test Replace definition 1'),('@2','Test Replace definition 2')]))
+		#Pickle that block.
+		myblocklib.pickleblock('Testblock')
+		#Remove it from the library.
+		myblocklib.removeblock('Testblock')
+		self.assertEqual(len(myblocklib.blocks.keys()),0)
+		#Unpickle that block.
+		myblocklib.addpickledblock('blocks/Testblock.p')
+		#Test that block still has the same contents.
+		self.assertEqual(myblocklib.blocks['Testblock'].text,open('blocks/source/tab_Main.qvs','r').read())
+		#Test write a block
+		myblocklib.writeblock('Testblock','test.qvs',['foo','bar','bad'])
+		#Test string replacement.
+		myblocklib.addtextblock('TestReplaceBlock','TestReplaceBlock','ReplaceType','blocks/source/block_CallMeta.qvs')
+		myblocklib.writeblock('TestReplaceBlock','test2.qvs',['TestTableName'])
 
 
+	def test_QVD(self):
+		print('Testing QVD Class')
+		#Load a qvd.
+		testqvd = QVD('qvd/TestEmployees.qvd')
+
+	def test_QVD_write(self):
+		print('Testing QVD load script writing.')
+		#Load a qvd.
+		tablename = 'Blah'
+		testqvd = QVD('qvd/TestEmployees.qvd',tablename=tablename,prefix='XX')
+		#create a block library:
+		myblocklib = BlockLibrary('Test')
+		#Generate a block from my qvd.
+		myblocklib.addqvdblock(testqvd)
+		myblocklib.addtextblock('DEF_META','Meta SUB Definition','SUB','blocks/source/sub_Metadata.qvs')
+		myblocklib.addtextblock('CALL_META','Call meta block','BLOCK','blocks/source/block_CallMeta.qvs')
+		myblocklib.addtextblock('INIT_META','Initialise meta block','BLOCK','blocks/source/block_InitMeta.qvs')
+
+		myblocklib.writeblock('DEF_META','test3.qvs',[],'w')
+		myblocklib.writeblock('INIT_META','test3.qvs',[])
+		myblocklib.writeblock('QVD_' + tablename,'test3.qvs',[])
+		myblocklib.writeblock('CALL_META','test3.qvs',[tablename])
+
+if __name__ == '__main__':
+        unittest.main()
