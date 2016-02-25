@@ -1,30 +1,39 @@
 #Module for storing blocks.
 import pickle
 import xml.etree.ElementTree as ET
-import sys, os, unicodedata
+import sys, os, unicodedata, re
 
 class Block:
-	def __init__(self,b_name,b_description,b_type,b_text):
+	def __init__(self,b_name,b_description,b_type,b_text,b_replacelist=[]):
 		self.name = b_name
 		self.description = b_description
 		self.type = b_type
 		self.text = b_text
+		self.replacelist = b_replacelist
 
-
+		
 class BlockLibrary:
 	"""This adds an easy way to bundle together the qvblocks scripts in a single file."""
 
-	def __init__(self,name):
+	def __init__(self,name,load_defaults=False):
 		self.name = name
-		self.blocks = {}
+		if load_defaults:
+			for pfile in ['Blocks' + f for f in os.listdir('Blocks') if f.startswith(Default_)]:
+				addpickledblock(pfile)
+		else:
+			self.blocks = {}
 
-	def addpickledblock(self,block):
-		self.blocks[block] = pickle.load(open('blocks/' + block + '.p'))
+	def addpickledblock(self,blockfile):
+		self.blocks[block] = pickle.load(open(blockfile,'rb'))
 
 	def addtextblock(self,b_name,b_description,b_type,b_textfile):
 		"""Adds a block from a text file given the rest of the inputs."""
-		with open(b_textfile,'r') as b_text:
-			self.blocks[b_name] = Block(b_name,b_description,b_type,b_text.read())	
+		with open(b_textfile,'r') as textfile:
+			b_text = textfile.read()
+			b_replacelist = re.findall(r"//\((@[\d]),\s?\'([\w\s,.?!()$]*)\'\)",b_text) #Returns a list of tuples. 
+			#self.replacelist = list(set(re.findall(r'@[\d]',self.text))) #List of items to be replaced. 
+			
+			self.blocks[b_name] = Block(b_name,b_description,b_type,b_text,b_replacelist)	
 
 		
 		# for bf in [f for f in os.listdir('Blocks')]:
@@ -36,14 +45,19 @@ class BlockLibrary:
 		del self.blocks[block]
 
 	def pickleblock(self,block):
-		with open('blocks/'+block+'.p','wb') as blockfile:
-			pickle.dump(self.blocks[block],blockfile)	
+		with open('Blocks/'+block+'.p','wb') as blockfile:
+			pickle.dump(self.blocks[block],blockfile)
 
-	def writeblock(self,block,intofile,replacelist=[],mode='a'):
+	def writeblock(self,blockname,intofile,replacelist=[],mode='a'):
 		"""Appends a block to a file."""
-		print('Writing block {0} to file.'.format(block))
+		block = self.blocks[blockname]
+		#Check that replacelist length is correct for block.
+		if len(replacelist) != len(block.replacelist):
+			raise NameError('Replacelist requires {0} items but supplied {1}.'.format(len(block.replacelist),len(replacelist)))
+			return
+		print('Writing block {0} to file.'.format(blockname))
 		#Replace @1 notation in block with user specified text.
-		blocktext = self.blocks[block].text
+		blocktext = block.text
 		for i  in range(0,len(replacelist)):
 			blocktext = blocktext.replace('@' + str(i),replacelist[i]) #This doesnt seem to be working...
 		#Write output to file.		
@@ -87,6 +101,7 @@ class QVD:
 		
 		def setprops(qvdfile,tablename,prefix):
 			#Turn fields and table name into some useful attributes of the class.
+			##First do attributes that will be used in the script, here we can transform them to be more useful.
 			self.fields = [e.text for e in self.qvdheader.findall('.//FieldName')]
 			if tablename:
 				self.table = tablename
@@ -98,6 +113,9 @@ class QVD:
 				self.tablePrefix = self.table[0:2].upper() + '_'
 			self.filename = os.path.basename(qvdfile)
 			self.abspath = os.path.abspath(qvdfile)
+			##Second covert some of the xml items into attributes directly. These are more for information purposes. Here we preserve Names from the
+			self.CreatorDoc = self.qvdheader.find('.//CreatorDoc').text
+			self.CreateUtcTime = self.qvdheader.find('.//CreateUtcTime').text
 
 		setprops(qvdfile,tablename,prefix)
 
@@ -114,5 +132,6 @@ class QVD:
 					break	
 				else:
 					filedata += byte.decode("utf-8",'ignore')		
-		return ET.fromstring(filedata) 
+		return ET.fromstring(filedata)
+
 
