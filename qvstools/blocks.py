@@ -3,6 +3,17 @@ import pickle
 import xml.etree.ElementTree as ET
 import sys, os, unicodedata, re
 
+### Methods
+
+def write_tab(name,intofile,mode='a'):
+	"Adds a tab line to the file."
+	"Standard function that doesnt need to be part of blocklibrary."
+	with open(intofile,mode) as outputfile:
+		outputfile.write('///$tab ' + name + '\n')
+	return
+
+### Classes
+
 class Block:
 	def __init__(self,b_name,b_description,b_type,b_text,b_replacelist=[]):
 		self.name = b_name
@@ -11,6 +22,21 @@ class Block:
 		self.text = b_text
 		self.replacelist = b_replacelist
 
+	def write(self,intofile,replacelist=[],mode='a'):
+		"""Appends a block to a file."""
+		#Check that replacelist length is correct for block.
+		if len(replacelist) != len(self.replacelist):
+			raise NameError('Replacelist requires {0} items but supplied {1}.'.format(len(self.replacelist),len(replacelist)))
+			return
+		print('Writing block {0} to file.'.format(self.name))
+		#Replace @1 notation in block with user specified text.
+		blocktext = self.text
+		for i  in range(0,len(replacelist)):
+			blocktext = blocktext.replace('@' + str(i),replacelist[i]) #This doesnt seem to be working...
+		#Write output to file.		
+		with open(intofile,mode) as outputfile:
+			outputfile.write(blocktext)
+		return	
 		
 class BlockLibrary:
 	"""This adds an easy way to bundle together the qvblocks scripts in a single file."""
@@ -22,50 +48,36 @@ class BlockLibrary:
 				addpickledblock(pfile)
 		else:
 			self.blocks = {}
+		# Block groups is a  dict of groups of blocks. 
+		# Each group is a list that should be written in order.
+		# Each item in the list is a tuple (block,replacelist). block just points to a key in self.blocks. It isnt a block itself.
+		self.blockgroups = {}
 
-	def addpickledblock(self,blockfile):
-		self.blocks[block] = pickle.load(open(blockfile,'rb'))
+	def add_pickled_block(self,blockfile, rename = False):
+		with open(blockfile,'rb') as pickled:
+			block = pickle.load(pickled)
+		if rename:
+			block.name = rename
+		self.blocks[block.name] = block
 
-	def addtextblock(self,b_name,b_description,b_type,b_textfile):
+	def add_text_block(self,b_name,b_description,b_type,b_textfile):
 		"""Adds a block from a text file given the rest of the inputs."""
 		with open(b_textfile,'r') as textfile:
 			b_text = textfile.read()
 			b_replacelist = re.findall(r"//\((@[\d]),\s?\'([\w\s,.?!()$]*)\'\)",b_text) #Returns a list of tuples. 
-			#self.replacelist = list(set(re.findall(r'@[\d]',self.text))) #List of items to be replaced. 
+			#Scrub replacelist lines from text file.
+			b_text = '\n'.join([line for line in b_text.split('\n') if not re.search(r"//\(@[\d]",line) ])
 			
 			self.blocks[b_name] = Block(b_name,b_description,b_type,b_text,b_replacelist)	
 
-		
-		# for bf in [f for f in os.listdir('Blocks')]:
-		# 	block = pickle.load(open('Blocks/'+bf,'rb'))
-		# 	self.blocks[block.name] = block
-		# ###
-	
-	def removeblock(self,block):
+	def remove_block(self,block):
 		del self.blocks[block]
 
-	def pickleblock(self,block):
+	def pickle_block(self,block):
 		with open('Blocks/'+block+'.p','wb') as blockfile:
 			pickle.dump(self.blocks[block],blockfile)
 
-	def writeblock(self,blockname,intofile,replacelist=[],mode='a'):
-		"""Appends a block to a file."""
-		block = self.blocks[blockname]
-		#Check that replacelist length is correct for block.
-		if len(replacelist) != len(block.replacelist):
-			raise NameError('Replacelist requires {0} items but supplied {1}.'.format(len(block.replacelist),len(replacelist)))
-			return
-		print('Writing block {0} to file.'.format(blockname))
-		#Replace @1 notation in block with user specified text.
-		blocktext = block.text
-		for i  in range(0,len(replacelist)):
-			blocktext = blocktext.replace('@' + str(i),replacelist[i]) #This doesnt seem to be working...
-		#Write output to file.		
-		with open(intofile,mode) as outputfile:
-			outputfile.write(blocktext)
-		return
-
-	def addqvdblock(self,qvd):
+	def add_qvd_block(self,qvd,name=''):
 		"""Takes a qvd object and writes a simple load statement for it.
 		Load Statement example:
 		TableName:
@@ -75,8 +87,11 @@ class BlockLibrary:
 		,	B	as TA_B
 		,	C	as TA_C
 		From [Filepath.qvd] (qvd);
-		"""
-		
+		"""		
+		if name:
+			qvdname = name
+		else:
+			qvdname = 'QVD_' + os.basname(qvd)[0:-4]
 		blocktext = '\n'
 		blocktext = blocktext + qvd.table + ':\nLoad\n'
 		#Optionalkeyload would go here.
@@ -85,12 +100,22 @@ class BlockLibrary:
 		blocktext = blocktext + '\t' + "'ALL_" + qvd.table.upper() + "'\tas\t" + 'ALL_' + qvd.table.upper() + '\n'
 		blocktext = blocktext + 'from [' + qvd.abspath + '] (qvd)\n'
 		blocktext = blocktext + ';\n'
-		self.blocks['QVD_' + qvd.table] = Block(
+		self.blocks[qvdname] = Block(
 			'QVD_' + qvd.table, 
 			'Generated qvd block. QVD File: ' + qvd.abspath,
 			'QVD',
 			blocktext
 			)
+
+	def add_directory_QVDs(self,directory):
+		files = [f for f in os.listdir(directory) if f.basename[-4:] == '.qvd']
+		for f in files:
+			addqvdblock(f)
+
+	def add_directory_blocks(self,directory):		
+		files = [f for f in os.listdir(directory) if f.basename[-2:] == '.p']
+		for f in files:
+			add_pickled_block(f)
 
 class QVD:
 	"""Takes a qvd file and makes a python class with its xml header info."""

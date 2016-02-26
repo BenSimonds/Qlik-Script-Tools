@@ -1,2 +1,2 @@
-from tests.qvtools_tests import *
+from tests.test_qvstools import *
 unittest.main()

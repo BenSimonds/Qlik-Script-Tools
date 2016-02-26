@@ -1,2 +1,3 @@
 *.qvw
 .DS_Store
+testoutput_*

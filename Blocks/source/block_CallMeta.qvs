@@ -1,4 +1,5 @@
 
-//---SUB END----//
+//(@0,'Name of table replace call meta sub on, can be a variable.')
+/---SUB END----//
 Call Meta ('@0')
 //---SUB END----//
