@@ -34,7 +34,6 @@ class TestBlock(unittest.TestCase):
 		myblocklib.removeblock('Testblock')
 		self.assertEqual(len(myblocklib.blocks.keys()),0)
 		#Unpickle that block.
-		myblocklib.addpickledblock('blocks/Testblock.p')
 		#Test that block still has the same contents.
 		self.assertEqual(myblocklib.blocks['Testblock'].text,open('blocks/source/tab_Main.qvs','r').read())
 		#Test write a block
@@ -65,7 +64,7 @@ class TestBlock(unittest.TestCase):
 		myblocklib.writeblock('DEF_META','test3.qvs',[],'w')
 		myblocklib.writeblock('INIT_META','test3.qvs',[])
 		myblocklib.writeblock('QVD_' + tablename,'test3.qvs',[])
-		myblocklib.writeblock('CALL_META','test3.qvs',[tablename])
+		myblocklib.writeblock('CALL_META','test3.qvs',[],)
 
 if __name__ == '__main__':
         unittest.main()

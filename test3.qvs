@@ -25,20 +25,20 @@ let vSubStart = now();
 let vSubStart = now();
 //---SUB START----//
 
-EmployeeHeirarchy:
+Blah:
 Load
-	AncestorID	as	EMAncestorID,
-	%Salesperson ID	as	EM%Salesperson ID,
-	Salesperson	as	EMSalesperson,
-	AncestorName	as	EMAncestorName,
-	Sales Person Title	as	EMSales Person Title,
-	Sales Person First Name	as	EMSales Person First Name,
-	Sales Person Last Name	as	EMSales Person Last Name,
-	Heirarchy	as	EMHeirarchy,
-ALL_EMPLOYEEHEIRARCHY	as	ALL_EMPLOYEEHEIRARCHY
-from [/Users/ben/Copy/Repositories/Qlik-Script-Tools/qvd/TestEmployees.qvd]
+	[AncestorID]	as	[XX_AncestorID],
+	[%Salesperson ID]	as	[XX_%Salesperson ID],
+	[Salesperson]	as	[XX_Salesperson],
+	[AncestorName]	as	[XX_AncestorName],
+	[Sales Person Title]	as	[XX_Sales Person Title],
+	[Sales Person First Name]	as	[XX_Sales Person First Name],
+	[Sales Person Last Name]	as	[XX_Sales Person Last Name],
+	[Heirarchy]	as	[XX_Heirarchy],
+	'ALL_BLAH'	as	ALL_BLAH
+from [/Users/ben/Copy/Repositories/Qlik-Script-Tools/qvd/TestEmployees.qvd] (qvd)
 ;
 
-//---SUB START----//
-let vSubStart = now();
-//---SUB START----//
+//---SUB END----//
+Call Meta ('@0')
+//---SUB END----//
