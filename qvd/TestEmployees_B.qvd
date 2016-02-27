@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+ <QvdTableHeader>
+   <QvBuildNo>12664</QvBuildNo>
+   <CreatorDoc>C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Apps\Certification6.qvw</CreatorDoc>
+   <CreateUtcTime>2015-05-22 12:04:42</CreateUtcTime>
+   <SourceCreateUtcTime></SourceCreateUtcTime>
+   <SourceFileUtcTime></SourceFileUtcTime>
+   <SourceFileSize>-1</SourceFileSize>
+   <StaleUtcTime></StaleUtcTime>
+   <TableName>Employee Heirarchy</TableName>
+   <Fields>
+     <QvdFieldHeader>
+       <FieldName>AncestorID</FieldName>
+       <BitOffset>0</BitOffset>
+       <BitWidth>5</BitWidth>
+       <Bias>0</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>19</NoOfSymbols>
+       <Offset>0</Offset>
+       <Length>99</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$numeric</String>
+         <String>$integer</String>
+       </Tags>
+     </QvdFieldHeader>
+     <QvdFieldHeader>
+       <FieldName>%Salesperson ID</FieldName>
+       <BitOffset>5</BitOffset>
+       <BitWidth>5</BitWidth>
+       <Bias>0</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>19</NoOfSymbols>
+       <Offset>99</Offset>
+       <Length>99</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$key</String>
+         <String>$numeric</String>
+         <String>$integer</String>
+       </Tags>
+     </QvdFieldHeader>
+     <QvdFieldHeader>
+       <FieldName>Salesperson</FieldName>
+       <BitOffset>10</BitOffset>
+       <BitWidth>6</BitWidth>
+       <Bias>0</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>19</NoOfSymbols>
+       <Offset>198</Offset>
+       <Length>303</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$text</String>
+       </Tags>
+     </QvdFieldHeader>
+     <QvdFieldHeader>
+       <FieldName>AncestorName</FieldName>
+       <BitOffset>16</BitOffset>
+       <BitWidth>5</BitWidth>
+       <Bias>0</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>19</NoOfSymbols>
+       <Offset>501</Offset>
+       <Length>303</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$text</String>
+       </Tags>
+     </QvdFieldHeader>
+     <QvdFieldHeader>
+       <FieldName>Sales Person Title</FieldName>
+       <BitOffset>37</BitOffset>
+       <BitWidth>3</BitWidth>
+       <Bias>-2</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>5</NoOfSymbols>
+       <Offset>804</Offset>
+       <Length>124</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$ascii</String>
+         <String>$text</String>
+       </Tags>
+     </QvdFieldHeader>
+     <QvdFieldHeader>
+       <FieldName>Sales Person First Name</FieldName>
+       <BitOffset>21</BitOffset>
+       <BitWidth>5</BitWidth>
+       <Bias>-2</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>18</NoOfSymbols>
+       <Offset>928</Offset>
+       <Length>127</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$text</String>
+       </Tags>
+     </QvdFieldHeader>
+     <QvdFieldHeader>
+       <FieldName>Sales Person Last Name</FieldName>
+       <BitOffset>26</BitOffset>
+       <BitWidth>6</BitWidth>
+       <Bias>-2</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>18</NoOfSymbols>
+       <Offset>1055</Offset>
+       <Length>167</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$ascii</String>
+         <String>$text</String>
+       </Tags>
+     </QvdFieldHeader>
+     <QvdFieldHeader>
+       <FieldName>Heirarchy</FieldName>
+       <BitOffset>32</BitOffset>
+       <BitWidth>5</BitWidth>
+       <Bias>0</Bias>
+       <NumberFormat>
+         <Type>UNKNOWN</Type>
+         <nDec>0</nDec>
+         <UseThou>0</UseThou>
+         <Fmt></Fmt>
+         <Dec></Dec>
+         <Thou></Thou>
+       </NumberFormat>
+       <NoOfSymbols>19</NoOfSymbols>
+       <Offset>1222</Offset>
+       <Length>852</Length>
+       <Comment></Comment>
+       <Tags>
+         <String>$text</String>
+       </Tags>
+     </QvdFieldHeader>
+   </Fields>
+   <Compression></Compression>
+   <RecordByteSize>5</RecordByteSize>
+   <NoOfRecords>230</NoOfRecords>
+   <Offset>2074</Offset>
+   <Length>1150</Length>
+   <Lineage>
+     <LineageInfo>
+       <Discriminator>AUTOGENERATE</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>INLINE</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Customers:
+LOAD
+	CustomerID		as [%Customer ID],
+	PersonID		as [%Person ID],
+	If(StoreID, StoreID, -1)			as [%Store ID],
+	TerritoryID		as [%Territory ID],  
+	AccountNumber	as [Customer Account No.]
+Where Exists([%Customer ID],CustomerID);SQL SELECT *
+FROM Customer</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Left Join (Customers)
+LOAD 
+	BusinessEntityID 	as [%Person ID],
+	EmailPromotion		as [Email Promotion],
+	Title &amp; ' ' &amp; FirstName &amp; ' ' &amp; LastName &amp; ' ' &amp; Suffix as [Customer Full Name],
+	FirstName 			as [Customer First Name],
+	LastName			as [Customer Last Name],
+	MiddleName			as [Customer Middle Name],
+	NameStyle			as [Customer Name Style],
+	ApplyMap('Map_Cust_Type', PersonType, 'unknown')			as [Customer Person Type],
+	Suffix				as [Customer Suffix],
+	Title				as [Customer Title]
+Where Exists([%Person ID],BusinessEntityID);SQL SELECT *
+FROM Person</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Left Join (Products)
+LOAD 
+	ProductCategoryID		as [%Product Category ID],
+	Name					as [Product Category]
+	;SQL SELECT *
+FROM ProductCategory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Left Join (Products)
+LOAD 
+	ProductCategoryID		as [%Product Category ID],
+	ProductSubcategoryID	as [%Product Subcategory ID],
+	Name 					as [Product Subcategory]
+	;SQL SELECT *
+FROM ProductSubcategory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Left Join (Products)
+LOAD 
+	ProductModelID			as [%Product Model ID],
+	Name					as [Product Model Name]
+    ;SQL SELECT *
+FROM ProductModel</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Left Join (Sales_INIT)
+LOAD
+	
+	ProductID				as [%Product ID], 
+	SalesOrderID			as [%Sales Order ID],
+	SpecialOfferID			as [%Special Offer ID],
+	SalesOrderDetailID		as [%Sales Order Detail ID],
+	
+	DueDate					as [Due Date],
+	ShipDate				as [Ship Date],
+	UnitPrice				as [#Unit Price],
+	UnitPriceDiscount		as [#Unit Discount],
+	CarrierTrackingNumber	as [Carrier Tracking No.],
+	OrderQty				as [#Order Quantity]
+	;SQL SELECT *
+FROM SalesOrderDetail</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Left join ([Vendors])
+LOAD
+	
+	BusinessEntityID	as [%Product Vendor ID],
+	ProductID			as [%Product ID],
+	ProductID			as [%TEMP_Product ID]
+	
+	
+	
+	
+	
+	
+	
+	
+	
+Where Exists([%Product Vendor ID],BusinessEntityID) and Exists([%Product ID],ProductID)
+;SQL SELECT *
+FROM ProductVendor</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Products:
+LOAD
+	
+	ProductID				as [%Product ID],
+	ProductModelID			as [%Product Model ID],
+	ProductSubcategoryID	as [%Product Subcategory ID],
+	
+	FinishedGoodsFlag		as [Finished Goods Flag],
+	
+	Class					as [Product Class],
+	
+	DaysToManufacture		as [#Days to Manufacture],
+	DiscontinuedDate		as [Discontinued Date],
+	num#(ListPrice, '$#')	as [#List Price],
+	MakeFlag				as [Make Flag],
+	Name					as [Product],
+	ProductLine				as [Product Line],	
+	ProductNumber			as [Product Number],	
+	
+	SafetyStockLevel		as [#Safety Stock Level],
+	SellEndDate				as [Sell End Date],
+	SellStartDate			as [Sell Start Date],
+	
+	
+	num#(StandardCost, '$#')	as [#Standard Cost]
+	
+	
+	
+Where Exists([%Product ID], ProductID)
+;SQL SELECT *
+FROM Product</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM Address</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM Customer</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM Employee</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM Person</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM Product</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM ProductCategory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM ProductModel</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM ProductSubcategory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM ProductVendor</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM SalesOrderDetail</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM SalesOrderHeader</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM SalesTerritory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM SalesTerritoryHistory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM Store</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>SQL SELECT *
+FROM Vendor</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Sales_INIT:
+LOAD
+	
+	SalesOrderID		as [%Sales Order ID],
+	
+	CustomerID			as [%Customer ID],
+	BillToAddressID	 	as [%Bill to Address ID],
+	ShipToAddressID		as [%Ship to Address ID],
+	TerritoryID			as [%SP Territory ID], 
+	OrderDate 			as [%DateKey],
+	
+	OnlineOrderFlag		as [!Online Order Flag],
+	
+	applymap('Map_ShippingType', ShipMethodID, 'unknown shipping method')
+						as [Shipping Method],
+	applymap('Map_OrderType', OnlineOrderFlag, 'unknown order type')
+						as [Order Type],					
+	AccountNumber 		as [Account Number],
+	LocalCurrency		as [Local Currency],
+	PurchaseOrderNumber as [Purchase Order No.],
+	RevisionNumber		as [Revision No.],
+	SalesOrderNumber	as [Sales Order No.],
+	Status				as [Status],
+	num#(Freight, '$#')	as [#Freight],	
+	num#(TaxAmt,'$#')	as [#TaxAmt]
+	;SQL SELECT *
+FROM SalesOrderHeader</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Stores:
+LOAD 
+	
+	StoreID		as [%Store ID],
+	StoreName	as [Store]
+	Where Exists([%Store ID], StoreID);SQL SELECT *
+FROM Store</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>TEMP_Employees:
+LOAD
+	
+	EmployeeBusinessEntityID as [%Salesperson ID],
+	if(ParentEmployeeBusinessEntityID &gt;= 273, ParentEmployeeBusinessEntityID, null())
+							as [%Parent Employee ID],
+	
+	LastName &amp; ', ' &amp; FirstName as [Salesperson],
+	Title	as [Sales Person Title],
+	FirstName as [Sales Person First Name],
+	LastName as [Sales Person Last Name]
+	
+	Where EmployeeBusinessEntityID &gt;= 273 
+	;SQL SELECT *
+FROM Employee</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Temp_STH:
+LOAD 
+	BusinessEntityID as [%Salesperson ID_OLD],
+    EndDate			 as [End Date Corrupted], 
+    Date(StartDate)		 as [Start Date],
+    TerritoryID		 as [%SP Territory ID]  
+    ;SQL SELECT *
+FROM SalesTerritoryHistory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Territories:
+LOAD 
+	TerritoryID			as [%Territory ID],
+	CountryRegionCode	as [Country Region Code],
+    `Group`				as [Territory Group],
+    Name				as [Territory]
+    ;SQL SELECT *
+FROM SalesTerritory</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>Vendors:
+LOAD
+	
+	BusinessEntityID		as [%Product Vendor ID],
+	
+	ActiveFlag				as [!Active Vendor],
+	PreferredVendorStatus	as [!Preferred Vendor],
+	
+	AccountNumber			as [Vendor Account No.],    
+    CreditRating			as [Vendor Credit Rating],
+    Name					as [Vendor]
+Where PreferredVendorStatus and ActiveFlag  
+;SQL SELECT *
+FROM Vendor</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>[Bill To]:
+LOAD 
+	AddressID 			as [%Bill to Address ID],
+	
+    AddressLine1		as [Bill to Address Line 1],
+    AddressLine2		as [Bill to Address Line 2],
+    City				as [Bill to City],
+    CountryRegionCode	as [Bill to Country Region Code],
+    CountryRegionName	as [Bill to Country Region Name],
+
+
+    PostalCode			as [Bill to Postal Code],
+    StateProvinceCode	as [Bill to State Province Code],
+    StateProvinceName	as [Bill to State Province Name],
+    City &amp; '-' &amp; StateProvinceCode &amp; '-' &amp; CountryRegionCode as [%Bill to LocaleKey]
+Where Exists([%Bill to Address ID],AddressID)
+;SQL SELECT *
+FROM Address</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=&quot;C:\Users\ben.simonds\Documents\Training\Qlikview Development\Betsy's Bikes\Data Files\Raw\Certification.mdb&quot;;Mode=Share Deny None;Extended Properties=&quot;&quot;;Jet OLEDB:System database=&quot;&quot;;Jet OLEDB:Registry Path=&quot;&quot;;Jet OLEDB:Database Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Jet OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False</Discriminator>
+       <Statement>[Ship To]:
+LOAD 
+	AddressID 			as [%Ship to Address ID],
+	
+    AddressLine1		as [Ship to Address Line 1],
+    AddressLine2		as [Ship to Address Line 2],
+    City				as [ShipToCity],
+    CountryRegionCode	as [Ship to Country Region Code],
+    CountryRegionName	as [ShipToCountryRegionName],
+
+
+    PostalCode			as [Ship to Postal Code],
+    StateProvinceCode	as [Ship To State Province Code],
+    StateProvinceName	as [ShipToStateProvinceName],
+    City &amp; '-' &amp; StateProvinceCode &amp; '-' &amp; CountryRegionCode as [%Ship to LocaleKey]
+Where Exists([%Ship to Address ID],AddressID)
+;SQL SELECT *
+FROM Address</Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT Products</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT Sales</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT Sales_INIT</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT TEMP_Employees</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT TEMP_Geocoding</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT TEMP_Heirarchy_Employees</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT TEMP_Interval_Match</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT Temp_STH</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>RESIDENT Temp_STH_Fixed</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>STORE - [..\Data Files\Processed\ShiptAddresses.qvd](qvd)</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>STORE - [..\Data Files\Processed\TestEmployees.qvd](qvd)</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>STORE - [..\Data Files\Processed\TestSales.qvd](qvd)</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>c:\users\ben.simonds\documents\training\qlikview development\betsy's bikes\data files\processed\designcolours.xlsx</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+     <LineageInfo>
+       <Discriminator>c:\users\ben.simonds\documents\training\qlikview development\betsy's bikes\data files\processed\geocoded.qvd</Discriminator>
+       <Statement></Statement>
+     </LineageInfo>
+   </Lineage>
+   <Comment></Comment>
+ </QvdTableHeader>
+                         !  "           Á  999                       Á  999 !  "             Reiter, Tsvi Saraiva, Jos√© Mitchell, Linda Ansman-Wolfe, Pamela Mensa-Annan, Tete Carson, Jillian Blythe, Michael Jiang, Stephen Vargas, Garrett Ito, Shu Campbell, David Website Pak, Jae Varkey Chudukatil, Ranjit Tsoflias, Lynn Valdez, Rachel Welcker, Brian Alberts, Amy Abbas, Syed Jiang, Stephen Welcker, Brian Blythe, Michael Mitchell, Linda Carson, Jillian Vargas, Garrett Reiter, Tsvi Ansman-Wolfe, Pamela Ito, Shu Saraiva, Jos√© Campbell, David Alberts, Amy Pak, Jae Varkey Chudukatil, Ranjit Mensa-Annan, Tete Abbas, Syed Valdez, Rachel Tsoflias, Lynn Website Sales Representative North American Sales Manager Vice President of Sales European Sales Manager Pacific Sales Manager Tsvi Jos√© Linda Pamela Tete Jillian Michael Stephen Garrett Shu David Jae Ranjit Lynn Rachel Brian Amy Syed Reiter Saraiva Mitchell Ansman-Wolfe Mensa-Annan Carson Blythe Jiang Vargas Ito Campbell Pak Varkey Chudukatil Tsoflias Valdez Welcker Alberts Abbas Welcker, Brian - Jiang, Stephen Welcker, Brian Welcker, Brian - Jiang, Stephen - Blythe, Michael Welcker, Brian - Jiang, Stephen - Mitchell, Linda Welcker, Brian - Jiang, Stephen - Carson, Jillian Welcker, Brian - Jiang, Stephen - Vargas, Garrett Welcker, Brian - Jiang, Stephen - Reiter, Tsvi Welcker, Brian - Jiang, Stephen - Ansman-Wolfe, Pamela Welcker, Brian - Jiang, Stephen - Ito, Shu Welcker, Brian - Jiang, Stephen - Saraiva, Jos√© Welcker, Brian - Jiang, Stephen - Campbell, David Welcker, Brian - Alberts, Amy Welcker, Brian - Alberts, Amy - Pak, Jae Welcker, Brian - Alberts, Amy - Varkey Chudukatil, Ranjit Welcker, Brian - Jiang, Stephen - Mensa-Annan, Tete Welcker, Brian - Abbas, Syed Welcker, Brian - Alberts, Amy - Valdez, Rachel Welcker, Brian - Abbas, Syed - Tsoflias, Lynn Welcker, Brian - Abbas, Syed - Website   @@  @@  @@  @@ `@ `@ `@ `@@Ä@@Ä@@Ä@@Ä@`†@`†@`†@`†@Ä¿@Ä¿@Ä¿@Ä¿@†‡@†‡@†‡@†‡@¿ !@¿ !@¿ !@¿ !@‡ %`‡ %` !@)@ !@)@ !@)@ !@)@ %`-@ %`-@ %`-@ %`-@@)Ä1@@)Ä1@@)Ä1@@)Ä1@ AA AA AA AA AA AA AA AAa- a- a- a- a- a- a- a- !aA!aA!aA!aA!aA!aA!aA!aAÅ1°5AÅ1°5AÅ1°5AÅ1°5AÅ1°5AÅ1°5AÅ1°5AÅ1°5AAÅAAÅAAÅAAÅAAÅAAÅAAÅAAÅAa°Aa°Aa°Aa°Aa°Aa°Aa°Aa°AÅ¡AÅ¡AÅ¡AÅ¡AÅ¡AÅ¡AÅ¡AÅ¡A°·A°·A°·A°·A°·A°·A°·A°·A¡!A¡!A¡!A¡!A¡!A¡!A¡!A¡!A°5¡9A°5¡9A°5¡9A°5¡9A°5¡9A°5¡9A°5¡9A°5¡9A¡9·=A¡9·=A¡9·=A¡9·=A¡9·=A¡9·=A¡9·=A¡9·=A·=BA·=BA·=BA·=BA·=BA·=BA·=BA·=BA·!%a·!%a·!%a·!%aB!FÅB!FÅ!A)A!A)A!A)A!A)A!A)A!A)A!A)A!A)A!%a-A!%a-A!%a-A!%a-A!%a-A!%a-A!%a-A!%a-AA)Å1AA)Å1AA)Å1AA)Å1AA)Å1AA)Å1AA)Å1AA)Å1A!FAJ°!FAJ°!FAJ°!FAJ°AJaN¡AJaN¡AJaN¡AJaN¡¬!B¬!BCÉCCÉC§‰D§‰D!E)E!E)E FF FFgßGgßG(%h-H(%h-H)iI)iIJ)ä1JJ)ä1Jã1´5Kã1´5Kã1´5Kã1´5K´5À9K´5À9K´5À9K´5À9KÎ=BKÎ=BKÎ=BKÎ=BK+FKJ´+FKJ´å1¨5Lå1¨5L≠5Õ9M≠5Õ9MéŒNéŒNo- o- o- o- œ9Ô=Oœ9Ô=Oœ9Ô=Oœ9Ô=OOJoNœOJoNœ=BP=BP—9Ò=Q—9Ò=Qr- r- 

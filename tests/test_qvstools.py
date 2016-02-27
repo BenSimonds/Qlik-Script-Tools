@@ -22,25 +22,25 @@ class TestBlock(unittest.TestCase):
 		myblocklib = BlockLibrary('Test')
 		self.assertEqual(myblocklib.name,'Test')
 		#Add a block from a text file.
-		myblocklib.add_text_block('Testblock','Test of Main block','BlockType','blocks/source/tab_Main.qvs')
+		myblocklib.add_text_block('Testblock','Test of Main block','BlockType','blocks/source/test_replacelist.qvs')
 		self.assertEqual(myblocklib.blocks['Testblock'].name,'Testblock')
 		self.assertEqual(myblocklib.blocks['Testblock'].description, 'Test of Main block')
 		self.assertEqual(myblocklib.blocks['Testblock'].type, 'BlockType')
-		with open('blocks/source/tab_Main.qvs','r') as comparetext:
+		with open('blocks/source/test_replacelist.qvs','r') as comparetext:
 			text_original = comparetext.read()
 			text_scrubbed = '\n'.join([line for line in text_original.split('\n') if not re.search(r"//\(@[\d]",line) ]) 
 			self.assertEqual(myblocklib.blocks['Testblock'].text,text_scrubbed)
 		self.assertEqual(set(myblocklib.blocks['Testblock'].replacelist), set([('@0','Test Replace definition 0'),('@1','Test Replace definition 1'),('@2','Test Replace definition 2')]))
 		#print(myblocklib.blocks['Testblock'].text)
 		#Pickle that block.
-		myblocklib.pickle_block('Testblock')
+		myblocklib.pickle_block(myblocklib.blocks['Testblock'])
 		#Remove it from the library.
 		myblocklib.remove_block('Testblock')
 		self.assertEqual(len(myblocklib.blocks.keys()),0)
 		#Unpickle that block.
 		#Test that block still has the same contents.
 		myblocklib.add_pickled_block('Blocks/Testblock.p')
-		with open('blocks/source/tab_Main.qvs','r') as comparetext:
+		with open('blocks/source/test_replacelist.qvs','r') as comparetext:
 			text_original = comparetext.read()
 			text_scrubbed = '\n'.join([line for line in text_original.split('\n') if not re.search(r"//\(@[\d]",line) ]) 
 			self.assertEqual(myblocklib.blocks['Testblock'].text,text_scrubbed)
@@ -58,13 +58,13 @@ class TestBlock(unittest.TestCase):
 	def test_QVD(self):
 		print('Testing QVD Class')
 		#Load a qvd.
-		testqvd = QVD('qvd/TestEmployees.qvd')
+		testqvd = QVD('qvd/TestEmployees_A.qvd')
 
 	def test_QVD_write(self):
 		print('Testing QVD load script writing.')
 		#Load a qvd.
 		tablename = 'Blah'
-		testqvd = QVD('qvd/TestEmployees.qvd',tablename=tablename,prefix='XX')
+		testqvd = QVD('qvd/TestEmployees_A.qvd',tablename=tablename,prefix='XX')
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Generate a block from my qvd.
@@ -77,6 +77,23 @@ class TestBlock(unittest.TestCase):
 		myblocklib.blocks['INIT_META'].write('testoutput_3.qvs')
 		myblocklib.blocks['QVD_testqvd'].write('testoutput_3.qvs')
 		myblocklib.blocks['CALL_META'].write('testoutput_3.qvs',[tablename])
+
+	def test_add_directory_qvd(self):
+		print('Testing loading a directory of qvds.')
+		#create a block library:
+		myblocklib = BlockLibrary('Test')
+		#Load directory:
+		myblocklib.add_directory_QVDs('qvd')
+		#Write blocks to file.
+		for block in [b for b in myblocklib.blocks if myblocklib.blocks[b].type == 'QVD']:
+			myblocklib.blocks[block].write('testoutput_4.qvs')
+
+	def test_load_defaults(self):
+		print('Testing loading the default blocks when creating a library.')
+		myblocklib = BlockLibrary('Test',load_defaults = True)
+
+
+
 
 if __name__ == '__main__':
         unittest.main()
