@@ -1,6 +1,13 @@
 # Qlik-Script-Tools
 Tools for quickly developing flexible Qlikview load scripts.
 
+##Usage:
+- Download library.
+- Main modules are in qvstools.
+- Create a block library to hold the different parts of your script.
+- Add blocks to the library with blocklibrary add methods (depending on type).
+- Write your load script with the block.write method.
+
 ##To do list:
 
 - Block class as a basic container for a chunk of qlik script. -DONE
