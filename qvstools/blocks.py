@@ -122,12 +122,12 @@ class BlockLibrary:
 	def split_block_tabs(self,block):
 		blocktext = block.text
 		#Tab looks like //$tab something.
-		tabs = [] //will be a list of blocks.
+		tabs = [] #will be a list of blocks.
 		current_tab = []
 		tab_name = block.name + '_TAB1'
 		for line in blocktext.split('\n'):
 			if line.startswith('///$tab'): #Beginning of new tab.
-				if current_tab = []: #Hadnt found any actual text yet.
+				if current_tab == []: #Hadnt found any actual text yet.
 					tab_name = line[6:] # Remainder of line.
 					pass
 				else: #Create block to append to tab.
