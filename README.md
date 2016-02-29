@@ -24,6 +24,6 @@ Tools for quickly developing flexible Qlikview load scripts.
 - XPath based find and replace for -prj folder xml files (useful for batch editing objects).
 - SQL discovery of tables and writing of standard load script.
 - Automatic SUB-ifying of existing scripts, adding metadata stuff.
-- Split tabs method for blocklibrary. Splits block at each //$tab
+- Split tabs method for blocklibrary. Splits block at each //$tab, returns a list of blocks.
 
 
