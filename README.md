@@ -23,5 +23,6 @@ Tools for quickly developing flexible Qlikview load scripts.
 ##Ideas for further tools:
 - XPath based find and replace for -prj folder xml files (useful for batch editing objects).
 - SQL discovery of tables and writing of standard load script.
+- Automatic SUB-ifying of existing scripts, adding metadata stuff.
 
 
