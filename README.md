@@ -8,6 +8,13 @@ Tools for quickly developing flexible Qlikview load scripts.
 - Add block methods for blocklibrary class. -DONE
 - Method for pickling blocks. -DONE
 - Write block method for blocklibrarty class to write block to script file, replacing neccessary @0,@1,@2 strings. -DONE
-- QVD analyser class to grab info from qvd xml header.
-- QVD script writer class to generate load script block for a given qvd.
-- QVD directory tool to write a full load script for a directory of qvds.
+- QVD analyser class to grab info from qvd xml header. -DONE
+- QVD script writer class to generate load script block for a given qvd. -DONE (use add_qvd_block in qvstools.blocks)
+- QVD directory tool to write a full load script for a directory of qvds. -DONE (use add_directory_QVD in qvstools.blocks)
+- Example script to generate full load script from a directory along with an example qvw file that runs the script.
+
+##Ideas for further tools:
+- XPath based find and replace for -prj folder xml files (useful for batch editing objects).
+- SQL discovery of tables and writing of standard load script.
+
+
