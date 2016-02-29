@@ -139,7 +139,7 @@ class BlockLibrary:
 					)
 					tabs.append(tab_block) # Add to tabs.
 					current_tab = [] #Restart current tab.
-					tab_name = line[6:] # Remainder of line - name of next tab.
+					tab_name = line[6:].strip() # Remainder of line - name of next tab.
 			else:
 				current_tab.append(line) ##Add line to tab.
 		return tabs
