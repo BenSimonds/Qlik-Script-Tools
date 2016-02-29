@@ -118,6 +118,31 @@ class BlockLibrary:
 		files = [f for f in os.listdir(directory) if os.path.basename(f)[-2:] == '.p']
 		for f in files:
 			self.add_pickled_block(f)
+			
+	def split_block_tabs(self,block):
+		blocktext = block.text
+		#Tab looks like //$tab something.
+		tabs = [] //will be a list of blocks.
+		current_tab = []
+		tab_name = block.name + '_TAB1'
+		for line in blocktext.split('\n'):
+			if line.startswith('//$tab'): #Beginning of new tab.
+				if current_tab = []: #Hadnt found any actual text yet.
+					tab_name = line[6:] # Remainder of line.
+					pass
+				else: #Create block to append to tab.
+					tab_block = Block(
+						tab_name,
+						'tab belonging to block: {0}'.format(block.name),
+						'TAB',
+						'\n'.join(current_tab)
+					)
+					tabs.append(tab_block) # Add to tabs.
+					current_tab = [] #Restart current tab.
+					tab_name = line[6:] # Remainder of line - name of next tab.
+			else:
+				current_tab.append(line) ##Add line to tab.
+		return tabs
 
 class QVD:
 	"""Takes a qvd file and makes a python class with its xml header info."""
