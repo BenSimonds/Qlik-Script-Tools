@@ -1,6 +1,3 @@
-//(@0,'Test Replace definition 0')
-//(@1,'Test Replace definition 1')
-//(@2,'Test Replace definition 2')
 
 ///$tab Main
 SET ThousandSep=',';
@@ -14,4 +11,3 @@ SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
 SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
 SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
 
-//Test Replace Methods Here: @0 @1 @2 

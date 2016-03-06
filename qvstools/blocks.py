@@ -43,15 +43,16 @@ class BlockLibrary:
 
 	def __init__(self,name,load_defaults=False):
 		self.name = name
+		self.blocks = {}
 		if load_defaults:
-			for pfile in ['Blocks' + f for f in os.listdir('Blocks') if f.startswith(Default_)]:
-				addpickledblock(pfile)
+			for pfile in [f for f in os.listdir('Blocks') if f.startswith('Default_')]:
+				self.add_pickled_block(os.path.join('Blocks',pfile))
 		else:
-			self.blocks = {}
+			pass
 		# Block groups is a  dict of groups of blocks. 
 		# Each group is a list that should be written in order.
 		# Each item in the list is a tuple (block,replacelist). block just points to a key in self.blocks. It isnt a block itself.
-		self.blockgroups = {}
+		
 
 	def add_pickled_block(self,blockfile, rename = False):
 		with open(blockfile,'rb') as pickled:
@@ -74,8 +75,8 @@ class BlockLibrary:
 		del self.blocks[block]
 
 	def pickle_block(self,block):
-		with open('Blocks/'+block+'.p','wb') as blockfile:
-			pickle.dump(self.blocks[block],blockfile)
+		with open('Blocks/'+block.name+'.p','wb') as blockfile:
+			pickle.dump(block,blockfile)
 
 	def add_qvd_block(self,qvd,name=''):
 		"""Takes a qvd object and writes a simple load statement for it.
@@ -91,7 +92,7 @@ class BlockLibrary:
 		if name:
 			qvdname = name
 		else:
-			qvdname = 'QVD_' + os.basname(qvd)[0:-4]
+			qvdname = 'QVD_' + os.path.basename(qvd.filename)[0:-4]	
 		blocktext = '\n'
 		blocktext = blocktext + qvd.table + ':\nLoad\n'
 		#Optionalkeyload would go here.
@@ -108,14 +109,40 @@ class BlockLibrary:
 			)
 
 	def add_directory_QVDs(self,directory):
-		files = [f for f in os.listdir(directory) if f.basename[-4:] == '.qvd']
+		files = [f for f in os.listdir(directory) if os.path.basename(f)[-4:] == '.qvd']
 		for f in files:
-			addqvdblock(f)
+			block = QVD(os.path.join(directory,f))
+			self.add_qvd_block(block)
 
 	def add_directory_blocks(self,directory):		
-		files = [f for f in os.listdir(directory) if f.basename[-2:] == '.p']
+		files = [f for f in os.listdir(directory) if os.path.basename(f)[-2:] == '.p']
 		for f in files:
-			add_pickled_block(f)
+			self.add_pickled_block(f)
+			
+	def split_block_tabs(self,block):
+		blocktext = block.text
+		#Tab looks like //$tab something.
+		tabs = [] #will be a list of blocks.
+		current_tab = []
+		tab_name = block.name + '_TAB1'
+		for line in blocktext.split('\n'):
+			if line.startswith('///$tab'): #Beginning of new tab.
+				if current_tab == []: #Hadnt found any actual text yet.
+					tab_name = line[6:] # Remainder of line.
+					pass
+				else: #Create block to append to tab.
+					tab_block = Block(
+						tab_name,
+						'tab belonging to block: {0}'.format(block.name),
+						'TAB',
+						'\n'.join(current_tab)
+					)
+					tabs.append(tab_block) # Add to tabs.
+					current_tab = [] #Restart current tab.
+					tab_name = line[6:].strip() # Remainder of line - name of next tab.
+			else:
+				current_tab.append(line) ##Add line to tab.
+		return tabs
 
 class QVD:
 	"""Takes a qvd file and makes a python class with its xml header info."""
