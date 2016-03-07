@@ -88,7 +88,7 @@ class BlockLibrary:
 		for item in block.replacelist:
 			ET.SubElement(block_xml).find('replacelist'),tag='replacelistitem',id=item[0],text=item[1])
 		tree = ET.ElementTree(element = block_xml)
-		tree.write('Blocks/'+block.name+'.p',encoding='UTF-8',short_empty_elements=False)
+		tree.write('blocks/'+block.name+'.xml',encoding='UTF-8',short_empty_elements=False)
 		
 	def add_qvd_block(self,qvd,name=''):
 		"""Takes a qvd object and writes a simple load statement for it.
