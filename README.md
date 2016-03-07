@@ -19,9 +19,10 @@ Tools for quickly developing flexible Qlikview load scripts.
 - QVD script writer class to generate load script block for a given qvd. -DONE (use add_qvd_block in qvstools.blocks)
 - QVD directory tool to write a full load script for a directory of qvds. -DONE (use add_directory_QVD in qvstools.blocks)
 - Example script to generate full load script from a directory along with an example qvw file that runs the script.
+- XPath based find and replace for -prj folder xml files (useful for batch editing objects). -IN PROGRESS
 
 ##Ideas for further tools:
-- XPath based find and replace for -prj folder xml files (useful for batch editing objects).
+
 - SQL discovery of tables and writing of standard load script.
 - Automatic SUB-ifying of existing scripts, adding metadata stuff.
 - Split tabs method for blocklibrary. Splits block at each //$tab, returns a list of blocks.
