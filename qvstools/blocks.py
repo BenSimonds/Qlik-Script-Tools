@@ -77,7 +77,19 @@ class BlockLibrary:
 	def pickle_block(self,block):
 		with open('Blocks/'+block.name+'.p','wb') as blockfile:
 			pickle.dump(block,blockfile)
-
+			
+	def block_to_xml(self,block):
+		block_xml = ET.Element('block')
+		ET.SubElement(block_xml,tag='name',text=block.name)
+		ET.SubElement(block_xml,tag='description',text=block.description)
+		ET.SubElement(block_xml,tag='type',text=block.type)
+		ET.SubElement(block_xml,tag='text',text=block.text)
+		ET.SubElement(block_xml,tag='replacelist')
+		for item in block.replacelist:
+			ET.SubElement(block_xml).find('replaceleist'),tag='replacelistitem',id=item[0],text=item[1])
+		tree = ET.ElementTree(element = block_xml)
+		tree.write('Blocks/'+block.name+'.p',encoding='UTF-8',short_empty_elements=False)
+		
 	def add_qvd_block(self,qvd,name=''):
 		"""Takes a qvd object and writes a simple load statement for it.
 		Load Statement example:
