@@ -92,6 +92,7 @@ class BlockLibrary:
 		ET.SubElement(block_xml,'replacelist')
 		for item in block.replacelist:
 			item_el = ET.Element('replacelistitem',id=item[0])
+			item_el.text = item[1]
 			block_xml.find('replacelist').append(item_el)
 		tree = ET.ElementTree(element = block_xml)
 		tree.write('blocks/'+block.name+'.xml',encoding='UTF-8',short_empty_elements=False)
