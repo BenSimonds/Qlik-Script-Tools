@@ -92,6 +92,11 @@ class TestBlock(unittest.TestCase):
 		print('Testing loading the default blocks when creating a library.')
 		myblocklib = BlockLibrary('Test',load_defaults = True)
 
+	def test_xml_write(self):
+		myblocklib = BlockLibrary('Test',load_defaults = True)
+		for block in myblocklib.blocks:
+			myblocklib.block_to_xml(myblocklib.blocks[block])
+
 
 
 

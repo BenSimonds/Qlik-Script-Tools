@@ -1,6 +1,7 @@
 #Module for storing blocks.
 import pickle
 import xml.etree.ElementTree as ET
+# from lxml import etree as ET
 import sys, os, unicodedata, re
 
 ### Methods
@@ -45,7 +46,7 @@ class BlockLibrary:
 		self.name = name
 		self.blocks = {}
 		if load_defaults:
-			for pfile in [f for f in os.listdir('Blocks') if f.startswith('Default_')]:
+			for pfile in [f for f in os.listdir('Blocks') if f.startswith('Default_') and f.endswith('.p')]:
 				self.add_pickled_block(os.path.join('Blocks',pfile))
 		else:
 			pass
@@ -80,13 +81,18 @@ class BlockLibrary:
 			
 	def block_to_xml(self,block):
 		block_xml = ET.Element('block')
-		ET.SubElement(block_xml,tag='name',text=block.name)
-		ET.SubElement(block_xml,tag='description',text=block.description)
-		ET.SubElement(block_xml,tag='type',text=block.type)
-		ET.SubElement(block_xml,tag='text',text=block.text)
-		ET.SubElement(block_xml,tag='replacelist')
+		ET.SubElement(block_xml,'name')
+		block_xml.find('name').text = block.name
+		ET.SubElement(block_xml,'description')
+		block_xml.find('description').text = block.description
+		ET.SubElement(block_xml,'type')
+		block_xml.find('type').text = block.type
+		ET.SubElement(block_xml,'text')
+		block_xml.find('text').text = block.text
+		ET.SubElement(block_xml,'replacelist')
 		for item in block.replacelist:
-			ET.SubElement(block_xml).find('replacelist'),tag='replacelistitem',id=item[0],text=item[1])
+			item_el = ET.Element('replacelistitem',id=item[0])
+			block_xml.find('replacelist').append(item_el)
 		tree = ET.ElementTree(element = block_xml)
 		tree.write('blocks/'+block.name+'.xml',encoding='UTF-8',short_empty_elements=False)
 		

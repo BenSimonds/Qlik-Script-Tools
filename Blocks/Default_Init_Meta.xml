@@ -1,0 +1,5 @@
+<block><name>Default_Init_Meta</name><description>Block to run before loading a table.</description><type>BLOCK</type><text>
+//---SUB START----//
+let vSubStart = now();
+//---SUB START----//
+</text><replacelist></replacelist></block>

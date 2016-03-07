@@ -1,0 +1,5 @@
+<block><name>Default_Call_Meta</name><description>Block to run after loading a table,  takes the name of the table as the replacelist.</description><type>BLOCK</type><text>
+/---SUB END----//
+Call Meta ('@0')
+//---SUB END----//
+</text><replacelist><replacelistitem id="@0"></replacelistitem></replacelist></block>

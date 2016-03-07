@@ -11,14 +11,14 @@ class TestPRJ(unittest.TestCase):
 
 	def test_prj_class(self):
 		print('Testing PRJ class.')
-		folder = 'QVW\\TestPRJ-prj'
+		folder = 'QVW/TestPRJ-prj'
 		prj = PRJ(folder)
 		self.assertEqual('TestPRJ',prj.name)
 		self.assertEqual(folder,prj.path)
 		self.assertEqual(len(os.listdir(folder)),len(prj.all_files))
 
 	def test_object (self):
-		path = 'QVW\\TestPRJ-prj\\TX01.xml'
+		path = 'QVW/TestPRJ-prj/TX01.xml'
 		obj = QVObject(path)
 		self.assertEqual('TX01',obj.id)
 		self.assertEqual(obj.path,path)
@@ -30,6 +30,6 @@ class TestPRJ(unittest.TestCase):
 				self.assertEqual(original,written)
 
 	def test_prj_findreplace(self):
-		folder = 'QVW\\TestPRJ-prj'
+		folder = 'QVW/TestPRJ-prj'
 		prj = PRJ(folder)
 		prj.find_replace_elements(".//FontName",'Calibri')			
