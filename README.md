@@ -14,6 +14,7 @@ Tools for quickly developing flexible Qlikview load scripts.
 - Blocklibrary class as a container for a dict of blocks. - DONE
 - Add block methods for blocklibrary class. -DONE
 - Method for pickling blocks. -DONE
+- Method for writing blocks as xml would be better given that a) they're only small text files, b) xml is human readable and c) the heavy use of xml elswhere in qlik/these tools.
 - Write block method for blocklibrarty class to write block to script file, replacing neccessary @0,@1,@2 strings. -DONE
 - QVD analyser class to grab info from qvd xml header. -DONE
 - QVD script writer class to generate load script block for a given qvd. -DONE (use add_qvd_block in qvstools.blocks)
