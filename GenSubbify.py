@@ -8,7 +8,10 @@ Steps:
 4. Save out resulting script into cloned prj directory for cloned empty/template file.
 """
 import os, sys, shutil
+import subprocess
 from qvstools.blocks import *
+
+print('Setting Up.')
 
 inputfile = 'qvexports/Subbify_TestInput.qvs'
 qvwsource = 'QVW/Subbify_Source'
@@ -19,15 +22,14 @@ shutil.copytree(qvwsource,outputfolder)
 #Copy empty qvw to foler and make 
 outputfile = os.path.join(outputfolder,'Subbified-prj\LoadScript.txt')
 
-print('###	BUILDING BLOCK LIBRARY	###')
+print('Building Block Library')
+
 #Init library
 bl = BlockLibrary('Main')
 
 #Add subbify blocks:
 for f in [f for f in os.listdir('blocks') if f.startswith('Subbify') and f.endswith('.xml')]:
 	bl.add_xml_block(os.path.join('blocks',f))
-
-print(bl.blocks.keys())
 
 #Add block for input script:
 bl.add_text_block(
@@ -37,23 +39,33 @@ bl.add_text_block(
 	inputfile)
 tabs = bl.split_block_tabs(bl.blocks['INPUT']) 
 
-print('###	TABS FOUND	###')
-print([tab.name for tab in tabs])
+print('{0} Tabs Found'.format(len(tabs)))
+for tab in tabs:
+	print('\t' + tab.name)
 
-#Now subbify it!
-#Start writing our qvs script:
-print('###	WRITING TABS	###')
+
+print('Writing Tabs')
+
 bl.blocks['Subbify_Main'].write(outputfile,mode='w')
 bl.blocks['Subbify_SmartCall_Init'].write(outputfile)
 bl.blocks['Subbify_Sub_Metadata'].write(outputfile)
 write_tab('<',outputfile)
 sublines = ''
-for tab in bl.split_block_tabs(bl.blocks['INPUT']): ##Each one is a block remember.
+smartvar = '_'
+for tab in tabs: ##Each one is a block remember.
 	sublines = sublines + tab.name + '\n'
-	bl.blocks['Subbify_Template_Start'].write(outputfile,[tab.name,'NONE']) ##No tables in our example for now... but need a replacelist for this block.
+	smartvar = smartvar + tab.name + '_'
+	bl.blocks['Subbify_Template_Start'].write(outputfile,[tab.name,tab.name]) ##No tables in our example for now... but need a replacelist for this block.
 	tab.write(outputfile)
 	bl.blocks['Subbify_Template_End'].write(outputfile)
 write_tab('>',outputfile)	
-bl.blocks['Subbify_SmartCall_Run'].write(outputfile,[sublines])
+bl.blocks['Subbify_SmartCall_Run'].write(outputfile,[sublines,smartvar])
 
 
+print('Launch Qlikview, Open And Reload')
+
+qvw_abspath = os.path.join(os.path.abspath(outputfolder),'Subbified.qvw')
+varstring = '/vvSmartVarPassedFromExternalCall='+smartvar
+subprocess.Popen(["C:\Program Files\QlikView\qv.exe",qvw_abspath,varstring,'/l'])
+
+print('Finished!')

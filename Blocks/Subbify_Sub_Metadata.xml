@@ -1,10 +1,17 @@
-<block><name>Subbify_Sub_Metadata</name><description>tab belonging to block: Subbify</description><type>TAB</type><text>
+<block>
+	<name>Subbify_Sub_Metadata</name>
+	<description>tab belonging to block: Subbify</description>
+	<type>TAB</type>
+	<text>
 ///$tab SUB_MetaData
 // Tab Start
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SUB TablesMetadata
-// It runs at the end of each extraction, capturing the metadata info and adding it to one record of the metadata table
+// This runs at the end of each subroutine, or optionally multiple times per sub
+// if you want to have multiple table loads per subroutine. By default it will assume
+// that the tab is named for the main table it loads. If the script fails to find
+// the table, then the NoOfRows and NoOfColumns field will return nulls.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -12,21 +19,21 @@ SUB TablesMetadata
 
 LET vExtractCurrentEnd = num(Now()); 													// The vExtractCurrentStart must be declared at the beginning of the new tab
 LET vExtractCurrentElapsedTime = ($(vExtractCurrentEnd)-$(vExtractCurrentStart))*86400; // Elapsed time in seconds
-LET vNoOfRows = NoOfRows('$(vTable)'); 													// Based on the table in memory. In general it can be smaller than the one in the DB
-LET vNoOfFields = NoOfFields('$(vTable)'); 												// Based on the table in memory. In general it can be smaller than the one in the DB
+LET vNoOfRows = NoOfRows('$(vTable)'); 													// No of Rows loaded.
+LET vNoOfFields = NoOfFields('$(vTable)'); 												// No of Cols loaded.
 
-Concatenate (Tables_Metadata) // Requires the existance of a table called Tables_Metadata
+Concatenate (Tables_Metadata) // Requires the existance of a table called Tables_Metadata (see tab SmartCall_Init).
 LOAD
 '$(vCurrentSub)' 								AS _KEY_SUB,		// Used as a key, not visible in front end
 $(vCounter)										AS TM_SubID,
 '$(vCurrentSub)'								AS TM_SubName,
-'$(vCounter)'&amp;' '&amp;'$(vCurrentSub)'				AS TM_Sub,
+'$(vCounter)'&amp;' '&amp;'$(vCurrentSub)'		AS TM_Sub,
 '$(vTable)' 									AS TM_TableName, 	// Table Name
-Date($(vExtractCurrentStart))					AS TM_Date,			//May want to have start and end date for very long extracts...
+Date($(vExtractCurrentStart))					AS TM_Date,			// May want to have start and end date for very long extracts...
 Time($(vExtractCurrentStart)) 					AS TM_StartTime,
 Time($(vExtractCurrentEnd)) 					AS TM_EndTime,
 Time($(vExtractCurrentElapsedTime)/86400 ) 		AS TM_ElapsedTime, 
-Num('$(vExtractCurrentElapsedTime)')			AS TM_ElapsedSeconds, // Easy to sum in the chart but not easy to read when the number is big
+Num('$(vExtractCurrentElapsedTime)')			AS TM_ElapsedSeconds, // Easy to sum in the chart but not easy to read when the number is big.
 Num('$(vNoOfRows)') 							AS TM_NoOfRows,
 Num('$(vNoOfFields)') 							AS TM_NoOfColumns,
 'ALL_TABLE_METADATA'							AS ALL_TABLE_METADATA
@@ -35,4 +42,7 @@ AutoGenerate 1;
 END SUB
 
 // Tab End
-</text><replacelist></replacelist></block>
+</text>
+<replacelist>
+</replacelist>
+</block>

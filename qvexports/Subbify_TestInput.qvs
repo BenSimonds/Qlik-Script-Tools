@@ -1,6 +1,7 @@
 ﻿///$tab A
+
 Trace #### TAB A ### ;
-Test1:
+A:
 Load
 	RowNo() as Test1_ID
 ,	'Category' & Pick(Round(Rand()*4)+1) as Test1_Category
@@ -8,8 +9,9 @@ Load
 AutoGenerate 1000;
 
 ///$tab B
+
 Trace #### TAB B ### ;
-Test2:
+B:
 Load
 	RowNo() as Test2_ID
 ,	'Category' & Pick(Round(Rand()*4)+1) as Test2_Category
@@ -17,8 +19,9 @@ Load
 AutoGenerate 1000;
 
 ///$tab C
+
 Trace #### TAB C ### ;
-Test3:
+C:
 Load
 	RowNo() as Test3_ID
 ,	'Category' & Pick(Round(Rand()*4)+1) as Test3_Category

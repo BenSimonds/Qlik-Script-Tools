@@ -1,4 +1,4 @@
-<block><name>Subbify_Template_Mid</name><description>tab belonging to block: Subbify</description><type>TAB</type><text>
+<block><name>Subbify_Template_Mid</name><description>Example middle block for subbify. Not generally used.</description><type>TAB</type><text>
 TEST:
 Load
 	'Test Ran!' as TEST_Field

@@ -1,18 +1,23 @@
-<block><name>Subbify_SmartCall_Run</name><description>tab belonging to block: Subbify</description><type>TAB</type><text>
+<block>
+<name>Subbify_SmartCall_Run</name>
+<description>tab belonging to block: Subbify</description>
+<type>TAB</type>
+<text>
 ///$tab SmartCall_Run
 // Tab Start    
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // This Tab is the place where everything happens
-// The INLINE table called SubNameList contains the list of the existing SUBROUTINES, and the associated table
-// The loop is running as many times as many records has this table
-// Each round of the loop is comparing the current SUBROUTINE XXX with the string.
+// The INLINE table called SubNameList contains the list of the existing SUBROUTINES.
+// The loop runs for each record in this table.
+// Each round of the loop compares the current SUBROUTINE XXX with the smart variable string.
 // If _XXX_ is contained in the string, then the SUBROUTINE XXX will be called, otherwise nothing will happen
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-//SET vSmartVar = $(vSmartVarPassedFromExternalCall); // The string must be passed from the external call. Alternatively, it can be manually inserted in the Input Field object
+//SET vSmartVar = $(vSmartVarPassedFromExternalCall); 
+// The string must be passed from the external call. Alternatively, it can be manually inserted in the Input Field object
 If '$(vSmartVarPassedFromExternalCall)' = ' ' THEN
-	SET vSmartVar = _TEST_; //Set this to whatever you want the default run to be.
+	SET vSmartVar = @1; //Set this to whatever you want the default run to be.
 ELSE 
 	SET vSmartVar = $(vSmartVarPassedFromExternalCall);
 ENDIF
@@ -40,21 +45,20 @@ WHERE LEFT(SubName,2)&lt;&gt;'//'
 
 LET vNumberOfRowsOfINLINE = NoOfRows('SubNameList');
 LET vNumberOfLoops=$(vNumberOfRowsOfINLINE);
-
 FOR vCurrentLoop = 1 to $(vNumberOfLoops)
-LET vCurrentRecord = $(vCurrentLoop)-1;  //The first record of a table by convention is 0, not 1
-LET vCurrentSub = Peek('SubName',$(vCurrentRecord),'SubNameList');  //Takes one by one the records of the column "SubName" of the table "SubNameList"
-TRACE Execution of loop $(vCurrentLoop) of $(vNumberOfLoops)  Launching Sub $(vCurrentSub); //Gives in the dialogue box a feedback of what's happening
+	LET vCurrentRecord = $(vCurrentLoop)-1;  //The first record of a table by convention is 0, not 1
+	LET vCurrentSub = Peek('SubName',$(vCurrentRecord),'SubNameList');  //Takes one by one the records of the column "SubName" of the table "SubNameList"
+	TRACE Execution of loop $(vCurrentLoop) of $(vNumberOfLoops)  Launching Sub $(vCurrentSub); //Gives in the dialogue box a feedback of what's happening
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ------------------------------------&gt; LOOP &lt;-----------------------------------
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// ------------------------------------&gt; LOOP &lt;-----------------------------------
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IF SubStringCount(UPPER('$(vSmartVar)'),'_'&amp;UPPER('$(vCurrentSub)')&amp;'_') THEN // NOTE: the separator is needed, because otherwise the string FTM will also execute the FT 
-Call $(vCurrentSub);
-ELSE 
-TRACE The SUB called "$(vCurrentSub)" is not in the variable, therefore it will not be executed;
-END IF
+	IF SubStringCount(UPPER('$(vSmartVar)'),'_'&amp;UPPER('$(vCurrentSub)')&amp;'_') THEN // NOTE: the separator is needed, because otherwise the string FTM would also execute FT 
+	Call $(vCurrentSub);
+	ELSE 
+	TRACE The SUB called "$(vCurrentSub)" is not in the variable, therefore it will not be executed;
+	END IF
 
 NEXT vCurrentLoop;
 
@@ -70,6 +74,9 @@ LET vCurrentRecord = ;
 LET vCurrentSub = ;
 
 // Tab End
-</text><replacelist>
+</text>
+<replacelist>
 	<replacelistitem id="@0">Text to fill the inline load of sub names.</replacelistitem>
-</replacelist></block>
+	<replacelistitem id="@1">Smartvar generated from script.</replacelistitem>
+</replacelist>
+</block>

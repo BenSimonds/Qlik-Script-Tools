@@ -29,7 +29,7 @@ class Block:
 		if len(replacelist) != len(self.replacelist):
 			raise NameError('Replacelist requires {0} items but supplied {1}.'.format(len(self.replacelist),len(replacelist)))
 			return
-		print('Writing block {0} to file.'.format(self.name))
+		#print('Writing block {0} to file.'.format(self.name))
 		#Replace @1 notation in block with user specified text.
 		blocktext = self.text
 		for i  in range(0,len(replacelist)):
@@ -176,9 +176,9 @@ class BlockLibrary:
 				tab_text = ''.join(blocklines[tablines[i][0]:])
 			else:
 				tab_text = '\n'+'\n'.join(blocklines[tablines[i][0]+1:tablines[i+1][0]-1])+'\n'
-			tab_name = tablines[i][1]
+			tab_name = tablines[i][1].strip()
 			tab_block = Block(
-				block.name + '_' + tab_name,
+				tab_name,
 				'tab belonging to block: {0}'.format(block.name),
 				'TAB',
 				tab_text
