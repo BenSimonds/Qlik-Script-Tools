@@ -1,3 +1,4 @@
 *.qvw
+!*ORIGINAL.qvw
 .DS_Store
 testoutput_*
