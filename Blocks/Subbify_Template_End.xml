@@ -1,0 +1,4 @@
+<block><name>Subbify_Template_End</name><description>tab belonging to block: Subbify</description><type>TAB</type><text>
+CALL TablesMetadata
+END SUB
+</text><replacelist></replacelist></block>

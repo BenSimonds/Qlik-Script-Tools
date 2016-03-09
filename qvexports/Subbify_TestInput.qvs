@@ -1,0 +1,26 @@
+﻿///$tab A
+Trace #### TAB A ### ;
+Test1:
+Load
+	RowNo() as Test1_ID
+,	'Category' & Pick(Round(Rand()*4)+1) as Test1_Category
+,	Rand()*1000 as Test1_Value
+AutoGenerate 1000;
+
+///$tab B
+Trace #### TAB B ### ;
+Test2:
+Load
+	RowNo() as Test2_ID
+,	'Category' & Pick(Round(Rand()*4)+1) as Test2_Category
+,	Rand()*1000 as Test2_Value
+AutoGenerate 1000;
+
+///$tab C
+Trace #### TAB C ### ;
+Test3:
+Load
+	RowNo() as Test3_ID
+,	'Category' & Pick(Round(Rand()*4)+1) as Test3_Category
+,	Rand()*1000 as Test1_Value
+AutoGenerate 1000;

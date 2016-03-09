@@ -1,9 +1,9 @@
-///$tab Main
+﻿///$tab Main
 SET ThousandSep=',';
 SET DecimalSep='.';
 SET MoneyThousandSep=',';
 SET MoneyDecimalSep='.';
-SET MoneyFormat='£#,##0.00;-£#,##0.00';
+SET MoneyFormat='#,##0.00;-#,##0.00';
 SET TimeFormat='hh:mm:ss';
 SET DateFormat='DD/MM/YYYY';
 SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
@@ -12,8 +12,6 @@ SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
 
 
 ///$tab SmartCall_Init
-
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Generic set up
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,7 +36,7 @@ LOAD
 '' AS TM_TableName
 AutoGenerate 0;
 
-///$tab Sub_Metadata
+///$tab SUB_MetaData
 // Tab Start
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,10 +72,13 @@ AutoGenerate 1;
 END SUB
 
 // Tab End
-///$tab Template_Start
-SUB TEST
 
-LET vTable = 'TEST';
+///$tab <
+
+///$tab INPUT_A
+SUB INPUT_A
+
+LET vTable = 'Test1';
 LET vCounter = $(vCounter)+1;
 TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
 LET vExtractCurrentStart = num(Now());
@@ -85,18 +86,60 @@ LET vExtractCurrentStart = num(Now());
 /*
 Notes:
 */
-///$tab Template_Mid
-TEST:
+
+Trace #### TAB A ### ;
+Test1:
 Load
-	'Test Ran!' as TEST_Field
-AutoGenerate(1);
+	'a' as Cat,
+	1	as Bat,
+	Today() as Date
+AutoGenerate 1;
 
-SLEEP 1000;
-TRACE >> Test Ran!;
+SLEEP RAND()*5000;
 
-///$tab Template_End
 CALL TablesMetadata
 END SUB
+
+///$tab INPUT_B
+SUB INPUT_B
+
+LET vTable = 'Test2';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+Test2:
+Load
+	'a' as BCat,
+	1	as BBat,
+	Today() as BDate
+AutoGenerate 1;
+
+SLEEP RAND()*5000;
+
+CALL TablesMetadata
+END SUB
+
+///$tab INPUT_C
+SUB INPUT_C
+
+LET vTable = 'NONE';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+CALL TablesMetadata
+END SUB
+///$tab >
+
 ///$tab SmartCall_Run
 // Tab Start    
 
@@ -126,7 +169,10 @@ Rowno() AS _SubNameListSort,
 * 
 INLINE [
 SubName, SubNote
-Test, SubName is not case sensitive.
+INPUT_A
+INPUT_B
+INPUT_C
+
 ]
 WHERE LEFT(SubName,2)<>'//'
 ;
@@ -168,6 +214,3 @@ LET vCurrentRecord = ;
 LET vCurrentSub = ;
 
 // Tab End
-
-///$tab EXIT
-exit script;

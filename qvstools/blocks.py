@@ -10,7 +10,7 @@ def write_tab(name,intofile,mode='a'):
 	"Adds a tab line to the file."
 	"Standard function that doesnt need to be part of blocklibrary."
 	with open(intofile,mode) as outputfile:
-		outputfile.write('///$tab ' + name + '\n')
+		outputfile.write('\n///$tab ' + name + '\n')
 	return
 
 ### Classes
@@ -20,7 +20,7 @@ class Block:
 		self.name = b_name
 		self.description = b_description
 		self.type = b_type
-		self.text = b_text
+		self.text = self.strip_non_unicode(b_text)
 		self.replacelist = b_replacelist
 
 	def write(self,intofile,replacelist=[],mode='a'):
@@ -37,7 +37,13 @@ class Block:
 		#Write output to file.		
 		with open(intofile,mode) as outputfile:
 			outputfile.write(blocktext)
-		return	
+		return
+
+	def strip_non_unicode(self,string):
+		"""
+		Required to strip non unicode characters out of weird qlik export text...
+		"""	
+		return ''.join([i for i in string if ord(i)<128])#string.encode('UTF-8','ignore').decode('UTF-8')
 		
 class BlockLibrary:
 	"""This adds an easy way to bundle together the qvblocks scripts in a single file."""
@@ -46,8 +52,8 @@ class BlockLibrary:
 		self.name = name
 		self.blocks = {}
 		if load_defaults:
-			for pfile in [f for f in os.listdir('Blocks') if f.startswith('Default_') and f.endswith('.p')]:
-				self.add_pickled_block(os.path.join('Blocks',pfile))
+			for xmlfile in [f for f in os.listdir('Blocks') if f.startswith('Default_') and f.endswith('.p')]:
+				self.add_xml_block(os.path.join('Blocks',xmlfile))
 		else:
 			pass
 		# Block groups is a  dict of groups of blocks. 
@@ -96,6 +102,22 @@ class BlockLibrary:
 			block_xml.find('replacelist').append(item_el)
 		tree = ET.ElementTree(element = block_xml)
 		tree.write('blocks/'+block.name+'.xml',encoding='UTF-8',short_empty_elements=False)
+
+	def add_xml_block(self,filepath):
+		xmlfile = ET.parse(filepath)
+		b_name = xmlfile.find('./name').text
+		b_description = xmlfile.find('./description').text
+		b_type = xmlfile.find('./type').text
+		b_text = xmlfile.find('./text').text
+		b_replacelist = []
+		for x in xmlfile.findall('.//replacelistitem'):
+			b_replacelist.append((x.get('id'),x.text))
+		self.blocks[b_name] = Block(
+			b_name,
+			b_description,
+			b_type,
+			b_text,
+			b_replacelist)
 		
 	def add_qvd_block(self,qvd,name=''):
 		"""Takes a qvd object and writes a simple load statement for it.
@@ -128,47 +150,49 @@ class BlockLibrary:
 			)
 
 	def add_directory_QVDs(self,directory):
-		files = [f for f in os.listdir(directory) if os.path.basename(f)[-4:] == '.qvd']
+		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.qvd')]
 		for f in files:
 			block = QVD(os.path.join(directory,f))
 			self.add_qvd_block(block)
 
 	def add_directory_blocks(self,directory):		
-		files = [f for f in os.listdir(directory) if os.path.basename(f)[-2:] == '.p']
+		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.xml')]
 		for f in files:
-			self.add_pickled_block(f)
+			self.add_xml_block(f)
 			
 	def split_block_tabs(self,block):
 		blocktext = block.text
 		#Tab looks like //$tab something.
 		tabs = [] #will be a list of blocks.
-		current_tab = []
-		tab_name = block.name + '_TAB1'
-		for line in blocktext.split('\n'):
-			if line.startswith('///$tab'): #Beginning of new tab.
-				if current_tab == []: #Hadnt found any actual text yet.
-					tab_name = line[6:] # Remainder of line.
-					pass
-				else: #Create block to append to tab.
-					tab_block = Block(
-						tab_name,
-						'tab belonging to block: {0}'.format(block.name),
-						'TAB',
-						'\n'.join(current_tab)
-					)
-					tabs.append(tab_block) # Add to tabs.
-					current_tab = [] #Restart current tab.
-					tab_name = line[6:].strip() # Remainder of line - name of next tab.
+		blocklines = blocktext.split('\n')
+		#Find intervals between tabs.
+		counter = 0
+		tablines = []
+		for i in range(0,len(blocklines)):
+			if blocklines[i].startswith('///$tab'):
+				tablines.append((i,blocklines[i][7:].strip()))
+		for i in range(0,len(tablines)):
+			if i == len(tablines)-1:
+				tab_text = ''.join(blocklines[tablines[i][0]:])
 			else:
-				current_tab.append(line) ##Add line to tab.
-		return tabs
+				tab_text = '\n'+'\n'.join(blocklines[tablines[i][0]+1:tablines[i+1][0]-1])+'\n'
+			tab_name = tablines[i][1]
+			tab_block = Block(
+				block.name + '_' + tab_name,
+				'tab belonging to block: {0}'.format(block.name),
+				'TAB',
+				tab_text
+				)
+			tabs.append(tab_block)
+			
+		return tabs #Return a list that can be iterated over in the correct order.
 
 class QVD:
 	"""Takes a qvd file and makes a python class with its xml header info."""
 
 	def __init__(self,qvdfile,tablename=False,prefix=False):
 		self.qvdheader = self.loadqvdfile(qvdfile)
-		
+		 
 		def setprops(qvdfile,tablename,prefix):
 			#Turn fields and table name into some useful attributes of the class.
 			##First do attributes that will be used in the script, here we can transform them to be more useful.

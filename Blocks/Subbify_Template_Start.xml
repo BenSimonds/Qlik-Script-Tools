@@ -1,0 +1,16 @@
+<block><name>Subbify_Template_Start</name><description>tab belonging to block: Subbify</description><type>TAB</type><text>
+///$tab @0
+SUB @0
+
+LET vTable = '@1';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+</text><replacelist>
+<replacelistitem id="@0">Name of sub being run, take from the tab name.</replacelistitem>
+<replacelistitem id="@1">Name of table to gather metadata about, should be the main table for the tab.</replacelistitem>
+</replacelist></block>

@@ -1,0 +1,26 @@
+<block><name>Subbify_SmartCall_Init</name><description>tab belonging to block: Subbify</description><type>TAB</type><text>
+///$tab SmartCall_Init
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Generic set up
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SET HidePrefix = '_';
+LET vDocumentName = Documentname();
+LET vCounter = 0; // Each tab will increment this variable
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Variables for calculation of the total elapsed time (see before the EXIT)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+LET vScriptStartTimestampNumeric = Num(Now());
+LET vScriptStartTimestamp = Timestamp($(vScriptStartTimestampNumeric));
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Initialization of the Metadata table. Used for concatenation.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Tables_Metadata:
+LOAD
+'' AS TM_TableName
+AutoGenerate 0;
+</text><replacelist></replacelist></block>

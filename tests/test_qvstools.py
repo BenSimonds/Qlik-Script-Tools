@@ -53,18 +53,18 @@ class TestBlock(unittest.TestCase):
 	def test_writeTab(self):
 		write_tab('TABNAME','testoutput_tab.qvs','w')
 		with open('testoutput_tab.qvs','r') as comparetext:
-			self.assertEqual(comparetext.read(),'///$tab TABNAME\n')
+			self.assertEqual(comparetext.read(),'\n///$tab TABNAME\n')
 
 	def test_QVD(self):
 		print('Testing QVD Class')
 		#Load a qvd.
-		testqvd = QVD('qvd/TestEmployees_A.qvd')
+		testqvd = QVD('qvd/Random/Random_Table_1.qvd')
 
 	def test_QVD_write(self):
 		print('Testing QVD load script writing.')
 		#Load a qvd.
 		tablename = 'Blah'
-		testqvd = QVD('qvd/TestEmployees_A.qvd',tablename=tablename,prefix='XX')
+		testqvd = QVD('qvd/Random/Random_Table_1.qvd',tablename=tablename,prefix='XX')
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Generate a block from my qvd.
@@ -96,6 +96,22 @@ class TestBlock(unittest.TestCase):
 		myblocklib = BlockLibrary('Test',load_defaults = True)
 		for block in myblocklib.blocks:
 			myblocklib.block_to_xml(myblocklib.blocks[block])
+
+	def test_xml_read(self):
+		myblocklib = BlockLibrary('Test')
+		myblocklib.add_text_block('Default_Call_Meta','Block to run after loading a table,  takes the name of the table as the replacelist.','BLOCK','blocks/source/block_CallMeta.qvs')
+		#Copy block for comparison.
+		myblocklib.blocks['A']=myblocklib.blocks['Default_Call_Meta']
+		#Write and read back (will overwrite):
+		myblocklib.block_to_xml(myblocklib.blocks['Default_Call_Meta'])
+		myblocklib.add_xml_block('blocks/Default_Call_Meta.xml')
+		a = myblocklib.blocks['A']
+		b = myblocklib.blocks['Default_Call_Meta']
+		self.assertEqual(a.type,b.type)
+		self.assertEqual(a.text,b.text)
+		self.assertEqual(a.description,b.description)
+		self.assertEqual(a.replacelist,b.replacelist)
+
 
 
 
