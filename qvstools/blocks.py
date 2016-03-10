@@ -173,7 +173,7 @@ class BlockLibrary:
 				tablines.append((i,blocklines[i][7:].strip()))
 		for i in range(0,len(tablines)):
 			if i == len(tablines)-1:
-				tab_text = ''.join(blocklines[tablines[i][0]:])
+				tab_text = '\n'+'\n'.join(blocklines[tablines[i][0]+1:])+'\n'
 			else:
 				tab_text = '\n'+'\n'.join(blocklines[tablines[i][0]+1:tablines[i+1][0]-1])+'\n'
 			tab_name = tablines[i][1].strip()
