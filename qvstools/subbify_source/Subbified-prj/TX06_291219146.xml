@@ -25,7 +25,7 @@
         <FontName>Calibri</FontName>
         <PointSize1000>10000</PointSize1000>
         <Underline>false</Underline>
-        <Bold>false</Bold>
+        <Bold>true</Bold>
         <Italic>false</Italic>
         <DropShadow>false</DropShadow>
       </Font>
@@ -251,26 +251,25 @@
     <BkgImageSettings></BkgImageSettings>
     <BkgMode>BKG_SOLID</BkgMode>
     <Bmp enctype="base64"></Bmp>
-    <BkgAlpha>255</BkgAlpha>
+    <BkgAlpha>0</BkgAlpha>
     <Text>
-      <v>Version 0.1
-Subbified is a tool for taking an existing load script - generally an extract or transform layer script - and turing it into a modular script that can be reloaded in parts as needed. It also adds some metadata tools for tracking which parts of the load script are taking the longest.
-
-To use it:
-	1. Save your target qlikview script into a .qvs file. You can export the whole script from the script editor, or just copy paste the parts you want into a text editor.
-	2. Run the commandline tool:
-		&gt; Subbify &quot;path/to/script/script.qvs&quot;
-		
-For more info/source code/downloads visit:
-
-
-Docs on readthedocs.org:
-	</v>
+      <v>http://github.com/BenSimonds/Qlik-Script-Tools</v>
     </Text>
     <ImageRepresentation></ImageRepresentation>
     <AllowVerticalScrollBar>false</AllowVerticalScrollBar>
     <AllowHorizontalScrollBar>false</AllowHorizontalScrollBar>
-    <ActionItems></ActionItems>
+    <ActionItems>
+      <ActionItemDef>
+        <Type>TYPE_OPEN_URL</Type>
+        <Parameters>
+          <StringExpr>
+            <v>http://github.com/BenSimonds/Qlik-Script-Tools</v>
+          </StringExpr>
+          <StringExpr></StringExpr>
+        </Parameters>
+        <StateName></StateName>
+      </ActionItemDef>
+    </ActionItems>
   </Layout>
   <PrintSettings></PrintSettings>
   <UserSized>true</UserSized>
