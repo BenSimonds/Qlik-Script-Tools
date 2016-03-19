@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Qlik-Script-Tools documentation build configuration file, created by
-# sphinx-quickstart on Sat Mar 19 17:12:08 2016.
+# sphinx-quickstart on Sat Mar 19 17:19:54 2016.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
