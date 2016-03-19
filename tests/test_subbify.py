@@ -1,4 +1,4 @@
-import unittest, os
+import unittest, os, shutil
 from qvstools.subbify import subbify
 
 class TestBlock(unittest.TestCase):
@@ -12,5 +12,8 @@ class TestBlock(unittest.TestCase):
 		print("Testing subbify")
 		testinput = 'testdata\\Subbify_TestInput.qvs'
 		print(testinput)
-		subbify(testinput)
+		subbify(testinput,open_after = False)
+		##Cleanup
+		shutil.rmtree('testdata\\Subbify_TestInput_Subbified-prj')
+		os.remove('testdata\\Subbify_TestInput_Subbified.qvw')
 

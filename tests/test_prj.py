@@ -29,9 +29,9 @@ class TestPRJ(unittest.TestCase):
 		self.assertEqual('TX01',obj.id)
 		self.assertEqual(obj.path,path)
 		obj.write(path='testoutput.txt')
-		with open(path,'rb') as original_file:
-			original = original_file.read()
-			with open('testoutput.txt','rb') as written_file:
+		with open(path,'r') as original_file:
+			original = original_file.read()#.replace('\r\n','\n')
+			with open('testoutput.txt','r') as written_file:
 				written = written_file.read()
 				self.assertEqual(original,written)
 
