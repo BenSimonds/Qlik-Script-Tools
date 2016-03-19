@@ -1,0 +1,11 @@
+<block>
+<name>Subbify_Template_End</name>
+<description>Runs at end of tab to call Tables Metadata and </description>
+<type>TAB</type>
+<text>
+CALL TablesMetadata
+END SUB
+</text>
+<replacelist>
+</replacelist>
+</block>

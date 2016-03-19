@@ -1,0 +1,9 @@
+<block><name>Subbify_Template_Mid</name><description>Example middle block for subbify. Not generally used.</description><type>TAB</type><text>
+TEST:
+Load
+	'Test Ran!' as TEST_Field
+AutoGenerate(1);
+
+SLEEP 1000;
+TRACE &gt;&gt; Test Ran!;
+</text><replacelist></replacelist></block>

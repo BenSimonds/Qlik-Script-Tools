@@ -170,12 +170,12 @@ class BlockLibrary:
 		tablines = []
 		for i in range(0,len(blocklines)):
 			if blocklines[i].startswith('///$tab'):
-				tablines.append((i,blocklines[i][7:].strip()))
+				tablines.append((i,blocklines[i][7:].strip())) #Tuple: (line of blocklines that tab starts, name of tab)
 		for i in range(0,len(tablines)):
-			if i == len(tablines)-1:
+			if i == len(tablines)-1: #If on last tab, take all the way to the end.
 				tab_text = '\n'+'\n'.join(blocklines[tablines[i][0]+1:])+'\n'
-			else:
-				tab_text = '\n'+'\n'.join(blocklines[tablines[i][0]+1:tablines[i+1][0]-1])+'\n'
+			else: #Else take from start +1 (to avoid tab line) up to next tab start.
+				tab_text = '\n'+'\n'.join(blocklines[tablines[i][0]+1:tablines[i+1][0]])+'\n'
 			tab_name = tablines[i][1].strip()
 			tab_block = Block(
 				tab_name,
