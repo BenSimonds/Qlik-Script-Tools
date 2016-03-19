@@ -1,12 +1,18 @@
-import unittest, re
+import unittest, re, os
 from qvstools.blocks import *
 
 class TestBlock(unittest.TestCase):
 	def setUp(self):
 		print ("SETUP!")
 
-	def tearDowm(self):
+	def tearDown(self):
 		print ("TEAR DOWN!")
+		#Delete output file:
+		outputfiles = ['testoutput.txt']
+		try:
+			delete = [os.remove(x) for x in outputfiles]
+		except FileNotFoundError:
+			print('No files to delete.')
 
 	def test_Block(self):
 		print("Testing Block Class")
@@ -45,26 +51,26 @@ class TestBlock(unittest.TestCase):
 			text_scrubbed = '\n'.join([line for line in text_original.split('\n') if not re.search(r"//\(@[\d]",line) ]) 
 			self.assertEqual(myblocklib.blocks['Testblock'].text,text_scrubbed)
 		#Test write a block
-		myblocklib.blocks['Testblock'].write('testoutput_1.qvs',['foo','bar','bad'])
+		myblocklib.blocks['Testblock'].write('testoutput.txt',['foo','bar','bad'])
 		#Test string replacement.
 		myblocklib.add_text_block('TestReplaceBlock','TestReplaceBlock','ReplaceType','Blocks/source/block_CallMeta.qvs')
-		myblocklib.blocks['TestReplaceBlock'].write('testoutput_2.qvs',['myTable'])
+		myblocklib.blocks['TestReplaceBlock'].write('testoutput.txt',['myTable'])
 
 	def test_writeTab(self):
-		write_tab('TABNAME','testoutput_tab.qvs','w')
-		with open('testoutput_tab.qvs','r') as comparetext:
+		write_tab('TABNAME','testoutput.txt','w')
+		with open('testoutput.txt','r') as comparetext:
 			self.assertEqual(comparetext.read(),'\n///$tab TABNAME\n')
 
 	def test_QVD(self):
 		print('Testing QVD Class')
 		#Load a qvd.
-		testqvd = QVD('qvd/Random/Random_Table_1.qvd')
+		testqvd = QVD('testdata/Test.qvd')
 
 	def test_QVD_write(self):
 		print('Testing QVD load script writing.')
 		#Load a qvd.
 		tablename = 'Blah'
-		testqvd = QVD('qvd/Random/Random_Table_1.qvd',tablename=tablename,prefix='XX')
+		testqvd = QVD('testdata/Test.qvd',tablename=tablename,prefix='XX')
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Generate a block from my qvd.
@@ -73,20 +79,20 @@ class TestBlock(unittest.TestCase):
 		myblocklib.add_text_block('CALL_META','Call meta block','BLOCK','blocks/source/block_CallMeta.qvs')
 		myblocklib.add_text_block('INIT_META','Initialise meta block','BLOCK','blocks/source/block_InitMeta.qvs')
 
-		myblocklib.blocks['DEF_META'].write('testoutput_3.qvs',mode='w')
-		myblocklib.blocks['INIT_META'].write('testoutput_3.qvs')
-		myblocklib.blocks['QVD_testqvd'].write('testoutput_3.qvs')
-		myblocklib.blocks['CALL_META'].write('testoutput_3.qvs',[tablename])
+		myblocklib.blocks['DEF_META'].write('testoutput.txt',mode='w')
+		myblocklib.blocks['INIT_META'].write('testoutput.txt')
+		myblocklib.blocks['QVD_testqvd'].write('testoutput.txt')
+		myblocklib.blocks['CALL_META'].write('testoutput.txt',[tablename])
 
 	def test_add_directory_qvd(self):
 		print('Testing loading a directory of qvds.')
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Load directory:
-		myblocklib.add_directory_QVDs('qvd')
+		myblocklib.add_directory_QVDs('testdata')
 		#Write blocks to file.
 		for block in [b for b in myblocklib.blocks if myblocklib.blocks[b].type == 'QVD']:
-			myblocklib.blocks[block].write('testoutput_4.qvs')
+			myblocklib.blocks[block].write('testoutput.txt')
 
 	def test_load_defaults(self):
 		print('Testing loading the default blocks when creating a library.')

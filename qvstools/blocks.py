@@ -52,8 +52,8 @@ class BlockLibrary:
 		self.name = name
 		self.blocks = {}
 		if load_defaults:
-			for xmlfile in [f for f in os.listdir('blocks') if f.startswith('Default_') and f.endswith('.p')]:
-				self.add_xml_block(os.path.join('blocks',xmlfile))
+			for xmlfile in [f for f in os.listdir('Blocks') if f.startswith('Default_') and f.endswith('.p')]:
+				self.add_xml_block(os.path.join('Blocks',xmlfile))
 		else:
 			pass
 		# Block groups is a  dict of groups of blocks. 
@@ -82,7 +82,7 @@ class BlockLibrary:
 		del self.blocks[block]
 
 	def pickle_block(self,block):
-		with open('blocks/'+block.name+'.p','wb') as blockfile:
+		with open('Blocks/'+block.name+'.p','wb') as blockfile:
 			pickle.dump(block,blockfile)
 			
 	def block_to_xml(self,block):

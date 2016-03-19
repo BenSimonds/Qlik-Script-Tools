@@ -11,7 +11,7 @@ config = {
     'author_email': 'BSSimonds@gmail.com',
     'version': '0.1dev',
     'install_requires': ['nose'],
-    'packages': ['qvtools'],
+    'packages': ['qvstools'],
     'scripts': [],
     'name': 'QVScriptTools'
 }
