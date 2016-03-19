@@ -1,6 +1,11 @@
 #Module for storing blocks.
 import pickle
-import xml.etree.ElementTree as ET
+try:
+	import lxml.etree as ET
+	print("running with lxml.etree")
+except ImportError:
+	import xml.etree.ElementTree as ET
+	print("running with xml.etree")
 # from lxml import etree as ET
 import sys, os, unicodedata, re
 
@@ -78,6 +83,10 @@ class BlockLibrary:
 			
 			self.blocks[b_name] = Block(b_name,b_description,b_type,b_text,b_replacelist)	
 
+	def write_block(self,block,outputfile,replacelist=[],mode='a'):
+		#Creates a familiar way to write blocks.
+		self.blocks[block].write(outputfile,replacelist,mode)
+
 	def remove_block(self,block):
 		del self.blocks[block]
 
@@ -85,7 +94,8 @@ class BlockLibrary:
 		with open('Blocks/'+block.name+'.p','wb') as blockfile:
 			pickle.dump(block,blockfile)
 			
-	def block_to_xml(self,block):
+	def block_to_xml(self,block,directory='.'):
+		block = self.blocks[block]	# Get block by name.
 		block_xml = ET.Element('block')
 		ET.SubElement(block_xml,'name')
 		block_xml.find('name').text = block.name
@@ -101,7 +111,8 @@ class BlockLibrary:
 			item_el.text = item[1]
 			block_xml.find('replacelist').append(item_el)
 		tree = ET.ElementTree(element = block_xml)
-		tree.write('blocks/'+block.name+'.xml',encoding='UTF-8',short_empty_elements=False)
+		filepath = os.path.join(directory,block.name+'.xml')
+		tree.write(filepath,encoding='UTF-8',short_empty_elements=False)
 
 	def add_xml_block(self,filepath):
 		xmlfile = ET.parse(filepath)
@@ -119,8 +130,8 @@ class BlockLibrary:
 			b_text,
 			b_replacelist)
 		
-	def add_qvd_block(self,qvd,name=''):
-		"""Takes a qvd object and writes a simple load statement for it.
+	def add_qvd_block(self,qvd,blockname='',tablename=False,prefix=False):
+		"""Takes a qvd file and writes a simple load statement for it.
 		Load Statement example:
 		TableName:
 		Load
@@ -129,9 +140,10 @@ class BlockLibrary:
 		,	B	as TA_B
 		,	C	as TA_C
 		From [Filepath.qvd] (qvd);
-		"""		
-		if name:
-			qvdname = name
+		"""
+		qvd = QVD(qvd,tablename,prefix)
+		if blockname:
+			qvdname = blockname
 		else:
 			qvdname = 'QVD_' + os.path.basename(qvd.filename)[0:-4]	
 		blocktext = '\n'
@@ -152,8 +164,7 @@ class BlockLibrary:
 	def add_directory_QVDs(self,directory):
 		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.qvd')]
 		for f in files:
-			block = QVD(os.path.join(directory,f))
-			self.add_qvd_block(block)
+			self.add_qvd_block(os.path.join(directory,f))
 
 	def add_directory_blocks(self,directory):		
 		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.xml')]

@@ -70,11 +70,11 @@ class TestBlock(unittest.TestCase):
 		print('Testing QVD load script writing.')
 		#Load a qvd.
 		tablename = 'Blah'
-		testqvd = QVD('testdata/Test.qvd',tablename=tablename,prefix='XX')
+		testqvd = QVD('testdata/Test.qvd')
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Generate a block from my qvd.
-		myblocklib.add_qvd_block(testqvd,'QVD_testqvd')
+		myblocklib.add_qvd_block('testdata/Test.qvd','QVD_testqvd',tablename=tablename,prefix='XX')
 		myblocklib.add_text_block('DEF_META','Meta SUB Definition','SUB','blocks/source/sub_Metadata.qvs')
 		myblocklib.add_text_block('CALL_META','Call meta block','BLOCK','blocks/source/block_CallMeta.qvs')
 		myblocklib.add_text_block('INIT_META','Initialise meta block','BLOCK','blocks/source/block_InitMeta.qvs')
@@ -101,7 +101,7 @@ class TestBlock(unittest.TestCase):
 	def test_xml_write(self):
 		myblocklib = BlockLibrary('Test',load_defaults = True)
 		for block in myblocklib.blocks:
-			myblocklib.block_to_xml(myblocklib.blocks[block])
+			myblocklib.block_to_xml(block,directory='blocks')
 
 	def test_xml_read(self):
 		myblocklib = BlockLibrary('Test')
@@ -109,7 +109,7 @@ class TestBlock(unittest.TestCase):
 		#Copy block for comparison.
 		myblocklib.blocks['A']=myblocklib.blocks['Default_Call_Meta']
 		#Write and read back (will overwrite):
-		myblocklib.block_to_xml(myblocklib.blocks['Default_Call_Meta'])
+		myblocklib.block_to_xml('Default_Call_Meta',directory='blocks')
 		myblocklib.add_xml_block('blocks/Default_Call_Meta.xml')
 		a = myblocklib.blocks['A']
 		b = myblocklib.blocks['Default_Call_Meta']
