@@ -1005,7 +1005,7 @@
     <ChartDimensionDataDef>
       <PseudoDef>
         <Name>TM_TableName</Name>
-        <Type>PRESENT</Type>
+        <Type>NOT_PRESENT</Type>
       </PseudoDef>
       <Title></Title>
       <TotalString></TotalString>
@@ -2403,7 +2403,6 @@
   <TableProperties>
     <VerticalLabels>false</VerticalLabels>
     <ColWidths>
-      <int>300</int>
       <int>300</int>
       <int>300</int>
     </ColWidths>

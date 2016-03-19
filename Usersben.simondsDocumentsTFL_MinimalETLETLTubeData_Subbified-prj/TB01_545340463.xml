@@ -231,8 +231,8 @@
         <SortCriteria>
           <SortByState>1</SortByState>
           <SortByFrequency>0</SortByFrequency>
-          <SortByNumeric>1</SortByNumeric>
-          <SortByAscii>1</SortByAscii>
+          <SortByNumeric>0</SortByNumeric>
+          <SortByAscii>0</SortByAscii>
           <SortByLoadOrder>0</SortByLoadOrder>
           <SortByExpression>0</SortByExpression>
           <Expression></Expression>
@@ -568,7 +568,7 @@
         </Label>
         <Field>
           <Name>TM_TableName</Name>
-          <Type>PRESENT</Type>
+          <Type>NOT_PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -2037,7 +2037,6 @@
   <Memory></Memory>
   <StyleNumber>12</StyleNumber>
   <InterFieldSortOrder>
-    <int>0</int>
     <int>9</int>
     <int>3</int>
     <int>6</int>
@@ -2046,6 +2045,7 @@
     <int>7</int>
     <int>4</int>
     <int>2</int>
+    <int>0</int>
     <int>1</int>
   </InterFieldSortOrder>
   <LabelCellVariation>

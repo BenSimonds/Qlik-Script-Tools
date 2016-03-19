@@ -10,9 +10,9 @@
         <FillPattern>COLORAREA_PATTERN1</FillPattern>
         <PrimaryCol>
           <Col>
-            <Red>4</Red>
-            <Green>108</Green>
-            <Blue>193</Blue>
+            <Red>192</Red>
+            <Green>192</Green>
+            <Blue>192</Blue>
             <Alpha>255</Alpha>
           </Col>
           <IsCalculated>false</IsCalculated>
@@ -23,7 +23,7 @@
       </Color>
       <Font>
         <FontName>Calibri</FontName>
-        <PointSize1000>20000</PointSize1000>
+        <PointSize1000>12000</PointSize1000>
         <Underline>false</Underline>
         <Bold>true</Bold>
         <Italic>false</Italic>
@@ -151,13 +151,13 @@
         <Alpha>255</Alpha>
       </FgColor>
       <FixCorner>true</FixCorner>
-      <FixCornerSize>20</FixCornerSize>
+      <FixCornerSize>21</FixCornerSize>
       <RelCornerSize>4059000000000000</RelCornerSize>
       <Power>4000000000000000</Power>
       <RoundedShape>true</RoundedShape>
       <EnableTopLeftRounded>false</EnableTopLeftRounded>
       <EnableTopRightRounded>false</EnableTopRightRounded>
-      <EnableBottomLeftRounded>false</EnableBottomLeftRounded>
+      <EnableBottomLeftRounded>true</EnableBottomLeftRounded>
       <EnableBottomRightRounded>true</EnableBottomRightRounded>
       <Light>3FEE666666666666</Light>
       <Dark>3FC3333333333333</Dark>
@@ -206,7 +206,7 @@
       <StateName></StateName>
     </Frame>
     <LegacyHelpModeThatHasNoEffectWhatSoEver>false</LegacyHelpModeThatHasNoEffectWhatSoEver>
-    <TextAdjustHorizontal>0</TextAdjustHorizontal>
+    <TextAdjustHorizontal>1</TextAdjustHorizontal>
     <TextAdjustVertical>4</TextAdjustVertical>
     <TopMargin>10</TopMargin>
     <BottomMargin>10</BottomMargin>
@@ -231,15 +231,15 @@
       <Alpha>255</Alpha>
     </TextColor>
     <BkgColor>
-      <Mode>COLORAREA_SOLID</Mode>
-      <Luminosity>85</Luminosity>
+      <Mode>COLORAREA_SINGLE_COLOR</Mode>
+      <Luminosity>170</Luminosity>
       <FillDirection>COLORAREA_HORZ</FillDirection>
       <FillPattern>COLORAREA_PATTERN1</FillPattern>
       <PrimaryCol>
         <Col>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
+          <Red>80</Red>
+          <Green>80</Green>
+          <Blue>100</Blue>
           <Alpha>255</Alpha>
         </Col>
         <IsCalculated>false</IsCalculated>
@@ -251,14 +251,34 @@
     <BkgImageSettings></BkgImageSettings>
     <BkgMode>BKG_SOLID</BkgMode>
     <Bmp enctype="base64"></Bmp>
-    <BkgAlpha>0</BkgAlpha>
+    <BkgAlpha>255</BkgAlpha>
     <Text>
-      <v>= vDocumentName</v>
+      <v>Run Subs</v>
     </Text>
     <ImageRepresentation></ImageRepresentation>
     <AllowVerticalScrollBar>false</AllowVerticalScrollBar>
     <AllowHorizontalScrollBar>false</AllowHorizontalScrollBar>
-    <ActionItems></ActionItems>
+    <ActionItems>
+      <ActionItemDef>
+        <Type>TYPE_SET_VALUE</Type>
+        <Parameters>
+          <StringExpr>
+            <v>vSmartVarPassedFromExternalCall</v>
+          </StringExpr>
+          <StringExpr>
+            <v>='_'&amp;concat(SubName,'_')&amp;'_'</v>
+          </StringExpr>
+        </Parameters>
+        <StateName></StateName>
+      </ActionItemDef>
+      <ActionItemDef>
+        <Type>TYPE_RELOAD</Type>
+        <Parameters>
+          <StringExpr></StringExpr>
+        </Parameters>
+        <StateName></StateName>
+      </ActionItemDef>
+    </ActionItems>
   </Layout>
   <PrintSettings></PrintSettings>
   <UserSized>true</UserSized>

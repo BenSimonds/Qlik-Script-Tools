@@ -23,7 +23,7 @@
       </Color>
       <Font>
         <FontName>Calibri</FontName>
-        <PointSize1000>20000</PointSize1000>
+        <PointSize1000>16000</PointSize1000>
         <Underline>false</Underline>
         <Bold>true</Bold>
         <Italic>false</Italic>
@@ -253,7 +253,7 @@
     <Bmp enctype="base64"></Bmp>
     <BkgAlpha>0</BkgAlpha>
     <Text>
-      <v>= vDocumentName</v>
+      <v>Subbified</v>
     </Text>
     <ImageRepresentation></ImageRepresentation>
     <AllowVerticalScrollBar>false</AllowVerticalScrollBar>

@@ -23,9 +23,9 @@
       </Color>
       <Font>
         <FontName>Calibri</FontName>
-        <PointSize1000>20000</PointSize1000>
+        <PointSize1000>12000</PointSize1000>
         <Underline>false</Underline>
-        <Bold>true</Bold>
+        <Bold>false</Bold>
         <Italic>false</Italic>
         <DropShadow>false</DropShadow>
       </Font>
@@ -151,13 +151,13 @@
         <Alpha>255</Alpha>
       </FgColor>
       <FixCorner>true</FixCorner>
-      <FixCornerSize>20</FixCornerSize>
+      <FixCornerSize>21</FixCornerSize>
       <RelCornerSize>4059000000000000</RelCornerSize>
       <Power>4000000000000000</Power>
       <RoundedShape>true</RoundedShape>
-      <EnableTopLeftRounded>false</EnableTopLeftRounded>
-      <EnableTopRightRounded>false</EnableTopRightRounded>
-      <EnableBottomLeftRounded>false</EnableBottomLeftRounded>
+      <EnableTopLeftRounded>true</EnableTopLeftRounded>
+      <EnableTopRightRounded>true</EnableTopRightRounded>
+      <EnableBottomLeftRounded>true</EnableBottomLeftRounded>
       <EnableBottomRightRounded>true</EnableBottomRightRounded>
       <Light>3FEE666666666666</Light>
       <Dark>3FC3333333333333</Dark>
@@ -206,7 +206,7 @@
       <StateName></StateName>
     </Frame>
     <LegacyHelpModeThatHasNoEffectWhatSoEver>false</LegacyHelpModeThatHasNoEffectWhatSoEver>
-    <TextAdjustHorizontal>0</TextAdjustHorizontal>
+    <TextAdjustHorizontal>1</TextAdjustHorizontal>
     <TextAdjustVertical>4</TextAdjustVertical>
     <TopMargin>10</TopMargin>
     <BottomMargin>10</BottomMargin>
@@ -232,14 +232,14 @@
     </TextColor>
     <BkgColor>
       <Mode>COLORAREA_SOLID</Mode>
-      <Luminosity>85</Luminosity>
+      <Luminosity>154</Luminosity>
       <FillDirection>COLORAREA_HORZ</FillDirection>
       <FillPattern>COLORAREA_PATTERN1</FillPattern>
       <PrimaryCol>
         <Col>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
+          <Red>30</Red>
+          <Green>30</Green>
+          <Blue>40</Blue>
           <Alpha>255</Alpha>
         </Col>
         <IsCalculated>false</IsCalculated>
@@ -251,9 +251,15 @@
     <BkgImageSettings></BkgImageSettings>
     <BkgMode>BKG_SOLID</BkgMode>
     <Bmp enctype="base64"></Bmp>
-    <BkgAlpha>0</BkgAlpha>
+    <BkgAlpha>255</BkgAlpha>
     <Text>
-      <v>= vDocumentName</v>
+      <v>Version 0.1
+Subbified is a tool for taking an existing load script - generally an extract or transform layer script - and turing it into a modular script that can be reloaded in parts as needed. It also adds some metadata tools for tracking which parts of the load script are taking the longest.
+
+To use it:
+	1. Run the python script.
+	2. Open the resulting qvw file in qlik.
+	3. Reload your data!</v>
     </Text>
     <ImageRepresentation></ImageRepresentation>
     <AllowVerticalScrollBar>false</AllowVerticalScrollBar>

@@ -770,7 +770,7 @@
     <ExtendedValues></ExtendedValues>
     <StateName></StateName>
   </CaptionFrame>
-  <HasTableOriginOfFields>true</HasTableOriginOfFields>
+  <HasTableOriginOfFields>false</HasTableOriginOfFields>
   <ReloadTimeObsololete></ReloadTimeObsololete>
   <VBModulePos>-2</VBModulePos>
   <VBModuleXScrollPos>-2</VBModuleXScrollPos>
@@ -856,7 +856,7 @@
       <int>3</int>
     </InterOrder>
   </BookmarkSortOrder>
-  <ScriptTabActiveTab>1</ScriptTabActiveTab>
+  <ScriptTabActiveTab>4</ScriptTabActiveTab>
   <ModuleSystemAccessIntended>0</ModuleSystemAccessIntended>
   <InhibitAggressiveQvdCleaning>false</InhibitAggressiveQvdCleaning>
   <Alerts></Alerts>

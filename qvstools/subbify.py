@@ -99,4 +99,13 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 
 	print('Finished!')
 
+def subbify_comandline():
+	args = sys.argv
+	print('Args:' + str(args))
+	pathname = os.path.abspath(sys.argv[1])
+	if '-f' in sys.argv:
+		reload_after = 'f'
+	else:
+		reload_after = 's'
+	subbify(pathname,open_after = True, reload_after = reload_after)
 

@@ -13,7 +13,8 @@ config = {
     'install_requires': ['nose'],
     'packages': ['qvstools'],
     'scripts': [],
-    'name': 'QVScriptTools'
+    'name': 'QVScriptTools',
+    'entry_points':{'console_scripts':['subbify=qvstools.subbify:subbify_comandline']}
 }
 
 setup(**config)

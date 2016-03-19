@@ -4,18 +4,12 @@
     <bool>false</bool>
     <bool>false</bool>
     <bool>false</bool>
-    <bool>false</bool>
   </AlwaysLoose>
   <FieldSrcTables>
-    <String>6</String>
-    <String>1</String>
-    <String>Tables_Metadata</String>
+    <String>8</String>
+    <String>0</String>
     <String>9</String>
-    <String>1</String>
-    <String>SubNameList</String>
-    <String>10</String>
-    <String>1</String>
-    <String>SubNameList</String>
+    <String>0</String>
   </FieldSrcTables>
   <TableViewData></TableViewData>
   <Bookmarks></Bookmarks>
@@ -28,6 +22,7 @@
         <FieldNames>
           <String>$Field</String>
           <String>$Table</String>
+          <String>_KEY_SUB</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -64,6 +59,11 @@
           <String>_KEY_SUB</String>
           <String>SubName</String>
           <String>SubNote</String>
+          <String>Cat</String>
+          <String>TM_SubName</String>
+          <String>TM_Sub</String>
+          <String>ALL_TABLE_METADATA</String>
+          <String>BCat</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -76,6 +76,11 @@
           <String>_KEY_SUB</String>
           <String>SubName</String>
           <String>SubNote</String>
+          <String>Cat</String>
+          <String>TM_SubName</String>
+          <String>TM_Sub</String>
+          <String>ALL_TABLE_METADATA</String>
+          <String>BCat</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -85,6 +90,18 @@
           <String>$Fields</String>
           <String>$FieldNo</String>
           <String>_SubNameListSort</String>
+          <String>Bat</String>
+          <String>Date</String>
+          <String>TM_SubID</String>
+          <String>TM_Date</String>
+          <String>TM_StartTime</String>
+          <String>TM_EndTime</String>
+          <String>TM_ElapsedTime</String>
+          <String>TM_ElapsedSeconds</String>
+          <String>TM_NoOfRows</String>
+          <String>TM_NoOfColumns</String>
+          <String>BBat</String>
+          <String>BDate</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -94,6 +111,30 @@
           <String>$Fields</String>
           <String>$FieldNo</String>
           <String>_SubNameListSort</String>
+          <String>Bat</String>
+          <String>Date</String>
+          <String>TM_SubID</String>
+          <String>TM_NoOfRows</String>
+          <String>TM_NoOfColumns</String>
+          <String>BBat</String>
+          <String>BDate</String>
+        </FieldNames>
+      </FieldTagData>
+      <FieldTagData>
+        <Tag>$timestamp</Tag>
+        <FieldNames>
+          <String>Date</String>
+          <String>TM_Date</String>
+          <String>TM_StartTime</String>
+          <String>TM_EndTime</String>
+          <String>BDate</String>
+        </FieldNames>
+      </FieldTagData>
+      <FieldTagData>
+        <Tag>$date</Tag>
+        <FieldNames>
+          <String>Date</String>
+          <String>BDate</String>
         </FieldNames>
       </FieldTagData>
     </ScriptBased>

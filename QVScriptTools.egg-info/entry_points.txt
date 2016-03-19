@@ -1,0 +1,3 @@
+[console_scripts]
+subbify = qvstools.subbify:subbify_comandline
+
