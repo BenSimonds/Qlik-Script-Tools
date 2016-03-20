@@ -110,7 +110,7 @@ def subbify_comandline():
 
 	Usage::
 
-		> subbify "MyQlikViewApp-prj"
+		> subbify "MyQlikViewScript.qvs"
 
 	"""
 	args = sys.argv
