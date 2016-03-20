@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Modules &mdash; Qlik-Script-Tools 0.1 documentation</title>
+    <title>Modules: &mdash; Qlik-Script-Tools 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Qlik-Script-Tools 0.1 documentation" href="index.html" />
-    <link rel="prev" title="Welcome to Qlik-Script-Tools’s documentation!" href="index.html" />
+    <link rel="prev" title="Qlik-Script-Tools" href="index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -38,9 +38,11 @@
           <div class="body" role="main">
             
   <div class="section" id="modules">
-<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<h1>Modules:<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
 <p>Currently Qlik-Script-Tools has a few different modules.</p>
-<span class="target" id="module-qvstools.blocks"></span><p>Module for creating and combining blocks.</p>
+<span class="target" id="module-qvstools.blocks"></span><div class="section" id="blocks">
+<h2>Blocks<a class="headerlink" href="#blocks" title="Permalink to this headline">¶</a></h2>
+<p>Module for creating and combining blocks.</p>
 <dl class="class">
 <dt id="qvstools.blocks.Block">
 <em class="property">class </em><code class="descclassname">qvstools.blocks.</code><code class="descname">Block</code><span class="sig-paren">(</span><em>name</em>, <em>description</em>, <em>blocktype</em>, <em>blocktext</em>, <em>replacelist=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.Block" title="Permalink to this definition">¶</a></dt>
@@ -89,18 +91,16 @@ mode &#8211; same as for normal write() method. &#8216;w&#8217; for write, &#821
 <dt id="qvstools.blocks.BlockLibrary.add_qvd_block">
 <code class="descname">add_qvd_block</code><span class="sig-paren">(</span><em>qvd</em>, <em>blockname=''</em>, <em>tablename=False</em>, <em>prefix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.add_qvd_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read in a qvd file using QVD() and create a block containing a simple load statement for it.</p>
-<dl class="docutils">
-<dt>Load Statement example::</dt>
-<dd><p class="first">TableName:
-Load</p>
-<blockquote>
-<div>ID      as _KEY_ID //(optional)</div></blockquote>
-<p class="last">,       A       as TA_A
+<p>Load Statement example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>TableName:
+Load
+        ID      as _KEY_ID //(optional)
+,       A       as TA_A
 ,       B       as TA_B
 ,       C       as TA_C
-From [Filepath.qvd] (qvd);</p>
-</dd>
-</dl>
+From [Filepath.qvd] (qvd);
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -182,17 +182,173 @@ Used for example by subbify.</p>
 </dd></dl>
 
 </div>
+<span class="target" id="module-qvstools.prj"></span><div class="section" id="prj">
+<h2>PRJ<a class="headerlink" href="#prj" title="Permalink to this headline">¶</a></h2>
+<p>Module for dealing with prj files.</p>
+<dl class="class">
+<dt id="qvstools.prj.PRJ">
+<em class="property">class </em><code class="descclassname">qvstools.prj.</code><code class="descname">PRJ</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.prj.PRJ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for holding the component parts of a prj folder, and methods for doing useful stuff with them.</p>
+<dl class="method">
+<dt id="qvstools.prj.PRJ.find_replace_elements">
+<code class="descname">find_replace_elements</code><span class="sig-paren">(</span><em>search_path</em>, <em>replace</em>, <em>object_id=False</em>, <em>object_type=False</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.prj.PRJ.find_replace_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes an xpath query and searches through self.xmlfiles to find and replace, then writes back to the source files.</p>
+<p>Qlik xml files seem not to use attributes so we assume that the user always wants to replace the .text of an element.</p>
+<p>Arguments:
+search_path &#8211; xpath query.
+object_id &#8211; (optional) object id of object to limit find and replace to.
+object_type &#8211; (optional) object type of objects to limit find and replace to.</p>
+<p>Examples:
+Find and replace all the fonts in a project with calibri:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">prj</span> <span class="o">=</span> <span class="n">PRJ</span><span class="p">(</span><span class="s1">&#39;App-prj&#39;</span><span class="p">)</span>
+<span class="n">prj</span><span class="o">.</span><span class="n">find_replace_elements</span><span class="p">(</span><span class="s2">&quot;.//FontName&quot;</span><span class="p">,</span><span class="s1">&#39;Calibri&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.prj.PRJ.write_xml_all">
+<code class="descname">write_xml_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.prj.PRJ.write_xml_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the content of the prj object back to their original file sources.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="qvstools.prj.QVObject">
+<em class="property">class </em><code class="descclassname">qvstools.prj.</code><code class="descname">QVObject</code><span class="sig-paren">(</span><em>object_file</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.prj.QVObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for a qlikview object. Holds the xml tree as well as it&#8217;s type, name etc.</p>
+<dl class="method">
+<dt id="qvstools.prj.QVObject.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>path=False</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.prj.QVObject.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the object back to an xml file.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-qvstools.subbify"></span><div class="section" id="subbify">
+<h2>Subbify<a class="headerlink" href="#subbify" title="Permalink to this headline">¶</a></h2>
+<p>Auto-generates a subbified qvd loader / extractor based on a script input.</p>
+<div class="section" id="steps">
+<h3>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Take input script:</li>
+<li>Split into tabs.</li>
+<li>Wrap each tab in subbify blocks.</li>
+<li>Save out resulting script into cloned prj directory for cloned empty/template file.</li>
+</ol>
+<dl class="function">
+<dt id="qvstools.subbify.subbify">
+<code class="descclassname">qvstools.subbify.</code><code class="descname">subbify</code><span class="sig-paren">(</span><em>filepath</em>, <em>open_after=True</em>, <em>reload_after='s'</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.subbify.subbify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base method for subbify. Takes a filepath and generates a subbified qvw file.</p>
+<p>Arguments:
+filepath &#8211; should point to a qvs file. possibly in future a qvw file if I can figure out how to generate the prj files for it.
+open_after &#8211; opens the generated file in qlikview.
+reload_after:</p>
+<blockquote>
+<div>s: loads sub table only. (default)
+f: loads sub table and runs all subs.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="qvstools.subbify.subbify_comandline">
+<code class="descclassname">qvstools.subbify.</code><code class="descname">subbify_comandline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.subbify.subbify_comandline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command line version of subbify.</p>
+<p>This is installed as a command line tool by setuptools.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&gt; subbify &quot;MyQlikViewApp-prj&quot;
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Creating a new block library and adding a block:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qvstools.blocks</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">bl</span> <span class="o">=</span> <span class="n">BlockLibrary</span><span class="p">(</span><span class="s1">&#39;MyBlockLibrary&#39;</span><span class="p">)</span> <span class="c1">#Create a block library.</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">add_text_block</span><span class="p">(</span>
+        <span class="s1">&#39;MyBlock&#39;</span><span class="p">,</span>                                                      <span class="c1">#Name</span>
+        <span class="s1">&#39;A small block of qlikview script&#39;</span><span class="p">,</span> <span class="c1">#Description</span>
+        <span class="s1">&#39;Block&#39;</span><span class="p">,</span>                                                        <span class="c1">#Type</span>
+        <span class="s1">&#39;Script.qvs&#39;</span>                                            <span class="c1">#Block to be added.</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>Blocks are just normal qvs script, but you can specify strings to be replaced with the syntax below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>//(@0,&#39;First Replace String&#39;)
+
+//Normal qlik script from here on.
+
+@0:
+Load
+        1               as ID
+        &#39;Text&#39;  as Text
+        10              as Value
+AutoGenerate 1;
+</pre></div>
+</div>
+<p>You can then write the block to a file with the block.write() method, the replacelist argument accepts a list of items to replace:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">write_block</span><span class="p">(</span><span class="s1">&#39;MyBlock&#39;</span><span class="p">,[</span><span class="s1">&#39;MyTable&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>write_block supports the usual python write modes (w or a), but defaults to a to allow you to chain blocks together easily.</p>
+<p>The resulting output file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>//Normal qlik script from here on.
+
+MyTable:
+Load
+        1               as ID
+        &#39;Text&#39;  as Text
+        10              as Value
+AutoGenerate 1;
+</pre></div>
+</div>
+<p>You can save useful blocks into xml files for reapeated use without entering descriptions and names every time:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">block_to_xml</span><span class="p">(</span><span class="s1">&#39;MyBlock&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Blocks can also be created from QVD&#8217;s:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">add_qvd_block</span><span class="p">(</span><span class="s1">&#39;Data.qvd&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Directories can also be batch loaded:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#Load a directory of block xml files</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">add_directory_blocks</span><span class="p">(</span><span class="s1">&#39;Directory_Blocks&#39;</span><span class="p">)</span>
+<span class="c1">#or QVDs:</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">add_directory_QVDs</span><span class="p">(</span><span class="s1">&#39;Directory_QVDs&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Modules:</a><ul>
+<li><a class="reference internal" href="#blocks">Blocks</a></li>
+<li><a class="reference internal" href="#prj">PRJ</a></li>
+<li><a class="reference internal" href="#subbify">Subbify</a><ul>
+<li><a class="reference internal" href="#steps">Steps</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Qlik-Script-Tools&#8217;s documentation!</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">Qlik-Script-Tools</a></li>
   </ul></li>
 </ul>
 </div>

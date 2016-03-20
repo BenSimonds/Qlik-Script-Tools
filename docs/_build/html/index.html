@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Qlik-Script-Tools’s documentation! &mdash; Qlik-Script-Tools 0.1 documentation</title>
+    <title>Qlik-Script-Tools &mdash; Qlik-Script-Tools 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Qlik-Script-Tools 0.1 documentation" href="#" />
-    <link rel="next" title="Modules" href="modules.html" />
+    <link rel="next" title="Modules:" href="modules.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -37,12 +37,18 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-qlik-script-tools-s-documentation">
-<h1>Welcome to Qlik-Script-Tools&#8217;s documentation!<a class="headerlink" href="#welcome-to-qlik-script-tools-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="qlik-script-tools">
+<h1>Qlik-Script-Tools<a class="headerlink" href="#qlik-script-tools" title="Permalink to this headline">¶</a></h1>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#blocks">Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#prj">PRJ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#subbify">Subbify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#examples">Examples</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -83,65 +89,6 @@
 <li>Subbify tool - load in an existing qvs script, and subbify will generate a qvw file with each tab made into a separate subroutine, useful for making ETL scripts modular.</li>
 </ul>
 </div>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>Creating a new block library and adding a block:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qvstools.blocks</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">bl</span> <span class="o">=</span> <span class="n">BlockLibrary</span><span class="p">(</span><span class="s1">&#39;MyBlockLibrary&#39;</span><span class="p">)</span> <span class="c1">#Create a block library.</span>
-<span class="n">bl</span><span class="o">.</span><span class="n">add_text_block</span><span class="p">(</span>
-        <span class="s1">&#39;MyBlock&#39;</span><span class="p">,</span>                                                      <span class="c1">#Name</span>
-        <span class="s1">&#39;A small block of qlikview script&#39;</span><span class="p">,</span> <span class="c1">#Description</span>
-        <span class="s1">&#39;Block&#39;</span><span class="p">,</span>                                                        <span class="c1">#Type</span>
-        <span class="s1">&#39;Script.qvs&#39;</span>                                            <span class="c1">#Block to be added.</span>
-        <span class="p">)</span>
-</pre></div>
-</div>
-<p>Blocks are just normal qvs script, but you can specify strings to be replaced with the syntax below:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>//(@0,&#39;First Replace String&#39;)
-
-//Normal qlik script from here on.
-
-@0:
-Load
-        1               as ID
-        &#39;Text&#39;  as Text
-        10              as Value
-AutoGenerate 1;
-</pre></div>
-</div>
-<p>You can then write the block to a file with the block.write() method, the replacelist argument accepts a list of items to replace:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">write_block</span><span class="p">(</span><span class="s1">&#39;MyBlock&#39;</span><span class="p">,[</span><span class="s1">&#39;MyTable&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>write_block supports the usual python write modes (w or a), but defaults to a to allow you to chain blocks together easily.</p>
-<p>The resulting output file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>//Normal qlik script from here on.
-
-MyTable:
-Load
-        1               as ID
-        &#39;Text&#39;  as Text
-        10              as Value
-AutoGenerate 1;
-</pre></div>
-</div>
-<p>You can save useful blocks into xml files for reapeated use without entering descriptions and names every time:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">block_to_xml</span><span class="p">(</span><span class="s1">&#39;MyBlock&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Blocks can also be created from QVD&#8217;s:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">add_qvd_block</span><span class="p">(</span><span class="s1">&#39;Data.qvd&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Directories can also be batch loaded:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#Load a directory of block xml files</span>
-<span class="n">bl</span><span class="o">.</span><span class="n">add_directory_blocks</span><span class="p">(</span><span class="s1">&#39;Directory_Blocks&#39;</span><span class="p">)</span>
-<span class="c1">#or QVDs:</span>
-<span class="n">bl</span><span class="o">.</span><span class="n">add_directory_QVDs</span><span class="p">(</span><span class="s1">&#39;Directory_QVDs&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
 </div>
 
 
@@ -152,11 +99,10 @@ AutoGenerate 1;
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to Qlik-Script-Tools&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#">Qlik-Script-Tools</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#current-features">Current Features</a></li>
-<li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -164,7 +110,7 @@ AutoGenerate 1;
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="modules.html" title="next chapter">Modules</a></li>
+      <li>Next: <a href="modules.html" title="next chapter">Modules:</a></li>
   </ul></li>
 </ul>
 </div>
