@@ -3,12 +3,18 @@ Modules:
 
 Currently Qlik-Script-Tools has a few different modules.
 
+Blocks
+--------
 .. automodule:: qvstools.blocks
 	:members:
 
+PRJ
+--------
 .. automodule:: qvstools.prj
 	:members:
 
+Subbify
+--------
 .. automodule:: qvstools.subbify
 	:members:
 

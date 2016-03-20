@@ -1,7 +1,8 @@
 """
-SUBBIFY:
-Aim: to aut-generate a subbiified qvd loader / extractor based on a script input.
-Steps:
+Auto-generates a subbified qvd loader / extractor based on a script input.
+
+Steps
+-----
 1. Take input script:
 2. Split into tabs.
 3. Wrap each tab in subbify blocks.
@@ -13,10 +14,13 @@ from qvstools.blocks import *
 
 def subbify(filepath, open_after = True, reload_after = 's'):
 	"""
-	filepath: should point to a qvs file. possibly in future a qvw file if I can figure out how to generate the prj files for it.
-	open_after: opens the generated file in qlikview.
+	Base method for subbify. Takes a filepath and generates a subbified qvw file.
+
+	Arguments:
+	filepath -- should point to a qvs file. possibly in future a qvw file if I can figure out how to generate the prj files for it.
+	open_after -- opens the generated file in qlikview.
 	reload_after:
-		s: loads sub table only.
+		s: loads sub table only. (default)
 		f: loads sub table and runs all subs.
 	"""
 
@@ -100,6 +104,15 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 	print('Finished!')
 
 def subbify_comandline():
+	"""Command line version of subbify.
+
+	This is installed as a command line tool by setuptools.
+
+	Usage::
+
+		> subbify "MyQlikViewApp-prj"
+
+	"""
 	args = sys.argv
 	print('Args:' + str(args))
 	pathname = os.path.abspath(sys.argv[1])

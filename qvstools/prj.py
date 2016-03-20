@@ -1,4 +1,4 @@
-##Module for dealing with prj files:
+"""Module for dealing with prj files."""
 import os, sys
 import xml.etree.ElementTree as ET
 
@@ -7,7 +7,7 @@ class QVObject:
 	Class for a qlikview object. Holds the xml tree as well as it's type, name etc.
 	"""
 
-	object_types = { #Possible Root Element tags and their associated object tyes.
+	object_types = {
 		'GraphProperties':'Chart',
 		'ListBoxProperties':'List',
 		'BookmarkObjectProperties':'Bookmark',
@@ -33,12 +33,14 @@ class QVObject:
 	}
 
 	def __init__(self,object_file):
+		"""Load the xml file object_file and turn it into an object."""
 		self.id = os.path.basename(object_file[0:-4])
 		self.path = object_file
 		self.xml = ET.parse(self.path)
 		self.type = self.object_types[self.xml.find('.').tag]
 
 	def write(self,path=False):
+		"""Write the object back to an xml file."""
 		root = self.xml.find('.') #Root of element tree as eleent.
 		ouptut_string = ET.tostring(root,encoding='UTF-8',short_empty_elements=False)
 		if path: #Overwrite original file.
@@ -60,32 +62,44 @@ class PRJ:
 	"""
 	Class for holding the component parts of a prj folder, and methods for doing useful stuff with them.
 	"""
-	def __init__(self,path):
-		self.name = os.path.basename(path)[0:-4]
-		self.path = path
-		self.all_files = os.listdir(path)
+	def __init__(self,directory):
+		"""Takes the """
+		self.name = os.path.basename(directory)[0:-4]
+		self.path = directory
+		self.all_files = os.listdir(directory)
 		self.objects = {}
 		for file in self.all_files:
 			if file.endswith('.xml'):
 				try:
-					ob = QVObject(os.path.join(path,file))
+					ob = QVObject(os.path.join(directory,file))
 					self.objects[ob.id] = ob
 				except KeyError:
-					print('Object type not found for file: ' & str(file))
+					print('Object type not found for file: {0}'.format(str(file)))
 
 	def write_xml_all(self):
 		"""
-		Writes the content of xmlfiles back to their original file sources.
+		Write the content of the prj object back to their original file sources.
 		"""		
 		for ob in self.objects.values():
 			ob.write()
 
 	def find_replace_elements(self,search_path,replace,object_id=False,object_type=False):
 		"""
-		Takes an xpath query and searches through self.xmlfiles to find and replace.
-		Qlik xml files seem not to use attributes so we'll assume that the user 
-		always wants to replace the .text of an element.
-		The object_type method can be used to restrict the find and replace to a specific object type.
+		Takes an xpath query and searches through self.xmlfiles to find and replace, then writes back to the source files.
+
+		Qlik xml files seem not to use attributes so we assume that the user always wants to replace the .text of an element.
+
+		Arguments:
+		search_path -- xpath query.
+		object_id -- (optional) object id of object to limit find and replace to.
+		object_type -- (optional) object type of objects to limit find and replace to.
+
+		Examples:
+		Find and replace all the fonts in a project with calibri::
+
+			prj = PRJ('App-prj')
+			prj.find_replace_elements(".//FontName",'Calibri')
+
 		"""
 		if isinstance(object_id,str):
 			object_id = [object_id]

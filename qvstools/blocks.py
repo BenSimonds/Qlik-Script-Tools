@@ -159,6 +159,7 @@ class BlockLibrary:
 		"""Read in a qvd file using QVD() and create a block containing a simple load statement for it.
 
 		Load Statement example::
+			
 			TableName:
 			Load
 				ID	as _KEY_ID //(optional)
@@ -166,6 +167,7 @@ class BlockLibrary:
 			,	B	as TA_B
 			,	C	as TA_C
 			From [Filepath.qvd] (qvd);
+
 		"""
 		qvd = QVD(qvd,tablename,prefix)
 		if blockname:
