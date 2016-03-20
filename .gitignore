@@ -1,3 +1,11 @@
 .DS_Store
+
+# Test output files.
 testoutput_*
+
+# Compiled python modules:
 *.pyc
+
+# Python egg metadata. Regenerated from source files by setuptools.
+/*.egg-info
+/*.egg

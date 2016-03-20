@@ -14,7 +14,8 @@ config = {
     'packages': ['qvstools'],
     'scripts': [],
     'name': 'QVScriptTools',
-    'entry_points':{'console_scripts':['subbify=qvstools.subbify:subbify_comandline']}
+    'entry_points':{'console_scripts':['subbify=qvstools.subbify:subbify_comandline']},
+    'include_package_data':True
 }
 
 setup(**config)

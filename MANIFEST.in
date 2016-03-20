@@ -1,0 +1,4 @@
+include qvstools/subbify_souce/*
+include docs/*.rst
+include blocks/*.xml
+include testdata/*
