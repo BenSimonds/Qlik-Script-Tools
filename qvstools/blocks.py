@@ -1,4 +1,5 @@
-#Module for storing blocks.
+"""Module for creating and combining blocks."""
+
 import pickle
 try:
 	import lxml.etree as ET
@@ -11,91 +12,114 @@ import sys, os, unicodedata, re
 
 ### Methods
 
-def write_tab(name,intofile,mode='a'):
-	"Adds a tab line to the file."
-	"Standard function that doesnt need to be part of blocklibrary."
-	with open(intofile,mode) as outputfile:
+def write_tab(name,pathname,mode='a'):
+	"""Write a single ///$tab to the file specified by pathname."""
+	with open(pathname,mode) as outputfile:
 		outputfile.write('\n///$tab ' + name + '\n')
 	return
 
 ### Classes
 
 class Block:
-	def __init__(self,b_name,b_description,b_type,b_text,b_replacelist=[]):
-		self.name = b_name
-		self.description = b_description
-		self.type = b_type
-		self.text = self.strip_non_unicode(b_text)
-		self.replacelist = b_replacelist
+	"""Container for a block of qlik script."""
+	def __init__(self,name,description,blocktype,blocktext,replacelist=[]):
+		"""Init method of Block class.
 
-	def write(self,intofile,replacelist=[],mode='a'):
-		"""Appends a block to a file."""
+		Arguments:
+		name -- the name for your block.
+		description -- longer description of your block
+		blocktype -- currently not much used, but useful for grouping blocks within a library.
+		blocktext -- string containing the actual text of your block.
+		replacelist -- replacelist -- list of strings to use as replacements for @0,@1...
+		"""
+		self.name = name
+		self.description = description
+		self.type = blocktype
+		self.text = self.strip_non_unicode(blocktext)
+		self.replacelist = replacelist
+
+	def write(self,pathname,replacelist=[],mode='a'):
+		"""Write block to pathname.
+
+		Arguments:
+		replacelist -- list of strings to use as replacements for @0,@1...
+		mode -- same as for normal write() method. 'w' for write, 'a' for append.
+		"""
 		#Check that replacelist length is correct for block.
 		if len(replacelist) != len(self.replacelist):
 			raise NameError('Replacelist requires {0} items but supplied {1}.'.format(len(self.replacelist),len(replacelist)))
 			return
-		#print('Writing block {0} to file.'.format(self.name))
 		#Replace @1 notation in block with user specified text.
 		blocktext = self.text
 		for i  in range(0,len(replacelist)):
 			blocktext = blocktext.replace('@' + str(i),replacelist[i]) #This doesnt seem to be working...
 		#Write output to file.		
-		with open(intofile,mode) as outputfile:
+		with open(pathname,mode) as outputfile:
 			outputfile.write(blocktext)
 		return
 
 	def strip_non_unicode(self,string):
-		"""
-		Required to strip non unicode characters out of weird qlik export text...
-		"""	
+		"""Strip non unicode characters out of weird qlik export text..."""	
 		return ''.join([i for i in string if ord(i)<128])#string.encode('UTF-8','ignore').decode('UTF-8')
 		
 class BlockLibrary:
-	"""This adds an easy way to bundle together the qvblocks scripts in a single file."""
+	"""Bundles together several blocks and provide methods for working with them.
+
+	A blocklibrary brings together several blocks as a dict within self.blocks. This makes it easy to lcombine several blocks to write more complex scripts.
+	"""
 
 	def __init__(self,name,load_defaults=False):
+		"""Create a block library. If load_defaults == True will load any xml blocks that already exist in the directory blocks that start with 'Default_'."""
 		self.name = name
 		self.blocks = {}
 		if load_defaults:
-			for xmlfile in [f for f in os.listdir('Blocks') if f.startswith('Default_') and f.endswith('.p')]:
-				self.add_xml_block(os.path.join('Blocks',xmlfile))
+			dir_defaults = os.path.join(os.path.dirname(__file__),'../blocks')
+			for xmlfile in [f for f in os.listdir(dir_defaults) if f.startswith('Default_') and f.endswith('.p')]:
+				self.add_xml_block(os.path.join(dir_defaults,xmlfile))
 		else:
 			pass
-		# Block groups is a  dict of groups of blocks. 
-		# Each group is a list that should be written in order.
-		# Each item in the list is a tuple (block,replacelist). block just points to a key in self.blocks. It isnt a block itself.
-		
-
+				
 	def add_pickled_block(self,blockfile, rename = False):
+		"""Deprecated - use add_xml_block instead"""
 		with open(blockfile,'rb') as pickled:
 			block = pickle.load(pickled)
 		if rename:
 			block.name = rename
 		self.blocks[block.name] = block
 
-	def add_text_block(self,b_name,b_description,b_type,b_textfile):
-		"""Adds a block from a text file given the rest of the inputs."""
-		with open(b_textfile,'r') as textfile:
-			b_text = textfile.read()
-			b_replacelist = re.findall(r"//\((@[\d]),\s?\'([\w\s,.?!()$]*)\'\)",b_text) #Returns a list of tuples. 
+	def add_text_block(self,name,description,blocktype,pathname):
+		"""Create a Block and adds it to the library.
+
+		Arguments:
+		name -- name of the block. Needn't be the same as pathname.
+		description -- description of the block.
+		blocktype -- currently not much used, but useful for grouping blocks within a library.
+		pathname -- filepath of text file (qvs/txt) to turn into a block.
+		"""
+		with open(pathname,'r') as textfile:
+			blocktext = textfile.read()
+			replacelist = re.findall(r"//\((@[\d]),\s?\'([\w\s,.?!()$]*)\'\)",blocktext) #Returns a list of tuples. 
 			#Scrub replacelist lines from text file.
-			b_text = '\n'.join([line for line in b_text.split('\n') if not re.search(r"//\(@[\d]",line) ])
+			blocktext = '\n'.join([line for line in blocktext.split('\n') if not re.search(r"//\(@[\d]",line) ])
 			
-			self.blocks[b_name] = Block(b_name,b_description,b_type,b_text,b_replacelist)	
+			self.blocks[name] = Block(name,description,blocktype,blocktext,replacelist)	
 
-	def write_block(self,block,outputfile,replacelist=[],mode='a'):
-		#Creates a familiar way to write blocks.
-		self.blocks[block].write(outputfile,replacelist,mode)
+	def write_block(self,blockname,outputfile,replacelist=[],mode='a'):
+		"""Call write() method of block."""
+		self.blocks[blockname].write(outputfile,replacelist,mode)
 
-	def remove_block(self,block):
-		del self.blocks[block]
+	def remove_block(self,blockname):
+		"""Remove block from library."""
+		del self.blocks[blockname]
 
 	def pickle_block(self,block):
+		"""Deprecated, use block_to_xml instead."""
 		with open('Blocks/'+block.name+'.p','wb') as blockfile:
 			pickle.dump(block,blockfile)
 			
-	def block_to_xml(self,block,directory='.'):
-		block = self.blocks[block]	# Get block by name.
+	def block_to_xml(self,blockname,directory='.'):
+		"""Takes the name of a block as a string and writes an xml file containing both the block text and its metadata (name, description, type, replacelist)."""
+		block = self.blocks[blockname]	# Get block by name.
 		block_xml = ET.Element('block')
 		ET.SubElement(block_xml,'name')
 		block_xml.find('name').text = block.name
@@ -115,6 +139,7 @@ class BlockLibrary:
 		tree.write(filepath,encoding='UTF-8',short_empty_elements=False)
 
 	def add_xml_block(self,filepath):
+		"""Create a block from an xml file and add it to the library."""
 		xmlfile = ET.parse(filepath)
 		b_name = xmlfile.find('./name').text
 		b_description = xmlfile.find('./description').text
@@ -131,15 +156,16 @@ class BlockLibrary:
 			b_replacelist)
 		
 	def add_qvd_block(self,qvd,blockname='',tablename=False,prefix=False):
-		"""Takes a qvd file and writes a simple load statement for it.
-		Load Statement example:
-		TableName:
-		Load
-			ID	as _KEY_ID //(optional)
-		,	A	as TA_A
-		,	B	as TA_B
-		,	C	as TA_C
-		From [Filepath.qvd] (qvd);
+		"""Read in a qvd file using QVD() and create a block containing a simple load statement for it.
+
+		Load Statement example::
+			TableName:
+			Load
+				ID	as _KEY_ID //(optional)
+			,	A	as TA_A
+			,	B	as TA_B
+			,	C	as TA_C
+			From [Filepath.qvd] (qvd);
 		"""
 		qvd = QVD(qvd,tablename,prefix)
 		if blockname:
@@ -148,7 +174,6 @@ class BlockLibrary:
 			qvdname = 'QVD_' + os.path.basename(qvd.filename)[0:-4]	
 		blocktext = '\n'
 		blocktext = blocktext + qvd.table + ':\nLoad\n'
-		#Optionalkeyload would go here.
 		for field in qvd.fields:
 			blocktext = blocktext + '\t[' + field + ']\tas\t[' + qvd.tablePrefix + field + '],\n'
 		blocktext = blocktext + '\t' + "'ALL_" + qvd.table.upper() + "'\tas\t" + 'ALL_' + qvd.table.upper() + '\n'
@@ -162,16 +187,28 @@ class BlockLibrary:
 			)
 
 	def add_directory_QVDs(self,directory):
+		"""Create blocks for all .qvd files in directory."""
 		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.qvd')]
 		for f in files:
 			self.add_qvd_block(os.path.join(directory,f))
 
-	def add_directory_blocks(self,directory):		
+	def add_directory_blocks(self,directory):
+		"""Create blocks for all .xml files in directory."""		
 		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.xml')]
 		for f in files:
 			self.add_xml_block(f)
-			
-	def split_block_tabs(self,block):
+		
+	@staticmethod
+	def split_block_tabs(block):
+		"""Split the input block at each ///$tab line and return a list of blocks.
+
+		The returned list will *not* be added to the blocklibray. To add it just to a simple for loop::
+			for sub_block in myblocklibrary.split_block_tabs(block):
+				myblocklibrary[sub_block.name] = sub_block
+		The reason for this behavior is that the block libray dict is unordered, but it is useful to preserve the order the blocks were split into.
+		Note that this method takes a block, not the name of a block in the library. This is so that the method can be called as a staticmethod independently of a blocklibray object.
+		Used for example by subbify. 
+		"""
 		blocktext = block.text
 		#Tab looks like //$tab something.
 		tabs = [] #will be a list of blocks.
@@ -199,9 +236,16 @@ class BlockLibrary:
 		return tabs #Return a list that can be iterated over in the correct order.
 
 class QVD:
-	"""Takes a qvd file and makes a python class with its xml header info."""
+	"""Take a qvd file and make a python class with its xml header info."""
 
 	def __init__(self,qvdfile,tablename=False,prefix=False):
+		"""Create QVD object.
+
+		Arguments:
+		qvdfile -- filepath of qvdfile to create block for.
+		tablename -- (optional) replaces the name of the table in the qvd with the value provided.
+		prefix -- (optional) prefix to be used when aliasing fieldnames in table, e.g if prefix = 'XX', FieldName will be aliased as XX_FieldName in the load statement.
+		"""
 		self.qvdheader = self.loadqvdfile(qvdfile)
 		 
 		def setprops(qvdfile,tablename,prefix):
@@ -225,6 +269,7 @@ class QVD:
 		setprops(qvdfile,tablename,prefix)
 
 	def loadqvdfile(self, infile):
+		"""Read the xml header of a qvd file and parse it as xml."""
 		with open(infile,'rb') as qvdfile:
 			endphrase =  '</QvdTableHeader>'
 			filedata = ''

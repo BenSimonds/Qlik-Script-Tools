@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Modules &mdash; Qlik-Script-Tools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Qlik-Script-Tools 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to Qlik-Script-Tools’s documentation!" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="modules">
+<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<p>Currently Qlik-Script-Tools has a few different modules.</p>
+<span class="target" id="module-qvstools.blocks"></span><p>Module for creating and combining blocks.</p>
+<dl class="class">
+<dt id="qvstools.blocks.Block">
+<em class="property">class </em><code class="descclassname">qvstools.blocks.</code><code class="descname">Block</code><span class="sig-paren">(</span><em>name</em>, <em>description</em>, <em>blocktype</em>, <em>blocktext</em>, <em>replacelist=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.Block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Container for a block of qlik script.</p>
+<dl class="method">
+<dt id="qvstools.blocks.Block.strip_non_unicode">
+<code class="descname">strip_non_unicode</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.Block.strip_non_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Strip non unicode characters out of weird qlik export text...</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.Block.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>pathname</em>, <em>replacelist=[]</em>, <em>mode='a'</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.Block.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write block to pathname.</p>
+<p>Arguments:
+replacelist &#8211; list of strings to use as replacements for &#64;0,&#64;1...
+mode &#8211; same as for normal write() method. &#8216;w&#8217; for write, &#8216;a&#8217; for append.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="qvstools.blocks.BlockLibrary">
+<em class="property">class </em><code class="descclassname">qvstools.blocks.</code><code class="descname">BlockLibrary</code><span class="sig-paren">(</span><em>name</em>, <em>load_defaults=False</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bundles together several blocks and provide methods for working with them.</p>
+<p>A blocklibrary brings together several blocks as a dict within self.blocks. This makes it easy to lcombine several blocks to write more complex scripts.</p>
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.add_directory_QVDs">
+<code class="descname">add_directory_QVDs</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.add_directory_QVDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create blocks for all .qvd files in directory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.add_directory_blocks">
+<code class="descname">add_directory_blocks</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.add_directory_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create blocks for all .xml files in directory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.add_pickled_block">
+<code class="descname">add_pickled_block</code><span class="sig-paren">(</span><em>blockfile</em>, <em>rename=False</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.add_pickled_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated - use add_xml_block instead</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.add_qvd_block">
+<code class="descname">add_qvd_block</code><span class="sig-paren">(</span><em>qvd</em>, <em>blockname=''</em>, <em>tablename=False</em>, <em>prefix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.add_qvd_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in a qvd file using QVD() and create a block containing a simple load statement for it.</p>
+<dl class="docutils">
+<dt>Load Statement example::</dt>
+<dd><p class="first">TableName:
+Load</p>
+<blockquote>
+<div>ID      as _KEY_ID //(optional)</div></blockquote>
+<p class="last">,       A       as TA_A
+,       B       as TA_B
+,       C       as TA_C
+From [Filepath.qvd] (qvd);</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.add_text_block">
+<code class="descname">add_text_block</code><span class="sig-paren">(</span><em>name</em>, <em>description</em>, <em>blocktype</em>, <em>pathname</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.add_text_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Block and adds it to the library.</p>
+<p>Arguments:
+name &#8211; name of the block. Needn&#8217;t be the same as pathname.
+description &#8211; description of the block.
+blocktype &#8211; currently not much used, but useful for grouping blocks within a library.
+pathname &#8211; filepath of text file (qvs/txt) to turn into a block.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.add_xml_block">
+<code class="descname">add_xml_block</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.add_xml_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a block from an xml file and add it to the library.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.block_to_xml">
+<code class="descname">block_to_xml</code><span class="sig-paren">(</span><em>blockname</em>, <em>directory='.'</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.block_to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the name of a block as a string and writes an xml file containing both the block text and its metadata (name, description, type, replacelist).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.pickle_block">
+<code class="descname">pickle_block</code><span class="sig-paren">(</span><em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.pickle_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated, use block_to_xml instead.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.remove_block">
+<code class="descname">remove_block</code><span class="sig-paren">(</span><em>blockname</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.remove_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove block from library.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="qvstools.blocks.BlockLibrary.split_block_tabs">
+<em class="property">static </em><code class="descname">split_block_tabs</code><span class="sig-paren">(</span><em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.split_block_tabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split the input block at each ///$tab line and return a list of blocks.</p>
+<dl class="docutils">
+<dt>The returned list will <em>not</em> be added to the blocklibray. To add it just to a simple for loop::</dt>
+<dd><dl class="first last docutils">
+<dt>for sub_block in myblocklibrary.split_block_tabs(block):</dt>
+<dd>myblocklibrary[sub_block.name] = sub_block</dd>
+</dl>
+</dd>
+</dl>
+<p>The reason for this behavior is that the block libray dict is unordered, but it is useful to preserve the order the blocks were split into.
+Note that this method takes a block, not the name of a block in the library. This is so that the method can be called as a staticmethod independently of a blocklibray object.
+Used for example by subbify.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="qvstools.blocks.BlockLibrary.write_block">
+<code class="descname">write_block</code><span class="sig-paren">(</span><em>blockname</em>, <em>outputfile</em>, <em>replacelist=[]</em>, <em>mode='a'</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.BlockLibrary.write_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call write() method of block.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="qvstools.blocks.QVD">
+<em class="property">class </em><code class="descclassname">qvstools.blocks.</code><code class="descname">QVD</code><span class="sig-paren">(</span><em>qvdfile</em>, <em>tablename=False</em>, <em>prefix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.QVD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a qvd file and make a python class with its xml header info.</p>
+<dl class="method">
+<dt id="qvstools.blocks.QVD.loadqvdfile">
+<code class="descname">loadqvdfile</code><span class="sig-paren">(</span><em>infile</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.QVD.loadqvdfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the xml header of a qvd file and parse it as xml.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="qvstools.blocks.write_tab">
+<code class="descclassname">qvstools.blocks.</code><code class="descname">write_tab</code><span class="sig-paren">(</span><em>name</em>, <em>pathname</em>, <em>mode='a'</em><span class="sig-paren">)</span><a class="headerlink" href="#qvstools.blocks.write_tab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a single ///$tab to the file specified by pathname.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Qlik-Script-Tools&#8217;s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/modules.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Ben Simonds.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/modules.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

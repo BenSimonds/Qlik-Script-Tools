@@ -1,17 +1,19 @@
 .. Qlik-Script-Tools documentation master file, created by
-   sphinx-quickstart on Sat Mar 19 17:19:54 2016.
+   sphinx-quickstart on Sat Mar 19 23:28:59 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Qlik-Script-Tools
-=================
-
-Qlik-Script-Tools is a set of tools for speeding up tedious tasks in Qlikview. So far it contains some useful tools for buidling load scripts from modular elements as well as a couple of tools for making changes to prj files procedurally. As time goes on I'll expand and improve these tools. See the todo list below for my current list of ideas.
+Welcome to Qlik-Script-Tools's documentation!
+=============================================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   modules
+   ...
+
 
 
 
@@ -33,7 +35,7 @@ Installation
 
 	subbify "MyScript.qvs"
 
-* Behold! Automeated qvw generation! See below for more about subbify.
+* Behold! Automated qvw generation! See below for more about subbify.
 
 Current Features
 ----------------
