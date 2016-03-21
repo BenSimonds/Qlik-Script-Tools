@@ -76,7 +76,7 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 		smartvar = '_' + '_'.join([tab.name for tab in tabs]) + '_'
 
 		bl.blocks['Subbify_Main'].write(outputscript,mode='w')
-		bl.blocks['Subbify_SmartCall_Init'].write(outputscript,[sublines,smartvar])
+		bl.blocks['Subbify_SmartCall_Init'].write(outputscript,[sublines])
 		bl.blocks['Subbify_Sub_Metadata'].write(outputscript)
 		write_tab('<',outputscript)
 		for tab in tabs: ##Each one is a block remember.
@@ -86,7 +86,7 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 			tab.write(outputscript)
 			bl.blocks['Subbify_Template_End'].write(outputscript)
 		write_tab('>',outputscript)	
-		bl.blocks['Subbify_SmartCall_Run'].write(outputscript,[sublines,smartvar])
+		bl.blocks['Subbify_SmartCall_Run'].write(outputscript)
 
 
 	if open_after:

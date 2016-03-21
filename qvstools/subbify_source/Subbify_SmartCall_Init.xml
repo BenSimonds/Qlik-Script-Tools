@@ -75,6 +75,5 @@ ENDIF
 </text>
 <replacelist>
 	<replacelistitem id="@0">Text to fill the inline load of sub names.</replacelistitem>
-	<replacelistitem id="@1">Smartvar generated from script.</replacelistitem>
 </replacelist>
 </block>
