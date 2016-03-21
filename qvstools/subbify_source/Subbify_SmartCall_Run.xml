@@ -7,38 +7,6 @@
 // Tab Start    
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// This Tab is the place where everything happens
-// The INLINE table called SubNameList contains the list of the existing SUBROUTINES.
-// The loop runs for each record in this table.
-// Each round of the loop compares the current SUBROUTINE XXX with the smart variable string.
-// If _XXX_ is contained in the string, then the SUBROUTINE XXX will be called, otherwise nothing will happen
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-//SET vSmartVar = $(vSmartVarPassedFromExternalCall); 
-// The string must be passed from the external call. Alternatively, it can be manually inserted in the Input Field object
-If '$(vSmartVarPassedFromExternalCall)' = ' ' THEN
-	SET vSmartVar = @1; //Set this to whatever you want the default run to be.
-ELSE 
-	SET vSmartVar = $(vSmartVarPassedFromExternalCall);
-ENDIF
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// List of SUBs. In general it should be all uncommented: if they are not in the vSmartVar, they will be ignored in any case
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-SubNameList:
-LOAD 
-SubName AS _KEY_SUB,
-Rowno() AS _SubNameListSort,
-* 
-INLINE [
-SubName, SubNote
-@0
-]
-WHERE LEFT(SubName,2)&lt;&gt;'//'
-;
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Loop initialization
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
