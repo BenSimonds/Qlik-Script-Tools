@@ -23,4 +23,61 @@ Tables_Metadata:
 LOAD
 '' AS TM_TableName
 AutoGenerate 0;
-</text><replacelist></replacelist></block>
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This Tab is the place where everything happens
+// The INLINE table called SubNameList contains the list of the existing SUBROUTINES.
+// The loop runs for each record in this table.
+// Each round of the loop compares the current SUBROUTINE XXX with the smart variable string.
+// If _XXX_ is contained in the string, then the SUBROUTINE XXX will be called, otherwise nothing will happen
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// List of SUBs. In general it should be all uncommented: if they are not in the vSmartVar, they will be ignored in any case
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SubNameList:
+LOAD 
+SubName AS _KEY_SUB,
+Rowno() AS _SubNameListSort,
+* 
+INLINE [
+SubName, SubNote
+NNA
+Holdings
+OwnerGroup
+AccountsTemp
+AccountsLast5Days
+Accounts
+Events
+AccountMonthly
+IncomeDVSLoad
+IncomeMonthlyHistory
+IncomeRecent
+]
+WHERE LEFT(SubName,2)<>'//'
+;
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Smart Variables:
+//
+// We have three smart variables:
+//	vSmartVarInternal	- this gets reset by a trigger to '*' on opening the qvd.
+//	vSmartVarPassedFromExternalCall	- this can be passed as a command line setting with vSmartVarExternal. It is reset to '*' after reloading so that it doesn't get saved as something else.
+//	vSmartVar			- this is generated from the two above. If vSmartVarInternal  = '*', take vSmartVarPassedFromExternalCall else, take vSmartVarInternal.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If '$(vSmartVarInternal)' = '*' THEN
+	set vSmartVar = $(vSmartVarPassedFromExternalCall); //Use external.
+ELSE 
+	set vSmartVar = $(vSmartVarInternal);	//Use internal.
+ENDIF
+
+IF '$(vSmartVar)' = '*' THEN //Convert * to concatenated SubNameList
+	TMP_Concat:
+	Load '_' & Concat(SubName,'_') & '_' as TMP_Concat Resident SubNameList;
+	let vSmartVar = peek('TMP_Concat',0,'TMP_Concat'); //Default to all.
+ENDIF
+</text>
+<replacelist></replacelist>
+</block>
