@@ -34,7 +34,7 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 		scriptpath = os.path.dirname(__file__)
 		qvwsource = os.path.join(scriptpath,'subbify_source','Subbified.qvw')
 		prjsource = os.path.join(scriptpath,'subbify_source','Subbified-prj')
-		blocksouce = os.path.join(scriptpath,'subbify_source')
+		blocksource = os.path.join(scriptpath,'subbify_source')
 	
 		#Copy files to outputfolder.
 		outputqvw = os.path.join(outputfolder,inputfilename + '_Subbified.qvw')
@@ -54,8 +54,8 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 		bl = BlockLibrary('Main')
 
 		#Add subbify blocks:
-		for f in [f for f in os.listdir(blocksouce) if f.endswith('.xml')]:
-			bl.add_xml_block(os.path.join('blocks',f))
+		for f in [f for f in os.listdir(blocksource) if f.endswith('.xml')]:
+			bl.add_xml_block(os.path.join(blocksource,f))
 
 		#Add block for input script:
 		bl.add_text_block(
