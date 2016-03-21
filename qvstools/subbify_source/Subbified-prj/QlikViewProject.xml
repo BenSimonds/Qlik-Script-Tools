@@ -1,4 +1,4 @@
-﻿<!-- Last project change: 2016-03-19 16:38:39 (2016-03-19 16:38:39) -->
+﻿<!-- Last project change: 2016-03-21 17:54:17 (2016-03-21 17:54:17) -->
 <PrjQlikViewProject>
   <GLOBAL>
     <AllPropertiesFileName>AllProperties.xml</AllPropertiesFileName>
@@ -156,7 +156,7 @@
             <Left>31</Left>
             <Top>1084</Top>
             <Width>469</Width>
-            <Height>106</Height>
+            <Height>103</Height>
           </Rect>
           <MinimizedRect>
             <Left>0</Left>

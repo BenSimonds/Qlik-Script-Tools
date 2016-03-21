@@ -36,6 +36,53 @@ LOAD
 '' AS TM_TableName
 AutoGenerate 0;
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This Tab is the place where everything happens
+// The INLINE table called SubNameList contains the list of the existing SUBROUTINES.
+// The loop runs for each record in this table.
+// Each round of the loop compares the current SUBROUTINE XXX with the smart variable string.
+// If _XXX_ is contained in the string, then the SUBROUTINE XXX will be called, otherwise nothing will happen
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// List of SUBs. In general it should be all uncommented: if they are not in the vSmartVar, they will be ignored in any case
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SubNameList:
+LOAD 
+SubName AS _KEY_SUB,
+Rowno() AS _SubNameListSort,
+* 
+INLINE [
+SubName, SubNote
+INPUT_A
+INPUT_B
+INPUT_C
+]
+WHERE LEFT(SubName,2)<>'//'
+;
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Smart Variables:
+//
+// We have three smart variables:
+//	vSmartVarInternal	- this gets reset by a trigger to '*' on opening the qvd.
+//	vSmartVarExternal	- this can be passed as a command line setting with vSmartVarExternal. It is reset to '*' after reloading so that it doesn't get saved as something else.
+//	vSmartVar			- this is generated from the two above. If vSmartVarInternal  = '*', take vSmartVarExternal else, take vSmartVarInternal.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If '$(vSmartVarInternal)' = '*' THEN
+	set vSmartVar = $(vSmartVarExternal); //Use external.
+ELSE 
+	set vSmartVar = $(vSmartVarInternal);	//Use internal.
+ENDIF
+
+IF '$(vSmartVar)' = '*' THEN //Convert * to concatenated SubNameList
+	TMP_Concat:
+	Load '_' & Concat(SubName,'_') & '_' as TMP_Concat Resident SubNameList;
+	let vSmartVar = peek('TMP_Concat',0,'TMP_Concat'); //Default to all.
+ENDIF
+
 ///$tab SUB_MetaData
 // Tab Start
 
@@ -80,7 +127,7 @@ SUB INPUT_A
 
 LET vTable = 'Test1';
 LET vCounter = $(vCounter)+1;
-TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
 LET vExtractCurrentStart = num(Now());
 
 /*
@@ -105,7 +152,7 @@ SUB INPUT_B
 
 LET vTable = 'Test2';
 LET vCounter = $(vCounter)+1;
-TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
 LET vExtractCurrentStart = num(Now());
 
 /*
@@ -129,7 +176,7 @@ SUB INPUT_C
 
 LET vTable = 'NONE';
 LET vCounter = $(vCounter)+1;
-TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
 LET vExtractCurrentStart = num(Now());
 
 /*
@@ -144,61 +191,26 @@ END SUB
 // Tab Start    
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// This Tab is the place where everything happens
-// The INLINE table called SubNameList contains the list of the existing SUBROUTINES, and the associated table
-// The loop is running as many times as many records has this table
-// Each round of the loop is comparing the current SUBROUTINE XXX with the string.
-// If _XXX_ is contained in the string, then the SUBROUTINE XXX will be called, otherwise nothing will happen
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-//SET vSmartVar = $(vSmartVarPassedFromExternalCall); // The string must be passed from the external call. Alternatively, it can be manually inserted in the Input Field object
-If '$(vSmartVarPassedFromExternalCall)' = ' ' THEN
-	SET vSmartVar = _TEST_; //Set this to whatever you want the default run to be.
-ELSE 
-	SET vSmartVar = $(vSmartVarPassedFromExternalCall);
-ENDIF
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// List of SUBs. In general it should be all uncommented: if they are not in the vSmartVar, they will be ignored in any case
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-SubNameList:
-LOAD 
-SubName AS _KEY_SUB,
-Rowno() AS _SubNameListSort,
-* 
-INLINE [
-SubName, SubNote
-INPUT_A
-INPUT_B
-INPUT_C
-
-]
-WHERE LEFT(SubName,2)<>'//'
-;
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Loop initialization
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 LET vNumberOfRowsOfINLINE = NoOfRows('SubNameList');
 LET vNumberOfLoops=$(vNumberOfRowsOfINLINE);
-
 FOR vCurrentLoop = 1 to $(vNumberOfLoops)
-LET vCurrentRecord = $(vCurrentLoop)-1;  //The first record of a table by convention is 0, not 1
-LET vCurrentSub = Peek('SubName',$(vCurrentRecord),'SubNameList');  //Takes one by one the records of the column "SubName" of the table "SubNameList"
-TRACE Execution of loop $(vCurrentLoop) of $(vNumberOfLoops)  Launching Sub $(vCurrentSub); //Gives in the dialogue box a feedback of what's happening
+	LET vCurrentRecord = $(vCurrentLoop)-1;  //The first record of a table by convention is 0, not 1
+	LET vCurrentSub = Peek('SubName',$(vCurrentRecord),'SubNameList');  //Takes one by one the records of the column "SubName" of the table "SubNameList"
+	TRACE Execution of loop $(vCurrentLoop) of $(vNumberOfLoops)  Launching Sub $(vCurrentSub); //Gives in the dialogue box a feedback of what's happening
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ------------------------------------> LOOP <-----------------------------------
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// ------------------------------------> LOOP <-----------------------------------
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IF SubStringCount(UPPER('$(vSmartVar)'),'_'&UPPER('$(vCurrentSub)')&'_') THEN // NOTE: the separator is needed, because otherwise the string FTM will also execute the FT 
-Call $(vCurrentSub);
-ELSE 
-TRACE The SUB called "$(vCurrentSub)" is not in the variable, therefore it will not be executed;
-END IF
+	IF SubStringCount(UPPER('$(vSmartVar)'),'_'&UPPER('$(vCurrentSub)')&'_') THEN // NOTE: the separator is needed, because otherwise the string FTM would also execute FT 
+	Call $(vCurrentSub);
+	ELSE 
+	TRACE The SUB called "$(vCurrentSub)" is not in the variable, therefore it will not be executed;
+	END IF
 
 NEXT vCurrentLoop;
 

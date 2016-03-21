@@ -226,7 +226,7 @@
         </Label>
         <Field>
           <Name>TM_SubID</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -397,7 +397,7 @@
         </Label>
         <Field>
           <Name>TM_SubName</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -739,7 +739,7 @@
         </Label>
         <Field>
           <Name>TM_Date</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -910,7 +910,7 @@
         </Label>
         <Field>
           <Name>TM_StartTime</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -1081,7 +1081,7 @@
         </Label>
         <Field>
           <Name>TM_EndTime</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -1252,7 +1252,7 @@
         </Label>
         <Field>
           <Name>TM_ElapsedTime</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -1423,7 +1423,7 @@
         </Label>
         <Field>
           <Name>TM_ElapsedSeconds</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -1601,7 +1601,7 @@
         </Label>
         <Field>
           <Name>TM_NoOfRows</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>
@@ -1772,7 +1772,7 @@
         </Label>
         <Field>
           <Name>TM_NoOfColumns</Name>
-          <Type>NOT_PRESENT</Type>
+          <Type>PRESENT</Type>
         </Field>
         <SortCriteria>
           <SortByState>1</SortByState>

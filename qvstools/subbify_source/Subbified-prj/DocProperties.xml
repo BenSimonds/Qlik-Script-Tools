@@ -3,7 +3,7 @@
   <SaveCompressed>0</SaveCompressed>
   <UsePassiveFtp>false</UsePassiveFtp>
   <IgnoreInfoLost>false</IgnoreInfoLost>
-  <GenerateLogfile>false</GenerateLogfile>
+  <GenerateLogfile>true</GenerateLogfile>
   <OpeningExec></OpeningExec>
   <OpenPicTimeout>0</OpenPicTimeout>
   <OpenPicCloseOnClick>0</OpenPicCloseOnClick>
@@ -1282,9 +1282,35 @@
   <InitialSelection>false</InitialSelection>
   <PublisherSchedule></PublisherSchedule>
   <ThumbNailSettings></ThumbNailSettings>
-  <OnOpenActionItems></OnOpenActionItems>
+  <OnOpenActionItems>
+    <ActionItemDef>
+      <Type>TYPE_SET_VALUE</Type>
+      <Parameters>
+        <StringExpr>
+          <v>vSmartVarInternal</v>
+        </StringExpr>
+        <StringExpr>
+          <v>*</v>
+        </StringExpr>
+      </Parameters>
+      <StateName></StateName>
+    </ActionItemDef>
+  </OnOpenActionItems>
   <OnSelectionActionItems></OnSelectionActionItems>
-  <OnPostReloadActionItems></OnPostReloadActionItems>
+  <OnPostReloadActionItems>
+    <ActionItemDef>
+      <Type>TYPE_SET_VALUE</Type>
+      <Parameters>
+        <StringExpr>
+          <v>vSmartVarExternal</v>
+        </StringExpr>
+        <StringExpr>
+          <v>*</v>
+        </StringExpr>
+      </Parameters>
+      <StateName></StateName>
+    </ActionItemDef>
+  </OnPostReloadActionItems>
   <OnPostReduceDataActionItems></OnPostReduceDataActionItems>
   <EnablePushFromServer>false</EnablePushFromServer>
   <AllowServerSearchObjects>false</AllowServerSearchObjects>

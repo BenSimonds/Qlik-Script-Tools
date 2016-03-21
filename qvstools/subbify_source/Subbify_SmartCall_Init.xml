@@ -1,4 +1,8 @@
-<block><name>Subbify_SmartCall_Init</name><description>tab belonging to block: Subbify</description><type>TAB</type><text>
+<block>
+	<name>Subbify_SmartCall_Init</name>
+	<description>tab belonging to block: Subbify</description>
+	<type>TAB</type>
+	<text>
 ///$tab SmartCall_Init
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Generic set up
@@ -44,19 +48,9 @@ Rowno() AS _SubNameListSort,
 * 
 INLINE [
 SubName, SubNote
-NNA
-Holdings
-OwnerGroup
-AccountsTemp
-AccountsLast5Days
-Accounts
-Events
-AccountMonthly
-IncomeDVSLoad
-IncomeMonthlyHistory
-IncomeRecent
+@0
 ]
-WHERE LEFT(SubName,2)<>'//'
+WHERE LEFT(SubName,2)&lt;&gt;'//'
 ;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,20 +58,23 @@ WHERE LEFT(SubName,2)<>'//'
 //
 // We have three smart variables:
 //	vSmartVarInternal	- this gets reset by a trigger to '*' on opening the qvd.
-//	vSmartVarPassedFromExternalCall	- this can be passed as a command line setting with vSmartVarExternal. It is reset to '*' after reloading so that it doesn't get saved as something else.
-//	vSmartVar			- this is generated from the two above. If vSmartVarInternal  = '*', take vSmartVarPassedFromExternalCall else, take vSmartVarInternal.
+//	vSmartVarExternal	- this can be passed as a command line setting with vSmartVarExternal. It is reset to '*' after reloading so that it doesn't get saved as something else.
+//	vSmartVar			- this is generated from the two above. If vSmartVarInternal  = '*', take vSmartVarExternal else, take vSmartVarInternal.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If '$(vSmartVarInternal)' = '*' THEN
-	set vSmartVar = $(vSmartVarPassedFromExternalCall); //Use external.
+	set vSmartVar = $(vSmartVarExternal); //Use external.
 ELSE 
 	set vSmartVar = $(vSmartVarInternal);	//Use internal.
 ENDIF
 
 IF '$(vSmartVar)' = '*' THEN //Convert * to concatenated SubNameList
 	TMP_Concat:
-	Load '_' & Concat(SubName,'_') & '_' as TMP_Concat Resident SubNameList;
+	Load '_' &amp; Concat(SubName,'_') &amp; '_' as TMP_Concat Resident SubNameList;
 	let vSmartVar = peek('TMP_Concat',0,'TMP_Concat'); //Default to all.
 ENDIF
 </text>
-<replacelist></replacelist>
+<replacelist>
+	<replacelistitem id="@0">Text to fill the inline load of sub names.</replacelistitem>
+	<replacelistitem id="@1">Smartvar generated from script.</replacelistitem>
+</replacelist>
 </block>

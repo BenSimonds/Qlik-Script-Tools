@@ -1408,9 +1408,9 @@
           <FillPattern>COLORAREA_PATTERN1</FillPattern>
           <PrimaryCol>
             <Col>
-              <Red>54</Red>
-              <Green>54</Green>
-              <Blue>54</Blue>
+              <Red>192</Red>
+              <Green>192</Green>
+              <Blue>192</Blue>
               <Alpha>255</Alpha>
             </Col>
             <IsCalculated>false</IsCalculated>
@@ -1580,9 +1580,9 @@
         <FillPattern>COLORAREA_PATTERN1</FillPattern>
         <PrimaryCol>
           <Col>
-            <Red>128</Red>
-            <Green>128</Green>
-            <Blue>128</Blue>
+            <Red>200</Red>
+            <Green>200</Green>
+            <Blue>200</Blue>
             <Alpha>255</Alpha>
           </Col>
           <IsCalculated>false</IsCalculated>
@@ -3870,9 +3870,9 @@
               <FillPattern>COLORAREA_PATTERN1</FillPattern>
               <PrimaryCol>
                 <Col>
-                  <Red>54</Red>
-                  <Green>54</Green>
-                  <Blue>54</Blue>
+                  <Red>192</Red>
+                  <Green>192</Green>
+                  <Blue>192</Blue>
                   <Alpha>255</Alpha>
                 </Col>
                 <IsCalculated>false</IsCalculated>

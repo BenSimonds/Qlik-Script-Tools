@@ -220,10 +220,10 @@
     <MemberAttributes>
       <LInputBoxMemberAttributes>
         <Label>
-          <v>vSmartVarPassedFromExternalCall</v>
+          <v>vSmartVarInternal</v>
         </Label>
         <Name>
-          <v>vSmartVarPassedFromExternalCall</v>
+          <v>vSmartVarInternal</v>
         </Name>
         <BkgColor>
           <Mode>COLORAREA_SOLID</Mode>
@@ -250,9 +250,9 @@
           <FillPattern>COLORAREA_PATTERN1</FillPattern>
           <PrimaryCol>
             <Col>
-              <Red>255</Red>
-              <Green>255</Green>
-              <Blue>255</Blue>
+              <Red>230</Red>
+              <Green>230</Green>
+              <Blue>230</Blue>
               <Alpha>255</Alpha>
             </Col>
             <IsCalculated>false</IsCalculated>

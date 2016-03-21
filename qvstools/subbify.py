@@ -72,16 +72,15 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 
 		print('Writing Tabs')
 
+		sublines = '\n'.join([tab.name.replace(' ','') for tab in tabs])
+		smartvar = '_' + '_'.join([tab.name for tab in tabs]) + '_'
+
 		bl.blocks['Subbify_Main'].write(outputscript,mode='w')
-		bl.blocks['Subbify_SmartCall_Init'].write(outputscript)
+		bl.blocks['Subbify_SmartCall_Init'].write(outputscript,[sublines,smartvar])
 		bl.blocks['Subbify_Sub_Metadata'].write(outputscript)
 		write_tab('<',outputscript)
-		sublines = ''
-		smartvar = '_'
 		for tab in tabs: ##Each one is a block remember.
 			subname = tab.name.replace(' ','')
-			sublines = sublines + subname + '\n'
-			smartvar = smartvar + subname + '_'
 			tablename = tab.name
 			bl.blocks['Subbify_Template_Start'].write(outputscript,[subname,tablename]) ##No tables in our example for now... but need a replacelist for this block.
 			tab.write(outputscript)
@@ -93,9 +92,9 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 	if open_after:
 		print('Launching Qlikview')
 		if reload_after == 's':
-			varstring = '/vvSmartVarPassedFromExternalCall=_'
+			varstring = '/vvSmartVarExternal=_'
 		elif reload_after == 'f':
-			varstring = '/vvSmartVarPassedFromExternalCall='+smartvar
+			varstring = '/vvSmartVarExternal='+smartvar
 		if reload_after:
 			subprocess.Popen(["C:\Program Files\QlikView\qv.exe",outputqvw,varstring,'/l'])
 		else:

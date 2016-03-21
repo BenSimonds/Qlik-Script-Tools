@@ -8,7 +8,7 @@ SUB @0
 
 LET vTable = '@1';
 LET vCounter = $(vCounter)+1;
-TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarPassedFromExternalCall);
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVarExternal);
 LET vExtractCurrentStart = num(Now());
 
 /*

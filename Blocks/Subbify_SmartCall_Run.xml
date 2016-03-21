@@ -14,12 +14,12 @@
 // If _XXX_ is contained in the string, then the SUBROUTINE XXX will be called, otherwise nothing will happen
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-//SET vSmartVar = $(vSmartVarPassedFromExternalCall); 
+//SET vSmartVar = $(vSmartVarExternal); 
 // The string must be passed from the external call. Alternatively, it can be manually inserted in the Input Field object
-If '$(vSmartVarPassedFromExternalCall)' = ' ' THEN
+If '$(vSmartVarExternal)' = ' ' THEN
 	SET vSmartVar = @1; //Set this to whatever you want the default run to be.
 ELSE 
-	SET vSmartVar = $(vSmartVarPassedFromExternalCall);
+	SET vSmartVar = $(vSmartVarExternal);
 ENDIF
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

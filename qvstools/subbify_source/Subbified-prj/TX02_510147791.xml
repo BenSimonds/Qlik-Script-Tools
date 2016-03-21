@@ -263,7 +263,7 @@
         <Type>TYPE_SET_VALUE</Type>
         <Parameters>
           <StringExpr>
-            <v>vSmartVarPassedFromExternalCall</v>
+            <v>vSmartVarInternal</v>
           </StringExpr>
           <StringExpr>
             <v>='_'&amp;concat(SubName,'_')&amp;'_'</v>

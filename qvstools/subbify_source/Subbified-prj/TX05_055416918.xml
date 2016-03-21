@@ -253,7 +253,7 @@
     <Bmp enctype="base64"></Bmp>
     <BkgAlpha>0</BkgAlpha>
     <Text>
-      <v>http://readthedocs.org/projects/qlik-script-tools</v>
+      <v>http://qlik-script-tools.readthedocs.org/en/latest/</v>
     </Text>
     <ImageRepresentation></ImageRepresentation>
     <AllowVerticalScrollBar>false</AllowVerticalScrollBar>
@@ -263,7 +263,7 @@
         <Type>TYPE_OPEN_URL</Type>
         <Parameters>
           <StringExpr>
-            <v>http://readthedocs.org/projects/qlik-script-tools</v>
+            <v>http://qlik-script-tools.readthedocs.org/en/latest/</v>
           </StringExpr>
           <StringExpr></StringExpr>
         </Parameters>
