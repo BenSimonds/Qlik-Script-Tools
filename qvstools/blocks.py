@@ -236,6 +236,35 @@ class BlockLibrary:
 			tabs.append(tab_block)
 			
 		return tabs #Return a list that can be iterated over in the correct order.
+	
+	@staticmethod
+	def find_referenced_qvds(block):
+		"""
+		Scan the block with a regular expression that matches qvds, return a list of the qvds it references.
+		"""
+
+		blocktext = block.text
+		qvdsearch = re.compile(r"([\w\s]*\.qvd)")	#Finds a qvd. Returns the name in the capture group.
+		storesearch = re.compile(r"store\s\[?[\w\s]*\sinto")
+		commentsearch = re.compile(r"\\")
+
+		matchlines = []
+		blocklines =  blocktext.split('\n')
+		qvdtype = 'LOAD'	#By default expect matches to be load statements.
+		for i in range(0,len(blocklines)):
+			line = blocklines[i].lower()#Covert to lowercase for case insensitive search.
+			if re.match(commentsearch,line): ##Line is commented.
+				pass
+			else:
+				if re.search(storesearch,line):
+					qvdtype = 'STORE'
+				s = re.search(qvdsearch,line)
+				if s:
+					for g in s.groups():
+						matchlines.append({'line':i,'text':line,'qvd':g,'type':qvdtype})
+					#reset qvdtype
+					qvdtype = 'LOAD'
+		return matchlines
 
 class QVD:
 	"""Take a qvd file and make a python class with its xml header info."""
