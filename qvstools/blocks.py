@@ -9,16 +9,8 @@ except ImportError:
 	print("running with xml.etree")
 # from lxml import etree as ET
 import sys, os, unicodedata, re
+from qvstools.text import detect_encoding
 
-### Methods
-
-def write_tab(name,pathname,mode='a'):
-	"""Write a single ///$tab to the file specified by pathname."""
-	with open(pathname,mode) as outputfile:
-		outputfile.write('\n///$tab ' + name + '\n')
-	return
-
-### Classes
 
 class Block:
 	"""Container for a block of qlik script."""
@@ -199,7 +191,15 @@ class BlockLibrary:
 		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.xml')]
 		for f in files:
 			self.add_xml_block(f)
-		
+	
+
+	@staticmethod
+	def write_tab(name,pathname,mode='a'):
+		"""Write a single ///$tab to the file specified by pathname."""
+		with open(pathname,mode) as outputfile:
+			outputfile.write('\n///$tab ' + name + '\n')
+		return
+
 	@staticmethod
 	def split_block_tabs(block):
 		"""Split the input block at each ///$tab line and return a list of blocks.
@@ -238,32 +238,38 @@ class BlockLibrary:
 		return tabs #Return a list that can be iterated over in the correct order.
 	
 	@staticmethod
-	def find_referenced_qvds(block):
+	def find_referenced_files(block,*args):
 		"""
 		Scan the block with a regular expression that matches qvds, return a list of the qvds it references.
 		"""
 
 		blocktext = block.text
-		qvdsearch = re.compile(r"([\w\s]*\.qvd)")	#Finds a qvd. Returns the name in the capture group.
-		storesearch = re.compile(r"store\s\[?[\w\s]*\sinto")
-		commentsearch = re.compile(r"\\")
+		filesearchstring = r"([\w\s-]+"	+	r"\."	+	r"|".join(args)	+	r")[\s\]$]"	###THIS IS GIVING ME GRIEF.
+		print(filesearchstring)
+		filesearch = re.compile(filesearchstring)	#Finds a qvd. Returns the name in the capture group.
+		storesearch = re.compile(r"store\s\[?[\w\s]*\]?\sinto")
+		commentsearch = re.compile(r"\\\\")
 
 		matchlines = []
 		blocklines =  blocktext.split('\n')
-		qvdtype = 'LOAD'	#By default expect matches to be load statements.
+		optype = 'LOAD'	#By default expect matches to be load statements.
 		for i in range(0,len(blocklines)):
 			line = blocklines[i].lower()#Covert to lowercase for case insensitive search.
 			if re.match(commentsearch,line): ##Line is commented.
 				pass
 			else:
 				if re.search(storesearch,line):
-					qvdtype = 'STORE'
-				s = re.search(qvdsearch,line)
+					optype = 'STORE'
+				s = re.search(filesearch,line)
 				if s:
 					for g in s.groups():
-						matchlines.append({'line':i,'text':line,'qvd':g,'type':qvdtype})
-					#reset qvdtype
-					qvdtype = 'LOAD'
+						matchlines.append({
+							'line':i+1,
+							'text':line,
+							'file':g,
+							'type':optype})
+					#reset optype
+					optype = 'LOAD'
 		return matchlines
 
 class QVD:
@@ -301,16 +307,17 @@ class QVD:
 
 	def loadqvdfile(self, infile):
 		"""Read the xml header of a qvd file and parse it as xml."""
+		encoding = detect_encoding(infile)
 		with open(infile,'rb') as qvdfile:
+			startphrase = '<QvdTableHeader>'
 			endphrase =  '</QvdTableHeader>'
-			filedata = ''
-			while filedata[-len(endphrase):] != endphrase: 
-				byte = qvdfile.read(1)
-				try:
-					x = unicodedata.category(byte.decode("utf-8",'ignore'))
-				except TypeError:
-					print('Unexpected end of file...')
-					break	
-				else:
-					filedata += byte.decode("utf-8",'ignore')		
+			#Read data until endphrase is found or we hit garbage...
+			start  = 0
+			span = qvdfile.read(len(endphrase)).decode(encoding)
+			filedata = span
+			while span != endphrase:
+				start += 1				#increment start by 1
+				qvdfile.seek(start)		#read the new span.
+				span = qvdfile.read(len(endphrase)).decode(encoding) #get new span
+				filedata += span[-1]	#Add last char of span 
 		return ET.fromstring(filedata)

@@ -57,7 +57,7 @@ class TestBlock(unittest.TestCase):
 		myblocklib.blocks['TestReplaceBlock'].write('testoutput.txt',['myTable'])
 
 	def test_writeTab(self):
-		write_tab('TABNAME','testoutput.txt','w')
+		BlockLibrary.write_tab('TABNAME','testoutput.txt','w')	#Can call without instantiating because staticmethod. Yay!
 		with open('testoutput.txt','r') as comparetext:
 			self.assertEqual(comparetext.read(),'\n///$tab TABNAME\n')
 

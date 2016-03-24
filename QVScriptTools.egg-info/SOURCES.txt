@@ -24,5 +24,8 @@ qvstools/__init__.py
 qvstools/blocks.py
 qvstools/prj.py
 qvstools/subbify.py
+qvstools/text.py
+testdata/ETLTubeData.qvs
+testdata/ETLTubeData_Subbified.qvw.log
 testdata/Subbify_TestInput.qvs
 testdata/Test.qvd

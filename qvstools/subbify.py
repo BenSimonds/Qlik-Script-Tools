@@ -78,14 +78,14 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 		bl.blocks['Subbify_Main'].write(outputscript,mode='w')
 		bl.blocks['Subbify_SmartCall_Init'].write(outputscript,[sublines])
 		bl.blocks['Subbify_Sub_Metadata'].write(outputscript)
-		write_tab('<',outputscript)
+		bl.write_tab('<',outputscript)
 		for tab in tabs: ##Each one is a block remember.
 			subname = tab.name.replace(' ','')
 			tablename = tab.name
 			bl.blocks['Subbify_Template_Start'].write(outputscript,[subname,tablename]) ##No tables in our example for now... but need a replacelist for this block.
 			tab.write(outputscript)
 			bl.blocks['Subbify_Template_End'].write(outputscript)
-		write_tab('>',outputscript)	
+		bl.write_tab('>',outputscript)	
 		bl.blocks['Subbify_SmartCall_Run'].write(outputscript)
 
 
