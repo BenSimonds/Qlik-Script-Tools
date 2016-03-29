@@ -30,6 +30,10 @@ Installation
 * Checkout Qlik-Script-Tools from github:: 
 
 	git checkout https://github.com/BenSimonds/Qlik-Script-Tools
+	
+* Install with setuptools (develop/install)::
+	
+	python setup.py develop
 
 * Start using! You can start by trying subbify on a qvs script::
 
