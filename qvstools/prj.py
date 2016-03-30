@@ -1,5 +1,5 @@
 """Module for dealing with prj files."""
-import os, sys
+import os, sys, subprocess
 import xml.etree.ElementTree as ET
 
 class QVObject:
@@ -125,16 +125,35 @@ class PRJ:
 		#Write back to source:
 		self.write_xml_all()
 
-def replace_fonts_commandline(directory,font):
-	"""Command line tool registered by setuptools as QVReplaceFonts. Takes a directory and switches all the fonts to the one specified. 
+def replace_fonts_commandline():
+	"""Command line tool registered by setuptools as QVReplaceFonts. Takes a qvw file and switches all the fonts to the one specified. 
 
 	Usage::
 
 		> QVReplaceFonts "PrjDirectory-prj"
 	"""
-	prj = PRJ(directory)
+	args = sys.argv
+	qvw = args[1]
+	prjdir = qvw[0:-4] + '-prj'
+	font = args[2]
+	flags = args[3:]
 
-	prj.find_replace_elements(".//FontName",font)			
+	#We can use flags to add some extra functionality
+	open_after = '-o' in flags
+
+	#Sense check input:
+	if not (os.path.isfile(qvw) and qvw.endswith('.qvw')):
+		print('Cannot find file: {0}'.format(qvw))
+		return None
+	elif not (os.path.isdir(prjdir)):
+		print('Cannot find a prj directory, have you generated one?')
+		return None
+	else:
+		prj = PRJ(prjdir)
+		prj.find_replace_elements(".//FontName",font)		
+
+	if open_after:
+		subprocess.Popen(["C:\Program Files\QlikView\qv.exe",qvw])	
 
 
 

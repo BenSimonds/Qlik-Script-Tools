@@ -4,7 +4,6 @@ QVScriptTools.egg-info/PKG-INFO
 QVScriptTools.egg-info/SOURCES.txt
 QVScriptTools.egg-info/dependency_links.txt
 QVScriptTools.egg-info/entry_points.txt
-QVScriptTools.egg-info/requires.txt
 QVScriptTools.egg-info/top_level.txt
 blocks/Default_Call_Meta.xml
 blocks/Default_Init_Meta.xml
