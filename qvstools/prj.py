@@ -125,7 +125,16 @@ class PRJ:
 		#Write back to source:
 		self.write_xml_all()
 
+def replace_fonts_commandline(directory,font):
+	"""Command line tool registered by setuptools as QVReplaceFonts. Takes a directory and switches all the fonts to the one specified. 
 
+	Usage::
+
+		> QVReplaceFonts "PrjDirectory-prj"
+	"""
+	prj = PRJ(directory)
+
+	prj.find_replace_elements(".//FontName",font)			
 
 
 

@@ -105,7 +105,7 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 def subbify_comandline():
 	"""Command line version of subbify.
 
-	This is installed as a command line tool by setuptools.
+	This is installed as a command line tool by setuptools as QST_Subbify.
 
 	Usage::
 
