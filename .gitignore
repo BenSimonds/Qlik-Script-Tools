@@ -9,3 +9,7 @@ testoutput_*
 # Python egg metadata. Regenerated from source files by setuptools.
 /*.egg-info
 /*.egg
+
+#Dist folder
+dist
+

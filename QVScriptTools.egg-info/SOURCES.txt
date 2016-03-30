@@ -27,4 +27,6 @@ qvstools/text.py
 testdata/ETLTubeData.qvs
 testdata/ETLTubeData_Subbified.qvw.log
 testdata/Subbify_TestInput.qvs
+testdata/Subbify_TestInput_Subbified.qvw
+testdata/Subbify_TestInput_Subbified.qvw.log
 testdata/Test.qvd
