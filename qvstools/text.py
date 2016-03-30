@@ -1,4 +1,5 @@
 """Tools for helping with text files, encodings etc."""
+import re
 
 def detect_encoding(textfile):
 	"""Tries to open textfile with a variety of encodings and returns the one that works"""
@@ -30,22 +31,63 @@ def detect_encoding(textfile):
 				pass
 	return None
 
-def parse_logfile(textfile):
-	encoding = detect_encoding(textfile)
-	parsed = []
-	limit = 200
-	with open(textfile,'r',encoding=encoding) as f:
-		#Start looping through lines.
-		lines = f.readlines()
-		for l in lines[0:limit]:
-			#First 10 chars are the date:
-			date = l[0:10]
-			#Gap of 1 char, then next 8 are time.
-			time = l[11:19]
-			#22-26  are operation no:
-			op = l[21:25]
-			#the rest is unknown...
-			rest = l[26:].strip()
-			lp = (date,time,op,rest)
-			parsed.append(lp)
-	return parsed
+
+class LogFile:
+	"""Parses a qlikview logfile and creates an object with it's info more easliy accessible."""
+	def __init__(self,textfile):
+		"""Take a Logfile and turn it into an object."""
+		self.path = textfile
+		self.lines = self.parse_logfile(textfile)
+		self.tag_file_lines()
+
+
+	@staticmethod
+	def parse_logfile(textfile):
+		encoding = detect_encoding(textfile)
+		parsed = []
+		limit = 200
+		with open(textfile,'r',encoding=encoding) as f:
+			#Start looping through lines.
+			lines = f.readlines()
+			for l in lines[0:limit]:
+				#First 10 chars are the date:
+				date = l[0:10]
+				#Gap of 1 char, then next 8 are time.
+				time = l[11:19]
+				#22-26  are operation no:
+				op = l[21:25]
+				#the rest is unknown...
+				rest = l[26:].strip()
+				lp = {
+					'date':date,
+					'time':time,
+					'op':op,
+					'text':rest
+					}
+				parsed.append(lp)
+		return parsed
+
+	def tag_file_lines (self):
+		"""Tag lines that reference qvds or other files within the logfile."""
+		filesearchstring = r"[^\[\s]([\w\s-\(\)])+\.(qvd|xlsx|xlsm|xls|csv)[$\s]"
+		storesearchstring = r"store\s\[?[\w\s]*\]?\sinto"
+
+		filesearch = re.compile(filesearchstring)	#Finds a qvd. Returns the name in the capture group.
+		storesearch = re.compile(storesearchstring)
+		
+		matchlines = []
+		optype = 'LOAD'	#By default expect matches to be load statements.
+		for line in self.lines:
+			linetext = line['text']
+			if re.search(storesearch,linetext):
+				optype = 'STORE'
+				s = re.search(filesearch,linetext)
+				if s:
+					file = s.group(1) + '.' + s.group(2)
+					line['file'] = file
+					line['load'] = optype == 'LOAD'
+					line['store'] = optype == 'STORE'
+					matchlines.append(file)
+				#reset optype
+					optype = 'LOAD'
+		return matchlines

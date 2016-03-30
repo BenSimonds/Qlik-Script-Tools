@@ -27,10 +27,8 @@ class TestBlock(unittest.TestCase):
 	def test_parse_logfile(self):
 		print('Testing logfile parse.')
 		log = r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\ETLTubeData_Subbified.qvw.log"
-		print(detect_encoding(log))
-		for x in parse_logfile(log):
-			print(x)
-		print('AAA')
+		
+		lf = LogFile(log)
 
 if __name__ == '__main__':
         unittest.main()
