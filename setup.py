@@ -9,9 +9,9 @@ config = {
     'url': 'https://github.com/BenSimonds/Qlik-Script-Tools',
     'download_url': 'https://github.com/BenSimonds/Qlik-Script-Tools/archive/master.zip',
     'author_email': 'BSSimonds@gmail.com',
-    'version': '0.11dev',
-    'packages': ['qvstools'],
-    'scripts': [],
+    'version': '0.123dev',
+    'packages': ['qvstools','tests'],
+    'scripts': ['runtests.py'],
     'name': 'QVScriptTools',
     'entry_points':{
         'console_scripts':[

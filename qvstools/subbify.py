@@ -105,11 +105,11 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 def subbify_comandline():
 	"""Command line version of subbify.
 
-	This is installed as a command line tool by setuptools as QST_Subbify.
+	This is installed as a command line tool by setuptools as QVSubbify.
 
 	Usage::
 
-		> subbify "MyQlikViewScript.qvs"
+		> QVSubbify "MyQlikViewScript.qvs"
 
 	"""
 	args = sys.argv

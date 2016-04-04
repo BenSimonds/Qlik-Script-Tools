@@ -45,11 +45,10 @@ class LogFile:
 	def parse_logfile(textfile):
 		encoding = detect_encoding(textfile)
 		parsed = []
-		limit = 200
 		with open(textfile,'r',encoding=encoding) as f:
 			#Start looping through lines.
 			lines = f.readlines()
-			for l in lines[0:limit]:
+			for l in lines:
 				#First 10 chars are the date:
 				date = l[0:10]
 				#Gap of 1 char, then next 8 are time.
@@ -69,7 +68,7 @@ class LogFile:
 
 	def tag_file_lines (self):
 		"""Tag lines that reference qvds or other files within the logfile."""
-		filesearchstring = r"[^\[\s]([\w\s-\(\)])+\.(qvd|xlsx|xlsm|xls|csv)[$\s]"
+		filesearchstring = r"(?:\s|\[|\n)((?:\.\.|\\\\|\\)?[\\\w \-_]+)\.(qvd|xls[xm]?)\]?"
 		storesearchstring = r"store\s\[?[\w\s]*\]?\sinto"
 
 		filesearch = re.compile(filesearchstring)	#Finds a qvd. Returns the name in the capture group.
@@ -77,17 +76,19 @@ class LogFile:
 		
 		matchlines = []
 		optype = 'LOAD'	#By default expect matches to be load statements.
-		for line in self.lines:
-			linetext = line['text']
+		no_of_lines = len(self.lines)
+		for line in range(0,no_of_lines - 1):
+			print('Parsing line {0} of {1}'.format(line,no_of_lines))
+			linetext = self.lines[line]['text']
 			if re.search(storesearch,linetext):
 				optype = 'STORE'
-				s = re.search(filesearch,linetext)
-				if s:
-					file = s.group(1) + '.' + s.group(2)
-					line['file'] = file
-					line['load'] = optype == 'LOAD'
-					line['store'] = optype == 'STORE'
-					matchlines.append(file)
-				#reset optype
-					optype = 'LOAD'
+			s = re.search(filesearch,linetext)
+			if s:
+				file = s.group(1) + '.' + s.group(2)
+				self.lines[line]['file'] = file
+				self.lines[line]['load'] = optype == 'LOAD'
+				self.lines[line]['store'] = optype == 'STORE'
+				matchlines.append(file)
+			#reset optype
+				optype = 'LOAD'
 		return matchlines

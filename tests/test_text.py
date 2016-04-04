@@ -29,6 +29,9 @@ class TestBlock(unittest.TestCase):
 		log = r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\ETLTubeData_Subbified.qvw.log"
 		
 		lf = LogFile(log)
+		print('{0} lines parsed'.format(len(lf.lines)))
+		print(lf.tag_file_lines())
+
 
 if __name__ == '__main__':
         unittest.main()

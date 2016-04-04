@@ -1,4 +1,5 @@
 MANIFEST.in
+runtests.py
 setup.py
 QVScriptTools.egg-info/PKG-INFO
 QVScriptTools.egg-info/SOURCES.txt
@@ -27,6 +28,9 @@ qvstools/text.py
 testdata/ETLTubeData.qvs
 testdata/ETLTubeData_Subbified.qvw.log
 testdata/Subbify_TestInput.qvs
-testdata/Subbify_TestInput_Subbified.qvw
-testdata/Subbify_TestInput_Subbified.qvw.log
 testdata/Test.qvd
+tests/__init__.py
+tests/test_blocks.py
+tests/test_prj.py
+tests/test_subbify.py
+tests/test_text.py
