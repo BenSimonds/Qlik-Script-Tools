@@ -1,5 +1,6 @@
 """Tools for helping with text files, encodings etc."""
 import re
+import sys
 
 def detect_encoding(textfile):
 	"""Tries to open textfile with a variety of encodings and returns the one that works"""
@@ -68,7 +69,7 @@ class LogFile:
 
 	def tag_file_lines (self):
 		"""Tag lines that reference qvds or other files within the logfile."""
-		filesearchstring = r"(?:\s|\[|\n)((?:\.\.|\\\\|\\)?[\\\w \-_]+)\.(qvd|xls[xm]?)\]?"
+		filesearchstring = r"(?:\s|\[|^)((?:\.\.|\\\\|\\)?[\\\w \-_]+)\.(qvd|xls[xm]?)\]?"
 		storesearchstring = r"store\s\[?[\w\s]*\]?\sinto"
 
 		filesearch = re.compile(filesearchstring)	#Finds a qvd. Returns the name in the capture group.
@@ -78,7 +79,7 @@ class LogFile:
 		optype = 'LOAD'	#By default expect matches to be load statements.
 		no_of_lines = len(self.lines)
 		for line in range(0,no_of_lines - 1):
-			print('Parsing line {0} of {1}'.format(line,no_of_lines))
+			sys.stdout.write('\rParsing line {0} of {1}'.format(line,no_of_lines))
 			linetext = self.lines[line]['text']
 			if re.search(storesearch,linetext):
 				optype = 'STORE'
@@ -91,4 +92,5 @@ class LogFile:
 				matchlines.append(file)
 			#reset optype
 				optype = 'LOAD'
+		print('\nParsed!')
 		return matchlines
