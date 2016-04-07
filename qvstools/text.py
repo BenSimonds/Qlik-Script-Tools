@@ -91,7 +91,7 @@ class LogFile:
 			if re.search(storesearch,linetext):
 				optype = 'STORE'
 			if linetext.strip().upper().startswith('DIRECTORY'):
-				workingdir = linetext[9:]
+				workingdir = linetext[10:].strip()
 			s = re.search(filesearch,linetext)
 			file = None
 			if s and isinstance(s.group(1),str) and isinstance(s.group(2),str):
@@ -99,7 +99,7 @@ class LogFile:
 			elif s and isinstance(s.group(3),str) and isinstance(s.group(4),str):
 				file = s.group(3) + '.' + s.group(4)
 			if file:
-				self.lines[line]['file'] = file
+				self.lines[line]['file'] = file.replace('\\\\','\\')
 				self.lines[line]['load'] = optype == 'LOAD'
 				self.lines[line]['store'] = optype == 'STORE'
 				self.lines[line]['workingdir'] = workingdir
@@ -119,18 +119,26 @@ class LogFile:
 		
 		f = line['file']
 		wd = line['workingdir']
-		print('FILE IS:' + f)
-		print('WDIR IS:' + wd)
-		if f.startswith('..'):
-			path = os.path.join(wd,f)
+		ld = self.dir
+		#print('FILE IS:' + f)
+		#print('WDIR IS:' + wd)
+		#print('LDIR IS' + ld)		
+		if os.path.isabs(f):
+			#print('ABSOLUTE PATH')
+			path = os.path.abspath(f)
+		elif os.path.isabs(wd):
+			#print('ABSOLUTE WD')
+			path = os.path.abspath(os.path.join(wd,f))
 		else:
-			path = f
-		print('PATH IS:' + path)
+			#print('RELATIVE WD')
+			path = os.path.abspath(os.path.join(ld,wd,f))
+			
+		#print('PATH IS:' + path)
 		if os.path.isabs(path):
 			if os.path.isfile(path):
 				return (path)
 		else:
-			rootpath = os.path.dirname(self.path)
+			rootpath = self.dir
 			#print('searching in {0}'.format(rootpath))
 			joined = os.path.abspath(os.path.join(rootpath,path))
 			if os.path.isfile(joined):

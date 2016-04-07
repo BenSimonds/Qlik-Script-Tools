@@ -2,7 +2,7 @@
 import re
 
 #(?:\s|^)\[((?:[A-Z]:|\\\\|(?:\.\.\\)+)[\\\w \-_]+)\.(qvd|xls[xm]?|csv|qvx)\]|(?:\s|^)((?:[A-Z]:|\\\\|(?:\.\.\\)+)[\\\w \-_]+)\.(qvd|xls[xm]?|csv|qvx)
-filestring1 = r"((?:[A-Z]:|\\\\|//|(?:\.\.\\|\.\./)+)[/\\\w \-_]+)"
+filestring1 = r"((?:[A-Z]:|\\\\|//|(?:\.\.\\|\.\./)*)[/\\\w \-_]+)"
 
 searches = {
     #First functional version of a file finder for log files.

@@ -29,7 +29,7 @@ class TestBlock(unittest.TestCase):
 		lf = LogFile(log)
 
 		for f in lf.get_files_touched():
-			print(f['file'],' --> ',lf.find_file(f),'	', f['workingdir'])
+			print(f['file'],' --> ',lf.find_file(f))
 
 if __name__ == '__main__':
         unittest.main()
