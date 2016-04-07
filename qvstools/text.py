@@ -46,6 +46,7 @@ class LogFile:
 	def __init__(self,textfile):
 		"""Take a Logfile and turn it into an object."""
 		self.path = textfile
+		self.dir  = os.path.dirname(textfile)
 		self.lines = self.parse_logfile(textfile)
 		self.tag_file_lines()
 
@@ -76,23 +77,32 @@ class LogFile:
 	def tag_file_lines (self):
 		"""Tag lines that reference qvds or other files within the logfile."""
 
-		filesearch = searches['filesearchstring1']	#Finds a qvd. Returns the name in the capture group.
-		storesearch = searches['storesearchstring']
+		filesearch = searches['filesearchstring2']	#Finds a qvd. Returns the name in the capture group.
+		storesearch = searches['store_statement']
+		dirsearch = searches['directory_statement']
 		
 		matchlines = []
 		optype = 'LOAD'	#By default expect matches to be load statements.
+		workingdir = self.dir
 		no_of_lines = len(self.lines)
 		for line in range(0,no_of_lines - 1):
 			sys.stdout.write('\rParsing line {0} of {1}'.format(line,no_of_lines))
 			linetext = self.lines[line]['text']
 			if re.search(storesearch,linetext):
 				optype = 'STORE'
+			if linetext.strip().upper().startswith('DIRECTORY'):
+				workingdir = linetext[9:]
 			s = re.search(filesearch,linetext)
-			if s:
+			file = None
+			if s and isinstance(s.group(1),str) and isinstance(s.group(2),str):
 				file = s.group(1) + '.' + s.group(2)
+			elif s and isinstance(s.group(3),str) and isinstance(s.group(4),str):
+				file = s.group(3) + '.' + s.group(4)
+			if file:
 				self.lines[line]['file'] = file
 				self.lines[line]['load'] = optype == 'LOAD'
 				self.lines[line]['store'] = optype == 'STORE'
+				self.lines[line]['workingdir'] = workingdir
 				matchlines.append(file)
 			#reset optype
 				optype = 'LOAD'
@@ -101,11 +111,21 @@ class LogFile:
 
 	def get_files_touched(self):
 		"""returns a list of the files found by tag_file_lines"""
-		files_touched = [line['file'] for line in self.lines if 'file' in line.keys()]
+		files_touched = [line for line in self.lines if 'file' in line.keys()]
 		return files_touched
 
-	def find_file(self,path):
+	def find_file(self,line):
 		"""Checks if the file exists and returns its absolute path."""
+		
+		f = line['file']
+		wd = line['workingdir']
+		print('FILE IS:' + f)
+		print('WDIR IS:' + wd)
+		if f.startswith('..'):
+			path = os.path.join(wd,f)
+		else:
+			path = f
+		print('PATH IS:' + path)
 		if os.path.isabs(path):
 			if os.path.isfile(path):
 				return (path)

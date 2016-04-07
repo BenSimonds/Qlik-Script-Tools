@@ -10,7 +10,7 @@ searches = {
     #Second attempt, differentiates between "[strings with spaces]" and "stringswithoutspaces"
     'filesearchstring2':re.compile(r"(?:\s|^)\["+ filestring1 +"\.(qvd|xls[xm]?|csv|qvx)\]|(?:\s|^)"+ filestring1 +"\.(qvd|xls[xm]?|csv|qvx)"),
     #Store search string, matches store x into y statements.
-    'store_statement':re.compile(r"store\s\[?[\w\s]*\]?\sinto")
+    'store_statement':re.compile(r"store\s\[?[\w\s]*\]?\sinto"),
     #Directory search string, matches Directory Path/To/Directory
-    'directory_statement':re.compile(r"directory  ")
+    'directory_statement':re.compile(r"directory " + filestring1, flags=re.I)
 }

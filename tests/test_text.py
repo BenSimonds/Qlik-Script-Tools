@@ -7,8 +7,6 @@ class TestBlock(unittest.TestCase):
 
 	def tearDown(self):
 		print ("TEAR DOWN!")
-
-	def test_detect_encoding(self):
 		paths = [
 			r"testdata\ETLTubeData_Subbified.qvw.log",
 			r"testdata\Subbify_TestInput.qvs",
@@ -26,12 +24,12 @@ class TestBlock(unittest.TestCase):
 
 	def test_parse_logfile(self):
 		print('Testing logfile parse.')
-		log = r"testdata\ETLTubeData_Subbified.qvw.log"
+		log = r"C:\Users\ben.simonds\Documents\TFL_Minimal\ETL\ETLTubeData_Subbified.qvw.log"
 		
 		lf = LogFile(log)
 
 		for f in lf.get_files_touched():
-			print(f,lf.find_file(f))
+			print(f['file'],' --> ',lf.find_file(f),'	', f['workingdir'])
 
 if __name__ == '__main__':
         unittest.main()
