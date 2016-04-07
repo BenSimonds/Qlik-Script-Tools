@@ -1,6 +1,8 @@
 """Tools for helping with text files, encodings etc."""
 import re
 import sys
+import os
+from qvstools.regex_store import searches
 
 def detect_encoding(textfile):
 	"""Tries to open textfile with a variety of encodings and returns the one that works"""
@@ -71,13 +73,11 @@ class LogFile:
 			parsed.append(lp)
 		return parsed
 
-def tag_file_lines (self):
+	def tag_file_lines (self):
 		"""Tag lines that reference qvds or other files within the logfile."""
-		filesearchstring = r"(?:\s|\[|^)((?:\.\.|\\\\|\\)*[\\\w \-_]+)\.(qvd|xls[xm]?)\]?"
-		storesearchstring = r"store\s\[?[\w\s]*\]?\sinto"
 
-		filesearch = re.compile(filesearchstring)	#Finds a qvd. Returns the name in the capture group.
-		storesearch = re.compile(storesearchstring)
+		filesearch = searches['filesearchstring1']	#Finds a qvd. Returns the name in the capture group.
+		storesearch = searches['storesearchstring']
 		
 		matchlines = []
 		optype = 'LOAD'	#By default expect matches to be load statements.

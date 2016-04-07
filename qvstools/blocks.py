@@ -186,7 +186,7 @@ class BlockLibrary:
 		for f in files:
 			self.add_qvd_block(os.path.join(directory,f))
 
-	def add_directory_blocks(self,directory):
+	def add_directory_block(self,directory):
 		"""Create blocks for all .xml files in directory."""		
 		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.xml')]
 		for f in files:

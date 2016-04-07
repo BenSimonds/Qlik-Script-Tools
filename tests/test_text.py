@@ -26,7 +26,7 @@ class TestBlock(unittest.TestCase):
 
 	def test_parse_logfile(self):
 		print('Testing logfile parse.')
-		log = r"Y:\GLB\BWData\CRM_Team\QlikView\QVDLoader\Transform\WASP\QVDGenCombinedAccounts.qvw.log"
+		log = r"testdata\ETLTubeData_Subbified.qvw.log"
 		
 		lf = LogFile(log)
 
