@@ -10,11 +10,11 @@ class TestBlock(unittest.TestCase):
 
 	def test_detect_encoding(self):
 		paths = [
-			r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\ETLTubeData_Subbified.qvw.log",
-			r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\Subbify_TestInput.qvs",
-			r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\ETLTubeData.qvs",
-			r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\TestPRJ-prj\LoadScript.txt",
-			r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\TestPRJ-prj\SH01.xml"
+			r"testdata\ETLTubeData_Subbified.qvw.log",
+			r"testdata\Subbify_TestInput.qvs",
+			r"testdata\ETLTubeData.qvs",
+			r"testdata\TestPRJ-prj\LoadScript.txt",
+			r"testdata\TestPRJ-prj\SH01.xml"
 			]
 
 		for path in paths:
@@ -26,13 +26,12 @@ class TestBlock(unittest.TestCase):
 
 	def test_parse_logfile(self):
 		print('Testing logfile parse.')
-		log = r"C:\Users\ben.simonds\Documents\QVPythonTools\Qlik-Script-Tools-Minimal\testdata\ETLTubeData_Subbified.qvw.log"
+		log = r"Y:\GLB\BWData\CRM_Team\QlikView\QVDLoader\Transform\WASP\QVDGenCombinedAccounts.qvw.log"
 		
 		lf = LogFile(log)
-		
-		for file in set([line['file'] for line in lf.lines if 'file' in line.keys()]):
-			print(file)
 
+		for f in lf.get_files_touched():
+			print(f,lf.find_file(f))
 
 if __name__ == '__main__':
         unittest.main()
