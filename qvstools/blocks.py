@@ -180,7 +180,7 @@ class BlockLibrary:
 			blocktext
 			)
 
-	def add_directory_QVDs(self,directory):
+	def add_directory_qvd(self,directory):
 		"""Create blocks for all .qvd files in directory."""
 		files = [f for f in os.listdir(directory) if os.path.basename(f).endswith('.qvd')]
 		for f in files:

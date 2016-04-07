@@ -89,7 +89,7 @@ class TestBlock(unittest.TestCase):
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Load directory:
-		myblocklib.add_directory_QVDs('testdata')
+		myblocklib.add_directory_qvd('testdata')
 		#Write blocks to file.
 		for block in [b for b in myblocklib.blocks if myblocklib.blocks[b].type == 'QVD']:
 			myblocklib.blocks[block].write('testoutput.txt')

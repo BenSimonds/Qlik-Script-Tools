@@ -115,6 +115,7 @@ class PRJ:
 			object_type = QVObject.object_types.values()
 
 		objects_list = [ob for ob in self.objects.values() if ob.id in object_id and ob.type in object_type]
+		print('Found {0} Elements.'.format(len(objects_list)))
 		for ob in objects_list:
 			tree = ob.xml
 			results = tree.findall(search_path)
@@ -130,19 +131,36 @@ def replace_fonts_commandline():
 
 	Usage::
 
-		> QVReplaceFonts "PrjDirectory-prj"
+		> QVReplaceFonts "PrjDirectory-prj" "Comic Sans"
 	"""
+	error_message = 'Please supply a prj folder or qvw file to replace fonts in, and the font you want to use. ie. QVReplaceFonts "PrjDirectory-prj" "Comic Sans" '
+
 	args = sys.argv
-	qvw = args[1]
-	prjdir = qvw[0:-4] + '-prj'
-	font = args[2]
-	flags = args[3:]
+	try:
+		if args[1].endswith('-prj'):
+			prjdir = args[1]
+			qvw = prjdir[0:-4] + '.qvw'
+			print(qvw)
+		elif args[1].endswith('.qvw'):
+			qvw = args[1]
+			prjdir = qvw[0:-4] + '-prj'
+		else:
+			print(error_message)
+			return
+		font = args[2]
+	except IndexError:
+		print(error_message)
+		return
+	try:
+		flags = args[3:]
+	except IndexError:
+		pass
 
 	#We can use flags to add some extra functionality
 	open_after = '-o' in flags
 
 	#Sense check input:
-	if not (os.path.isfile(qvw) and qvw.endswith('.qvw')):
+	if not os.path.isfile(qvw) and qvw.endswith('.qvw'):
 		print('Cannot find file: {0}'.format(qvw))
 		return None
 	elif not (os.path.isdir(prjdir)):
