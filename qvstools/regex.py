@@ -10,5 +10,7 @@ search_strings = {
     'storesearchstring':r"store\s\[?[\w\s]*\]?\sinto"
 }
 
+#Compile search strings.
 searches = {}
-for
+for s in search_strings:
+    searches[s] = re.compile(search_strings[s])
