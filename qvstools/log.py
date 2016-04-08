@@ -172,10 +172,11 @@ def build_dependency_graph(path,depth=100):
 	while counter < depth and len(logfiles_working) > 0:
 		for l in logfiles_working:
 			deps = gather_deps(l)
-			deps_all += deps
-			logfiles_done = list(set(logfiles_done + logfiles_working))
-			logfiles_working = list(set([x[2]+'.log' for x in deps if x[2] and x[2]+'.log' not in logfiles_done]))
-
+			if deps:
+				deps_all += deps
+				logfiles_working = list(set([x[2]+'.log' for x in deps if x[2] and x[2]+'.log' not in logfiles_done and x[2]+'.log' is not l]))
+			logfiles_done = list(set(logfiles_done + [l]))
+	
 	return list(set(deps_all)) #not interested in duplicates.
 
 
