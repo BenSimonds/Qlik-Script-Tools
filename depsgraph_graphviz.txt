@@ -1,0 +1,11 @@
+digraph G {
+qvw0 [label="DepsGraph2.qvw",color="lightgreen",shape=ellipse,style=filled]
+qvw1 [label="DepsGraph3.qvw",color="lightgreen",shape=ellipse,style=filled]
+qvw2 [label="DepsGraph1.qvw",color="lightgreen",shape=ellipse,style=filled]
+qvd0 [label="DepsGraphTable3.qvd",color="lightblue",shape=rectangle,style=filled]
+qvd1 [label="DepsGraphTable1.qvd",color="lightblue",shape=rectangle,style=filled]
+qvd2 [label="DepsGraphTable2.qvd",color="lightblue",shape=rectangle,style=filled]
+qvw1 -> qvd1 -> qvw2
+qvw1 -> qvd2 -> qvw2
+qvw1 -> qvd0 -> qvw0
+}

@@ -71,7 +71,7 @@ class LogFile:
 				matchlines.append(file)
 			#reset optype
 				optype = 'LOAD'
-		print('\nParsed!')
+		print('Parsed!')
 		return matchlines
 
 	def get_file_lines(self):
@@ -112,9 +112,8 @@ class LogFile:
 				return None
 
 
-def build_dependency_graph(path,depth=100):
+def build_dependency_graph(path,depth=3,maxfiles=100):
 	"""Recursively looks through log files to build a dependency graph.
-
 	Steps:
 		1. Start with the logfile, and find all the files it generates.
 		2. For the qvd files, find the creator doc for those files, and see if *that* file has a logfile.
@@ -130,33 +129,39 @@ def build_dependency_graph(path,depth=100):
 			print('Could not find logfile: {0}'.format(logfile_input))
 			return None
 		else:
+			print('parsing logfile: {0}'.format(logfile_input))
 			qvw = logfile_input[0:-4]
 			lf = LogFile(logfile_input)
 			deps = []
 			for l in lf.get_file_lines():
-				file = lf.find_file(l)
-				if file:
-					if file.endswith('.qvd'):
-						creatordoc = QVD(file).CreatorDoc
+				deps_triplet = [qvw,'None','None']
+				l_file = lf.find_file(l)
+				if l_file:
+					deps_triplet[1] = l_file
+					if l_file.endswith('.qvd'):
+						creatordoc = QVD(l_file).CreatorDoc
+						deps_triplet[2] = creatordoc
 					else:
-						creatordoc = None
+						pass
 				else:
-					file = l['file'] + '(UNFOUND)'
-					creatordoc = None
-				deps.append((qvw,file,creatordoc))
+					deps_triplet[1] = l['file'] + '(UNFOUND)'
+				deps_triplet = tuple(deps_triplet)
+				deps.append(deps_triplet)
 			return deps
 
 	input_error_message = 'This function takes a logfile or a qvw file (that has a log file associated with it). Did you supply a valid qvw or log file?'
 	#Sense check inut:
 	if path.endswith('.log'):
 		if os.path.isfile(path):
-			logfile_input = path
+			logfile_input = os.path.abspath(path)
+			root_qvw = os.path.abspath(path[0:-4]+'.qvw')
 		else:
 			print(input_error_message,'NOT LOG')
 			return
 	elif path.endswith('.qvw'):
 		if os.path.isfile(path):
-			logfile_input = path + '.log'
+			logfile_input = os.path.abspath(path + '.log')
+			root_qvw = os.path.abspath(path)
 		else:
 			print(input_error_message,'NOT QVW')
 			return
@@ -165,24 +170,111 @@ def build_dependency_graph(path,depth=100):
 		return
 
 	deps_all = []
-	counter  = 0
+	counter_depth  = 0
+	counter_files = 0
 	logfiles_working = [logfile_input]
 	logfiles_done = []
 
-	while counter < depth and len(logfiles_working) > 0:
-		for l in logfiles_working:
+	##Results objects:
+	r_qvd = [] 		# QVDs (basename,abspath)
+	r_qvw = [] 	# QVWs (basename,abspath)
+	r_other = [] 	# Other files (excel,csv) (basename,abspath)
+	r_creatordocs = [] # List of tuples: (qvd basename, qvd abspath,creatordoc basename, creatodoc abspath) 
+	r_userdocs = [] #List of tuples (qvw basename, qvw abspath,file basename, file abspath)
+	r_triplets = [] #List of tuples (userdoc basename, userdoc abspath,file basename, file abspath,creatordoc basename, creatordoc abspath)
+
+	while counter_depth < depth and counter_files < maxfiles and len(logfiles_working) > 0:
+		counter_depth += 1
+		# Pop a logfile from the list to work on.
+		l = logfiles_working.pop()
+
+		#Append it to logfiles_done so it won't get done again.
+		logfiles_done.append(l)
+
+		#Add the associated qvw to our results.
+		qvw_current = l[0:-4]
+		r_qvw.append((os.path.basename(qvw_current),qvw_current))
+
+		#Gather deps on it if we haven't reached maxfiles:
+		if counter_files < maxfiles:
+			counter_files += 1
 			deps = gather_deps(l)
+			#If it has any add them to our results.
 			if deps:
-				deps_all += deps
-				logfiles_working = list(set([x[2]+'.log' for x in deps if x[2] and x[2]+'.log' not in logfiles_done and x[2]+'.log' is not l]))
-			logfiles_done = list(set(logfiles_done + [l]))
+				# Add the deps triplets to the results.
+				r_qvd += [(os.path.basename(d[1]) , d[1]) for d in deps if d[1].endswith('.qvd')]
+				r_other += [(os.path.basename(d[1]) , d[1]) for d in deps if not d[1].endswith('.qvd')]
+				r_userdocs += [
+					(
+					os.path.basename(d[0]), d[0],
+					os.path.basename(d[1]), d[1]
+					) 
+					for d in deps]
+				r_creatordocs += [
+					(
+					os.path.basename(d[1]), d[1],
+					os.path.basename(d[2]), d[2]
+					)
+					for d in deps]
+				r_triplets += [
+					(
+					os.path.basename(d[0]), d[0],
+					os.path.basename(d[1]), d[1],
+					os.path.basename(d[2]), d[2]
+					)
+					for d in deps]
+				r_qvw += [(os.path.basename(d[2]),d[2]) for d in deps if (os.path.basename(d[2]),d[2]) not in r_qvw]
+
+				#Add any new creatordocs to logfiles_working.
+				for d in deps:
+					dlog = d[2]+'.log'
+					if dlog not in logfiles_done + logfiles_working:
+						logfiles_working.append(dlog)
+		else:
+			break
+
+	#Build a results object:
+	deps_graph = {
+		'depth':depth,
+		'maxfiles':maxfiles,
+		'qvw':list(set(r_qvw)),
+		'qvd':list(set(r_qvd)),
+		'otherfiles':list(set(r_other)),
+		'creatordocs':list(set(r_creatordocs)),
+		'userdocs':list(set(r_userdocs)),
+		'triplets':list(set(r_triplets))
+	}
 	
-	return list(set(deps_all)) #not interested in duplicates.
+	return deps_graph #not interested in duplicates.
 
+def generate_graphviz(path,depth=4,maxfiles=100):
+	"""Takes a logfile and builds a graphviz.it compatible graph document."""
+	outputfile = 'depsgraph_graphviz.txt'
+	deps = build_dependency_graph(path,depth=depth,maxfiles=maxfiles)
+	print('###')
+	for w in deps['qvw']:
+		print(w[0],w[1])
+	print('###')
 
-
-
-
-	
-
-
+	with open(outputfile,'w') as output:
+		output.write('digraph G {\n')
+		index = {}
+		for i, qvw in enumerate(deps['qvw']):
+			name ='qvw' + str(i)
+			index[qvw[1]]=name
+			output.write('{0} [label="{1}",color="yellowgreen",shape=ellipse,style=filled]\n'.format(name,qvw[0]))
+		for i, qvd in enumerate(deps['qvd']):
+			name = 'qvd' + str(i)
+			index[qvd[1]]=name
+			output.write('{0} [label="{1}",color="cornflowerblue",shape=rectangle,style=filled]\n'.format(name,qvd[0]))
+		for i, f in enumerate(deps['otherfiles']):
+			name = 'other' + str(i)
+			index[f[1]]=name
+			output.write('{0} [label="{1}",color="slategray",shape=rectangle],style=filled\n'.format(name,f[0]))
+		print(index)
+		for x in deps['triplets']:
+			ia = index[x[1]]
+			ib = index[x[3]]
+			ic = index[x[5]]
+			output.write('{0} -> {1} -> {2}\n'.format(ia,ib,ic))
+		output.write('}\n')

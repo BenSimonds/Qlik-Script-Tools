@@ -11,7 +11,7 @@ class TestQVD(unittest.TestCase):
 	def test_QVD(self):
 		print('Testing QVD Class')
 		#Load a qvd.
-		testqvd = QVD('testdata/Test.qvd')
+		testqvd = QVD(r'qvstools\tests\testdata\Test.qvd')
 
 
 if __name__ == '__main__':

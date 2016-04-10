@@ -1,0 +1,864 @@
+   ///$tab Main
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='#,##0.00;-#,##0.00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='DD/MM/YYYY';
+SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+
+
+///$tab SmartCall_Init
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Generic set up
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SET HidePrefix = '_';
+LET vDocumentName = Documentname();
+LET vCounter = 0; // Each tab will increment this variable
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Variables for calculation of the total elapsed time (see before the EXIT)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+LET vScriptStartTimestampNumeric = Num(Now());
+LET vScriptStartTimestamp = Timestamp($(vScriptStartTimestampNumeric));
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Initialization of the Metadata table. Used for concatenation.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Tables_Metadata:
+LOAD
+'' AS TM_TableName
+AutoGenerate 0;
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This Tab is the place where everything happens
+// The INLINE table called SubNameList contains the list of the existing SUBROUTINES.
+// The loop runs for each record in this table.
+// Each round of the loop compares the current SUBROUTINE XXX with the smart variable string.
+// If _XXX_ is contained in the string, then the SUBROUTINE XXX will be called, otherwise nothing will happen
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// List of SUBs. In general it should be all uncommented: if they are not in the vSmartVar, they will be ignored in any case
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SubNameList:
+LOAD 
+SubName AS _KEY_SUB,
+Rowno() AS _SubNameListSort,
+* 
+INLINE [
+SubName, SubNote
+Main
+ExcessJourneyTime
+TrainDelays
+StationClosures
+LostCustomerHours
+ServiceControlFailures
+PassengerJourneys
+TubeMasterCalendar
+LondonWeather
+CreateQVDs
+]
+WHERE LEFT(SubName,2)<>'//'
+;
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Smart Variables:
+//
+// We have three smart variables:
+//	vSmartVarInternal	- this gets reset by a trigger to '*' on opening the qvd.
+//	vSmartVarExternal	- this can be passed as a command line setting with vSmartVarExternal. It is reset to '*' after reloading so that it doesn't get saved as something else.
+//	vSmartVar			- this is generated from the two above. If vSmartVarInternal  = '*', take vSmartVarExternal else, take vSmartVarInternal.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If '$(vSmartVarInternal)' = '*' THEN
+	set vSmartVar = $(vSmartVarExternal); //Use external.
+ELSE 
+	set vSmartVar = $(vSmartVarInternal);	//Use internal.
+ENDIF
+
+IF '$(vSmartVar)' = '*' THEN //Convert * to concatenated SubNameList
+	TMP_Concat:
+	Load '_' & Concat(SubName,'_') & '_' as TMP_Concat Resident SubNameList;
+	let vSmartVar = peek('TMP_Concat',0,'TMP_Concat'); //Default to all.
+ENDIF
+
+///$tab SUB_MetaData
+// Tab Start
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SUB TablesMetadata
+// This runs at the end of each subroutine, or optionally multiple times per sub
+// if you want to have multiple table loads per subroutine. By default it will assume
+// that the tab is named for the main table it loads. If the script fails to find
+// the table, then the NoOfRows and NoOfColumns field will return nulls.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+SUB TablesMetadata
+
+LET vExtractCurrentEnd = num(Now()); 													// The vExtractCurrentStart must be declared at the beginning of the new tab
+LET vExtractCurrentElapsedTime = ($(vExtractCurrentEnd)-$(vExtractCurrentStart))*86400; // Elapsed time in seconds
+LET vNoOfRows = NoOfRows('$(vTable)'); 													// No of Rows loaded.
+LET vNoOfFields = NoOfFields('$(vTable)'); 												// No of Cols loaded.
+
+Concatenate (Tables_Metadata) // Requires the existance of a table called Tables_Metadata (see tab SmartCall_Init).
+LOAD
+'$(vCurrentSub)' 								AS _KEY_SUB,		// Used as a key, not visible in front end
+$(vCounter)										AS TM_SubID,
+'$(vCurrentSub)'								AS TM_SubName,
+'$(vCounter)'&' '&'$(vCurrentSub)'		AS TM_Sub,
+'$(vTable)' 									AS TM_TableName, 	// Table Name
+Date($(vExtractCurrentStart))					AS TM_Date,			// May want to have start and end date for very long extracts...
+Time($(vExtractCurrentStart)) 					AS TM_StartTime,
+Time($(vExtractCurrentEnd)) 					AS TM_EndTime,
+Time($(vExtractCurrentElapsedTime)/86400 ) 		AS TM_ElapsedTime, 
+Num('$(vExtractCurrentElapsedTime)')			AS TM_ElapsedSeconds, // Easy to sum in the chart but not easy to read when the number is big.
+Num('$(vNoOfRows)') 							AS TM_NoOfRows,
+Num('$(vNoOfFields)') 							AS TM_NoOfColumns,
+'ALL_TABLE_METADATA'							AS ALL_TABLE_METADATA
+AutoGenerate 1;
+
+END SUB
+
+// Tab End
+
+///$tab <
+
+///$tab Main
+SUB Main
+
+LET vTable = 'Main';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='#,##0.00;-#,##0.00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='DD/MM/YYYY';
+SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+
+
+CALL TablesMetadata
+END SUB
+
+///$tab ExcessJourneyTime
+SUB ExcessJourneyTime
+
+LET vTable = 'Excess Journey Time';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+// Excess Journey Time
+
+
+DIRECTORY ../Data/tube data raw;
+
+[Temp Excess Journey Time]:
+CrossTable(Period, [Excess Journey Time])
+LOAD 
+	F1 as Station, 
+    [1.000000], 
+    [2.000000], 
+    [3.000000], 
+    [4.000000], 
+    [5.000000], 
+    [6.000000], 
+    [7.000000], 
+    [8.000000], 
+    [9.000000], 
+    [10.000000], 
+    [11.000000], 
+    [12.000000], 
+    [13.000000]
+FROM
+[performance-datastore-period-3-2014-15.xlsm]
+(ooxml, embedded labels, table is [Excess Journey Time], filters(
+Remove(Row, Pos(Top, 13)),
+Remove(Row, Pos(Top, 12)),
+Remove(Row, Pos(Top, 11)),
+Remove(Row, Pos(Top, 10)),
+Remove(Row, Pos(Top, 9)),
+Remove(Row, Pos(Top, 8)),
+Remove(Row, Pos(Top, 7)),
+Remove(Row, Pos(Top, 6)),
+Remove(Row, Pos(Top, 5)),
+Remove(Row, Pos(Top, 4)),
+Remove(Row, Pos(Top, 3)),
+Remove(Row, Pos(Top, 2)),
+Remove(Row, Pos(Top, 1)),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Excess', case))),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'TOTAL', case)))
+));
+
+
+[Excess Journey Time]:
+LOAD
+	* ,
+	RecNo() as ID
+RESIDENT [Temp Excess Journey Time];
+DROP Table [Temp Excess Journey Time];
+
+LEFT JOIN ([Excess Journey Time]) 
+[Temp Excess Journey Time]:
+LOAD 
+	A as ID, 
+    C as Year
+FROM
+[Years for Performance Data.xlsx]
+(ooxml, no labels, table is Sheet1);
+
+sleep 1000;
+
+
+CALL TablesMetadata
+END SUB
+
+///$tab TrainDelays
+SUB TrainDelays
+
+LET vTable = 'Train Delays';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+
+//Train Delays
+[Temp Train Delays]:
+CrossTable(Period, [#Train Delays])
+LOAD 
+    F1 as Station, 
+    [1.000000], 
+    [2.000000], 
+    [3.000000], 
+    [4.000000], 
+    [5.000000], 
+    [6.000000], 
+    [7.000000], 
+    [8.000000], 
+    [9.000000], 
+    [10.000000], 
+    [11.000000], 
+    [12.000000], 
+    [13.000000]
+FROM
+[performance-datastore-period-3-2014-15.xlsm]
+(ooxml, embedded labels, table is [Train Delays 15 mins], filters(
+Remove(Row, Pos(Top, 13)),
+Remove(Row, Pos(Top, 12)),
+Remove(Row, Pos(Top, 11)),
+Remove(Row, Pos(Top, 10)),
+Remove(Row, Pos(Top, 9)),
+Remove(Row, Pos(Top, 8)),
+Remove(Row, Pos(Top, 7)),
+Remove(Row, Pos(Top, 6)),
+Remove(Row, Pos(Top, 5)),
+Remove(Row, Pos(Top, 4)),
+Remove(Row, Pos(Top, 3)),
+Remove(Row, Pos(Top, 2)),
+Remove(Row, Pos(Top, 1)),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Train', case))),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'TOTAL', case)))
+));
+
+[Train Delays]:
+LOAD
+	* ,
+	RecNo() as ID
+RESIDENT [Temp Train Delays];
+DROP Table [Temp Train Delays];
+
+LEFT JOIN ([Train Delays]) 
+LOAD 
+	*
+RESIDENT [Excess Journey Time];
+///**/Drop Table [Excess Journey Time];
+
+CALL TablesMetadata
+END SUB
+
+///$tab StationClosures
+SUB StationClosures
+
+LET vTable = 'Station Closures';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+
+//Station Closures
+[Temp Station Closures]:
+CrossTable(Period, [Station Closures])
+LOAD 
+	F1 as Station, 
+    [1.000000], 
+    [2.000000], 
+    [3.000000], 
+    [4.000000], 
+    [5.000000], 
+    [6.000000], 
+    [7.000000], 
+    [8.000000], 
+    [9.000000], 
+    [10.000000], 
+    [11.000000], 
+    [12.000000], 
+    [13.000000]
+FROM
+[performance-datastore-period-3-2014-15.xlsm]
+/**/(ooxml, embedded labels, table is [Stn Closures], filters(
+Remove(Row, Pos(Top, 13)),
+Remove(Row, Pos(Top, 12)),
+Remove(Row, Pos(Top, 11)),
+Remove(Row, Pos(Top, 10)),
+Remove(Row, Pos(Top, 9)),
+Remove(Row, Pos(Top, 8)),
+Remove(Row, Pos(Top, 7)),
+Remove(Row, Pos(Top, 6)),
+Remove(Row, Pos(Top, 5)),
+Remove(Row, Pos(Top, 4)),
+Remove(Row, Pos(Top, 3)),
+Remove(Row, Pos(Top, 2)),
+Remove(Row, Pos(Top, 1)),
+/**/Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Station', case))),
+/**/Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'TOTAL', case)))
+));
+
+[Station Closures]:
+Load
+	* ,
+	RecNo() as ID
+RESIDENT [Temp Station Closures];
+DROP Table [Temp Station Closures];
+
+LEFT JOIN ([Station Closures])
+LOAD 
+	*
+Resident [Train Delays];
+///**/Drop Table [Excess Journey Time];
+sleep 1000;
+
+
+CALL TablesMetadata
+END SUB
+
+///$tab LostCustomerHours
+SUB LostCustomerHours
+
+LET vTable = 'Lost Customer Hours';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+
+//Lost Customer Hours
+[Temp Lost Customer Hours]:
+CrossTable(Period, [Lost Customer Hours])
+LOAD 
+	F1 as Station, 
+    [1.000000], 
+    [2.000000], 
+    [3.000000], 
+    [4.000000], 
+    [5.000000], 
+    [6.000000], 
+    [7.000000], 
+    [8.000000], 
+    [9.000000], 
+    [10.000000], 
+    [11.000000], 
+    [12.000000], 
+    [13.000000]
+FROM
+[performance-datastore-period-3-2014-15.xlsm]
+(ooxml, embedded labels, table is [LCH by Line], filters(
+Remove(Row, Pos(Top, 160)),
+Remove(Row, Pos(Top, 147)),
+Remove(Row, Pos(Top, 134)),
+Remove(Row, Pos(Top, 121)),
+Remove(Row, Pos(Top, 108)),
+Remove(Row, Pos(Top, 95)),
+Remove(Row, Pos(Top, 82)),
+Remove(Row, Pos(Top, 69)),
+Remove(Row, Pos(Top, 56)),
+Remove(Row, Pos(Top, 43)),
+Remove(Row, Pos(Top, 30)),
+Remove(Row, Pos(Top, 17)),
+Remove(Row, Pos(Top, 14)),
+Remove(Row, Pos(Top, 13)),
+Remove(Row, Pos(Top, 10)),
+Remove(Row, Pos(Top, 11)),
+Remove(Row, Pos(Top, 10)),
+Remove(Row, Pos(Top, 9)),
+Remove(Row, Pos(Top, 8)),
+Remove(Row, Pos(Top, 7)),
+Remove(Row, Pos(Top, 6)),
+Remove(Row, Pos(Top, 5)),
+Remove(Row, Pos(Top, 4)),
+Remove(Row, Pos(Top, 3)),
+Remove(Row, Pos(Top, 2)),
+Remove(Row, Pos(Top, 1)),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Customer', case))),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'NETWORK', case)))
+));
+
+[Lost Customer Hours]:
+LOAD
+	* ,
+	RecNo() as ID
+RESIDENT [Temp Lost Customer Hours];
+DROP Table [Temp Lost Customer Hours];
+
+LEFT JOIN ([Lost Customer Hours])
+LOAD 
+	*
+RESIDENT [Station Closures];
+/**///Drop Table [Excess Journey Time];
+
+sleep 1000;
+
+
+CALL TablesMetadata
+END SUB
+
+///$tab ServiceControlFailures
+SUB ServiceControlFailures
+
+LET vTable = 'Service Control Failures';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+
+//Service Control Failures
+[Temp Service Control Failures]:
+CrossTable(Period, [Service Control Failures])
+LOAD 
+	F1 as Station, 
+    [1.000000], 
+    [2.000000], 
+    [3.000000], 
+    [4.000000], 
+    [5.000000], 
+    [6.000000], 
+    [7.000000], 
+    [8.000000], 
+    [9.000000], 
+    [10.000000], 
+    [11.000000], 
+    [12.000000], 
+    [13.000000]
+FROM
+[performance-datastore-period-3-2014-15.xlsm]
+(ooxml, embedded labels, table is [Number of service cont failures], filters(
+Remove(Row, Pos(Top, 13)),
+Remove(Row, Pos(Top, 12)),
+Remove(Row, Pos(Top, 11)),
+Remove(Row, Pos(Top, 10)),
+Remove(Row, Pos(Top, 9)),
+Remove(Row, Pos(Top, 8)),
+Remove(Row, Pos(Top, 7)),
+Remove(Row, Pos(Top, 6)),
+Remove(Row, Pos(Top, 5)),
+Remove(Row, Pos(Top, 4)),
+Remove(Row, Pos(Top, 3)),
+Remove(Row, Pos(Top, 2)),
+Remove(Row, Pos(Top, 1)),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Number', case))),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'TOTAL', case)))
+));
+
+[Service Control Failures]:
+LOAD
+	* ,
+	RecNo() as ID
+RESIDENT [Temp Service Control Failures];
+DROP Table [Temp Service Control Failures];
+
+LEFT JOIN ([Service Control Failures])
+LOAD 
+	*
+Resident [Lost Customer Hours];
+/**///Drop Table [Excess Journey Time];
+
+//Track Failures
+[Temp Track Failures]:
+CrossTable(Period, [Service Track Failures])
+LOAD 
+	F1 as Station, 
+    [1.000000], 
+    [2.000000], 
+    [3.000000], 
+    [4.000000], 
+    [5.000000], 
+    [6.000000], 
+    [7.000000], 
+    [8.000000], 
+    [9.000000], 
+    [10.000000], 
+    [11.000000], 
+    [12.000000], 
+    [13.000000]
+FROM
+[performance-datastore-period-3-2014-15.xlsm]
+(ooxml, embedded labels, table is [Number of Track failures], filters(
+Remove(Row, Pos(Top, 13)),
+Remove(Row, Pos(Top, 12)),
+Remove(Row, Pos(Top, 11)),
+Remove(Row, Pos(Top, 10)),
+Remove(Row, Pos(Top, 9)),
+Remove(Row, Pos(Top, 8)),
+Remove(Row, Pos(Top, 7)),
+Remove(Row, Pos(Top, 6)),
+Remove(Row, Pos(Top, 5)),
+Remove(Row, Pos(Top, 4)),
+Remove(Row, Pos(Top, 3)),
+Remove(Row, Pos(Top, 2)),
+Remove(Row, Pos(Top, 1)),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'Number', case))),
+Remove(Row, RowCnd(CellValue, 1, StrCnd(contain, 'TOTAL', case)))
+));
+
+[underground_data_temp]:
+LOAD
+	Round(num#([Period],'##.0')) as Period,
+	Station,
+	[Service Track Failures],
+	RecNo() as ID
+RESIDENT [Temp Track Failures];
+DROP Table [Temp Track Failures];
+
+LEFT JOIN ([underground_data_temp])
+LOAD
+	[Excess Journey Time],
+	Round(num#([Period],'##.0')) as Period,
+	Station,
+	ID,
+	Year,
+	[#Train Delays],
+	[Station Closures],
+	[Lost Customer Hours],
+	[Service Control Failures],
+	Station & '|' & Year as StationYear
+RESIDENT [Service Control Failures];
+
+[Underground Data]:
+LOAD
+	*,
+	Dual(Text(Num(Period)) & ' - ' & Text(Num(Year)), (Year*100) + Period) as [Period - Fiscal Year]
+RESIDENT underground_data_temp;
+
+DROP Table [underground_data_temp];
+DROP Fields Year, Period FROM [Underground Data];
+DROP Table [Excess Journey Time];
+DROP Table [Train Delays];
+DROP Table [Station Closures];
+DROP Table [Lost Customer Hours];
+DROP Table [Service Control Failures];
+
+sleep 1000;
+
+
+CALL TablesMetadata
+END SUB
+
+///$tab PassengerJourneys
+SUB PassengerJourneys
+
+LET vTable = 'Passenger Journeys';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+
+[Passenger Journeys Cross]:
+CrossTable(Year, [Passenger Journeys])
+LOAD 
+	[Passenger Journeys ('000)] as Station, 
+    [2003/04] as [2004], 
+    [2004/05] as [2005], 
+    [2005/06] as [2006], 
+    [2006/07] as [2007], 
+    [2007/08] as [2008], 
+    [2008/09] as [2009], 
+    [2009/10] as [2010], 
+    [2010/11] as [2011], 
+    [2011/12] as [2012], 
+    [2012/13] as [2013], 
+    [2013/14] as [2014], 
+    [2014/15] as [2015]
+FROM
+[performance-datastore-period-3-2014-15.xlsm]
+(ooxml, embedded labels, table is [Passenger Journeys], filters(
+Remove(Row, RowCnd(Interval, Pos(Top, 13), Pos(Bottom, 1), Select(1, 0))),
+Remove(Row, Pos(Top, 1)),
+Remove(Col, Pos(Top, 14)),
+Remove(Col, Pos(Top, 16)),
+Remove(Col, Pos(Top, 15)),
+Remove(Col, Pos(Top, 14))
+));
+
+[Passenger Journeys]:
+LOAD 
+	Station & '|' & Year as StationYear,
+	[Passenger Journeys]
+RESIDENT [Passenger Journeys Cross];
+
+DROP TABLE [Passenger Journeys Cross];
+
+
+CALL TablesMetadata
+END SUB
+
+///$tab TubeMasterCalendar
+SUB TubeMasterCalendar
+
+LET vTable = 'Tube Master Calendar';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+// Creates a temporary calendar based on the 13 periods feautured in the TFL Underground data
+[temp_master_calendar]:
+LOAD
+	[Reporting Period] as [Period],
+	[Days in period],
+	Date([Period ending]-[Days in period]+1) as StartDate,
+	Date([Period ending]) as EndDate;
+LOAD 
+	[Period and Financial year], 
+    [Reporting Period], 
+    [Days in period], 
+    [Period ending]
+FROM
+[Period Dates.xls]
+(biff, embedded labels, table is [Key trends$]);
+
+// Creates an individual row for every date between the start and end dates in the temporary calendar
+SET vRowCount = (NoOfRows('temp_master_calendar') -1);
+
+FOR i = 0 TO $(vRowCount)
+
+LET vMinDate = PEEK('StartDate',$(i),'temp_master_calendar');     //  
+LET vMaxDate = PEEK('MinDate',$(i),'temp_master_calendar');     //   
+LET vDays = PEEK('Days in period',$(i),'temp_master_calendar');     // 
+
+tempDates:
+LOAD
+PEEK('StartDate', $(i), 'temp_master_calendar') as StartDate, // ith start date
+PEEK('EndDate', $(i), 'temp_master_calendar') as EndDate, // ith end date
+date(Date(recno()) + DAte('$(vMinDate)' -1), 'DD/MM/YYYY') as [Date]   // create dates
+autogenerate $(vDays) ;
+
+NEXT i
+
+// Joins the rows to the temporary calendar
+LEFT JOIN ([temp_master_calendar])
+LOAD 
+	*
+RESIDENT tempDates;
+
+DROP Table tempDates;
+
+// TFL's fiscal year starts in April
+SET vFirstMonth = 4 ;
+
+[Tube Master Calendar]:
+LOAD
+	*,
+	Dual(Text(Num(Period)) & ' - ' & Text(Num([Fiscal Year])), ([Fiscal Year]*100) + Period) as [Period - Fiscal Year]
+	Where Year=2013;
+LOAD
+	*,
+	Year + IF(Month >= $(vFirstMonth), 1, 0) as [Fiscal Year],
+	IF(Month = 12 OR Month < 3, DUAL('Winter',4), IF(Month < 6, DUAL('Spring',1), IF(Month < 9, DUAL('Summer',2), DUAl('Autumn',3)  ))) as Season;
+LOAD
+	*,
+	WeekDay([Date]) as Weekday,
+	Year([Date]) as Year,
+	Month([Date]) as Month,
+	Day([Date]) as Day
+RESIDENT [temp_master_calendar];
+
+DROP Table temp_master_calendar;
+
+LET vMinDate = Null();
+LET vMaxDate = Null();
+
+CALL TablesMetadata
+END SUB
+
+///$tab LondonWeather
+SUB LondonWeather
+
+LET vTable = 'London Weather';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+[London Weather]:
+Load * Where Year(Date)= 2013;
+LOAD 
+	Date(Date#(Date, 'DD-MM-YYYY'), 'DD/MM/YYYY') as [Date],
+	'Central London' as Location, 
+    [Mean Temp], 
+    [Max Temp], 
+    [Avg Max Temp], 
+    [Record Max Temp], 
+    [Min Temp], 
+    [Avg Min Temp], 
+    [Record Min Temp], 
+    [Dew Point],  
+    [Sea Lvl Pressure], 
+    [Wind Spd], 
+    [Max Wind Spd], 
+    [Max Gust Spd], 
+    Visibility
+FROM
+wunder_data_EGLC_2003_2015.txt
+(txt, codepage is 1252, embedded labels, delimiter is ',', msq);
+
+LEFT JOIN ([London Weather])
+[Heathrow Weather]:
+LOAD 
+	Date(Date#(Date, 'DD-MM-YYYY'), 'DD/MM/YYYY') as [Date],
+    Precipitation
+FROM
+[wunder_data_EGLL_2003-2015.txt]
+(txt, codepage is 1252, embedded labels, delimiter is ',', msq, no eof);
+
+sleep 1000;
+
+
+CALL TablesMetadata
+END SUB
+
+///$tab CreateQVDs
+SUB CreateQVDs
+
+LET vTable = 'Create QVDs';
+LET vCounter = $(vCounter)+1;
+TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+LET vExtractCurrentStart = num(Now());
+
+/*
+Notes:
+*/
+
+// '.\' is the current path, define the path here if required
+SET basePath = '..\'; 
+ 
+TRACE ---------------------------------------------------------------;
+TRACE Saving tables ... ;
+TRACE ~~;
+ 
+For i = 0 To NoOfTables() -1
+     
+     LET vTableName = TableName(i);
+     TRACE Saving table "$(vTableName)";
+     
+     STORE [$(vTableName)] INTO $(basePath)\$(vTableName).qvd (qvd);
+ 
+ 
+Next // Table Loop
+ 
+ 
+ 
+TRACE ~~;
+TRACE Finished saving tables ...;
+TRACE ---------------------------------------------------------------; 
+
+CALL TablesMetadata
+END SUB
+
+///$tab >
+
+///$tab SmartCall_Run
+// Tab Start    
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Loop initialization
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+LET vNumberOfRowsOfINLINE = NoOfRows('SubNameList');
+LET vNumberOfLoops=$(vNumberOfRowsOfINLINE);
+FOR vCurrentLoop = 1 to $(vNumberOfLoops)
+	LET vCurrentRecord = $(vCurrentLoop)-1;  //The first record of a table by convention is 0, not 1
+	LET vCurrentSub = Peek('SubName',$(vCurrentRecord),'SubNameList');  //Takes one by one the records of the column "SubName" of the table "SubNameList"
+	TRACE Execution of loop $(vCurrentLoop) of $(vNumberOfLoops)  Launching Sub $(vCurrentSub); //Gives in the dialogue box a feedback of what's happening
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// ------------------------------------> LOOP <-----------------------------------
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	IF SubStringCount(UPPER('$(vSmartVar)'),'_'&UPPER('$(vCurrentSub)')&'_') THEN // NOTE: the separator is needed, because otherwise the string FTM would also execute FT 
+	Call $(vCurrentSub);
+	ELSE 
+	TRACE The SUB called "$(vCurrentSub)" is not in the variable, therefore it will not be executed;
+	END IF
+
+NEXT vCurrentLoop;
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Cleanup of variables that are not needed in the front end
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+LET vCurrentLoop = ;
+LET vNumberOfRowsOfINLINE = ;
+LET vNumberOfLoops = ;
+LET vCurrentRecord = ;
+LET vCurrentSub = ;
+
+// Tab End

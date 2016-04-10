@@ -10,10 +10,10 @@ class TestBlock(unittest.TestCase):
 
 	def test_subbify(self):
 		print("Testing subbify")
-		testinput = 'testdata\\Subbify_TestInput.qvs'
+		testinput = r'qvstools\tests\testdata\Subbify_TestInput.qvs'
 		print(testinput)
 		subbify(testinput,open_after = False)
 		##Cleanup
-		shutil.rmtree('testdata\\Subbify_TestInput_Subbified-prj')
-		os.remove('testdata\\Subbify_TestInput_Subbified.qvw')
+		shutil.rmtree(r'qvstools\tests\testdata\Subbify_TestInput_Subbified-prj')
+		os.remove(r'qvstools\tests\testdata\Subbify_TestInput_Subbified.qvw')
 

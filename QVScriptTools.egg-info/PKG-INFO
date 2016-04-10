@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: QVScriptTools
-Version: 0.123.dev0
+Version: 0.127.dev0
 Summary: Tools for making Qlikview load scripts and doing other automation tasks on Qlikview projects.
 Home-page: https://github.com/BenSimonds/Qlik-Script-Tools
 Author: BenSimonds

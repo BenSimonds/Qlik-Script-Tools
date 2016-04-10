@@ -67,11 +67,11 @@ class TestBlock(unittest.TestCase):
 		print('Testing QVD load script writing.')
 		#Load a qvd.
 		tablename = 'Blah'
-		testqvd = QVD('testdata/Test.qvd')
+		testqvd = QVD(r'qvstools\tests\testdata\Test.qvd')
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Generate a block from my qvd.
-		myblocklib.add_qvd_block('testdata/Test.qvd','QVD_testqvd',tablename=tablename,prefix='XX')
+		myblocklib.add_qvd_block(r'qvstools\tests\testdata\Test.qvd','QVD_testqvd',tablename=tablename,prefix='XX')
 		myblocklib.add_text_block('DEF_META','Meta SUB Definition','SUB','blocks/source/sub_Metadata.qvs')
 		myblocklib.add_text_block('CALL_META','Call meta block','BLOCK','blocks/source/block_CallMeta.qvs')
 		myblocklib.add_text_block('INIT_META','Initialise meta block','BLOCK','blocks/source/block_InitMeta.qvs')
@@ -86,7 +86,7 @@ class TestBlock(unittest.TestCase):
 		#create a block library:
 		myblocklib = BlockLibrary('Test')
 		#Load directory:
-		myblocklib.add_directory_qvd('testdata')
+		myblocklib.add_directory_qvd(r'qvstools\tests\testdata')
 		#Write blocks to file.
 		for block in [b for b in myblocklib.blocks if myblocklib.blocks[b].type == 'QVD']:
 			myblocklib.blocks[block].write('testoutput.txt')
