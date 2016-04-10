@@ -22,7 +22,10 @@ docs/index.rst
 docs/modules.rst
 qvstools/__init__.py
 qvstools/blocks.py
+qvstools/log.py
 qvstools/prj.py
+qvstools/qvd.py
+qvstools/regex_store.py
 qvstools/subbify.py
 qvstools/text.py
 testdata/ETLTubeData.qvs
@@ -31,6 +34,8 @@ testdata/Subbify_TestInput.qvs
 testdata/Test.qvd
 tests/__init__.py
 tests/test_blocks.py
+tests/test_logfile.py
 tests/test_prj.py
+tests/test_qvd.py
 tests/test_subbify.py
 tests/test_text.py
