@@ -9,16 +9,15 @@ except ImportError:
 	print("running with xml.etree")
 
 class QVD:
-	"""Take a qvd file and make a python class with its xml header info."""
+	"""Take a qvd file and make a python class with its xml header info.
+
+	:param qvdfile: filepath of qvdfile to create block for. 
+	:param tablename: replaces the name of the table in the qvd with the string given.	
+	:param prefix: specifies a prefix to be used when aliasing fieldnames in table, i.e. if prefix = 'XX', FieldName will be aliased as XX_FieldName in the load statement.
+	"""
 
 	def __init__(self,qvdfile,tablename=False,prefix=False):
-		"""Create QVD object.
-
-		Arguments:
-		qvdfile -- filepath of qvdfile to create block for.
-		tablename -- (optional) replaces the name of the table in the qvd with the value provided.
-		prefix -- (optional) prefix to be used when aliasing fieldnames in table, e.g if prefix = 'XX', FieldName will be aliased as XX_FieldName in the load statement.
-		"""
+		
 		self.qvdheader = self.loadqvdfile(qvdfile)
 		 
 		def setprops(qvdfile,tablename,prefix):
@@ -42,7 +41,7 @@ class QVD:
 		setprops(qvdfile,tablename,prefix)
 
 	def loadqvdfile(self, infile):
-		"""Read the xml header of a qvd file and parse it as xml."""
+		# Read the xml header of a qvd file and parse it as xml.
 		encoding = detect_encoding(infile)
 		with open(infile,'rb') as qvdfile:
 			startphrase = '<QvdTableHeader>'

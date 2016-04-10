@@ -35,7 +35,7 @@ def detect_encoding(textfile):
 	return None
 
 def decode_with_detected(textfile):
-	"""Uses detect_encoding to get encoding and returns a unicode string of the text file"""
+	"""Uses :func:`detect_encoding <qvstools.text.detect_encoding>` to get encoding and returns a unicode string of the text file"""
 	encoding  = detect_encoding(textfile)
 	with open(textfile,'r',encoding=encoding,errors='replace') as f:
 		fulltext = f.read()

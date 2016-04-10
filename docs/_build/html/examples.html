@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Examples &mdash; Qlik-Script-Tools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Qlik-Script-Tools 0.1 documentation" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>Creating a new block library and adding a block:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qvstools.blocks</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">bl</span> <span class="o">=</span> <span class="n">BlockLibrary</span><span class="p">(</span><span class="s1">&#39;MyBlockLibrary&#39;</span><span class="p">)</span> <span class="c1">#Create a block library.</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">add_text_block</span><span class="p">(</span>
+        <span class="s1">&#39;MyBlock&#39;</span><span class="p">,</span>                                                      <span class="c1">#Name</span>
+        <span class="s1">&#39;A small block of qlikview script&#39;</span><span class="p">,</span> <span class="c1">#Description</span>
+        <span class="s1">&#39;Block&#39;</span><span class="p">,</span>                                                        <span class="c1">#Type</span>
+        <span class="s1">&#39;Script.qvs&#39;</span>                                            <span class="c1">#Block to be added.</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>Blocks are just normal qvs script, but you can specify strings to be replaced with the syntax below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>//(@0,&#39;First Replace String&#39;)
+
+//Normal qlik script from here on.
+
+@0:
+Load
+        1               as ID
+        &#39;Text&#39;  as Text
+        10              as Value
+AutoGenerate 1;
+</pre></div>
+</div>
+<p>You can then write the block to a file with the block.write() method, the replacelist argument accepts a list of items to replace:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">write_block</span><span class="p">(</span><span class="s1">&#39;MyBlock&#39;</span><span class="p">,[</span><span class="s1">&#39;MyTable&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>write_block supports the usual python write modes (w or a), but defaults to a to allow you to chain blocks together easily.</p>
+<p>The resulting output file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>//Normal qlik script from here on.
+
+MyTable:
+Load
+        1               as ID
+        &#39;Text&#39;  as Text
+        10              as Value
+AutoGenerate 1;
+</pre></div>
+</div>
+<p>You can save useful blocks into xml files for reapeated use without entering descriptions and names every time:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">block_to_xml</span><span class="p">(</span><span class="s1">&#39;MyBlock&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Blocks can also be created from QVD&#8217;s:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">bl</span><span class="o">.</span><span class="n">add_qvd_block</span><span class="p">(</span><span class="s1">&#39;Data.qvd&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Directories can also be batch loaded:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#Load a directory of block xml files</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">add_directory_blocks</span><span class="p">(</span><span class="s1">&#39;Directory_Blocks&#39;</span><span class="p">)</span>
+<span class="c1">#or QVDs:</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">add_directory_QVDs</span><span class="p">(</span><span class="s1">&#39;Directory_QVDs&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/examples.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Ben Simonds.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/examples.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

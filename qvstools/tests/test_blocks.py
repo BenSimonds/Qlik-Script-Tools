@@ -37,15 +37,6 @@ class TestBlock(unittest.TestCase):
 			text_scrubbed = '\n'.join([line for line in text_original.split('\n') if not re.search(r"//\(@[\d]",line) ]) 
 			self.assertEqual(myblocklib.blocks['Testblock'].text,text_scrubbed)
 		self.assertEqual(set(myblocklib.blocks['Testblock'].replacelist), set([('@0','Test Replace definition 0'),('@1','Test Replace definition 1'),('@2','Test Replace definition 2')]))
-		#print(myblocklib.blocks['Testblock'].text)
-		#Pickle that block.
-		myblocklib.pickle_block(myblocklib.blocks['Testblock'])
-		#Remove it from the library.
-		myblocklib.remove_block('Testblock')
-		self.assertEqual(len(myblocklib.blocks.keys()),0)
-		#Unpickle that block.
-		#Test that block still has the same contents.
-		myblocklib.add_pickled_block('Blocks/Testblock.p')
 		with open('blocks/source/test_replacelist.qvs','r') as comparetext:
 			text_original = comparetext.read()
 			text_scrubbed = '\n'.join([line for line in text_original.split('\n') if not re.search(r"//\(@[\d]",line) ]) 

@@ -6,7 +6,7 @@ Steps
 1. Take input script:
 2. Split into tabs.
 3. Wrap each tab in subbify blocks.
-4. Save out resulting script into cloned prj directory for cloned empty/template file.
+4. Save out resulting script into cloned prj directory based on a template file.
 """
 import os, sys, shutil
 import subprocess
@@ -16,12 +16,9 @@ def subbify(filepath, open_after = True, reload_after = 's'):
 	"""
 	Base method for subbify. Takes a filepath and generates a subbified qvw file.
 
-	Arguments:
-	filepath -- should point to a qvs file. possibly in future a qvw file if I can figure out how to generate the prj files for it.
-	open_after -- opens the generated file in qlikview.
-	reload_after:
-		s: loads sub table only. (default)
-		f: loads sub table and runs all subs.
+	:param filepath: should point to a qvs file. possibly in future a qvw file if I can figure out how to generate the prj files for it.
+	:param open_after: opens the generated file in qlikview if True.
+	:param reload_after: 's' loads sub table only (default), 'f' loads sub table *and* runs all subs.
 	"""
 
 	if not filepath.endswith('.qvs'):
@@ -109,7 +106,7 @@ def subbify_comandline():
 
 	Usage::
 
-		> QVSubbify "MyQlikViewScript.qvs"
+		QVSubbify "MyQlikViewScript.qvs"
 
 	"""
 	args = sys.argv

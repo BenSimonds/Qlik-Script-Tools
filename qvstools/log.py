@@ -18,6 +18,17 @@ class LogFile:
 
 	@staticmethod
 	def parse_logfile(textfile):
+		""""Parses the logfile and dict for each line.
+
+		Each line is turned into a dict with the following keys::
+
+			{
+			'date':'date of execution',
+			'time':'time of execution',
+			'op':'operation number of the line if present',
+			'text':'the remainder of the line'
+			}
+		"""
 		fulltext = decode_with_detected(textfile)
 		parsed = []
 		lines = fulltext.split('\n')
@@ -40,7 +51,7 @@ class LogFile:
 		return parsed
 
 	def tag_file_lines (self):
-		"""Tag lines that reference qvds or other files within the logfile."""
+		#Tag lines that reference qvds or other files within the logfile.
 
 		filesearch = searches['filesearchstring2']	#Finds a qvd. Returns the name in the capture group.
 		storesearch = searches['store_statement']
@@ -75,12 +86,12 @@ class LogFile:
 		return matchlines
 
 	def get_file_lines(self):
-		"""returns a list of the files found by tag_file_lines"""
+		"""Returns a list of the files found by tag_file_lines."""
 		files_touched = [line for line in self.lines if 'file' in line.keys()]
 		return files_touched
 
 	def find_file(self,line):
-		"""Checks if the file exists and returns its absolute path."""
+		#Checks if the file exists and returns its absolute path.
 		
 		f = line['file']
 		wd = line['workingdir']
@@ -118,9 +129,21 @@ def build_dependency_graph(path,depth=3,maxfiles=100):
 		1. Start with the logfile, and find all the files it generates.
 		2. For the qvd files, find the creator doc for those files, and see if *that* file has a logfile.
 		3. If it does, see step 1.
-		.
-		.
-		N. Once all your logfiles have been searched through, write out the dependency chain in some handy format.
+		4. Once all your logfiles have been searched through, write out the dependency graph in a structured format.
+
+	The dependency graph is returned in the following format::
+
+		{
+		'depth':'depth of recursion',
+		'maxfiles': 'maximum number of files scanned',
+		'qvw': [list of tuples (basename,abspath) for each qvw logfile scanned or named as a creatordoc],
+		'qvd': [list of tuples (basename,abspath) for each qvd file found],
+		'otherfiles': [list of tuples (basename,abspath) for each non qvd data file found]
+		'creatordocs': [list of tuples (qvd_basename,qvd_abspath,creatordoc_basename,creatordoc_abspath) for each qvd file found],
+		'userdocs':[list of tuples (userdoc_basename,userdoc_abspath,qvd_basename,qvd_abspath) for each qvd file found],
+		'triplets':[list of tuples (userdoc_basename,userdoc_abspath,qvd_basename,qvd_abspathcreatordoc_basename,creatordoc_abspath) for each qvd file found]
+		}
+		
 	"""
 
 	def gather_deps(logfile_input):
@@ -248,7 +271,7 @@ def build_dependency_graph(path,depth=3,maxfiles=100):
 	return deps_graph #not interested in duplicates.
 
 def generate_graphviz(path,depth=4,maxfiles=100):
-	"""Takes a logfile and builds a graphviz.it compatible graph document."""
+	"""Takes a logfile and builds a graphviz.it compatible graph of it's dependencies."""
 	outputfile = 'depsgraph_graphviz.txt'
 	deps = build_dependency_graph(path,depth=depth,maxfiles=maxfiles)
 	print('###')
