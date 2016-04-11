@@ -21,7 +21,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-* :ref:`_examples`
+* :ref:`examples`
 
 Installation
 ------------
@@ -44,7 +44,7 @@ You can start by trying subbify on a qvs script::
 
 	QVSubbify "MyScript.qvs"
 
-Behold! Automated qvw generation! See :ref:`_examples` for more ways to use Qlik-Script-Tools.
+Behold! Automated qvw generation! See :ref:`examples` for more ways to use Qlik-Script-Tools.
 
 Current Features
 ----------------
