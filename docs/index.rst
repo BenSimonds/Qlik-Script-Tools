@@ -34,7 +34,7 @@ There are two ways to get Qlik-Script-Tools. You can either:
 	
 	python setup.py develop
 
-Or install with Pip:
+Or install with Pip::
 
 	pip install Qlik-Script-Tools.
 
