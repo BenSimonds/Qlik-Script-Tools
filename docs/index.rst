@@ -25,20 +25,26 @@ Indices and tables
 
 Installation
 ------------
-
-* Checkout Qlik-Script-Tools from github:: 
+There are two ways to get Qlik-Script-Tools. You can either:
+1. Checkout Qlik-Script-Tools from github:: 
 
 	git checkout https://github.com/BenSimonds/Qlik-Script-Tools
 	
-* Install with setuptools (develop/install)::
+2. Install with setuptools (develop/install)::
 	
 	python setup.py develop
 
-* Start using! You can start by trying subbify on a qvs script::
+Or install with Pip:
 
-	subbify "MyScript.qvs"
+	pip install Qlik-Script-Tools.
 
-* Behold! Automated qvw generation! See below for more about subbify.
+Usage:
+------
+You can start by trying subbify on a qvs script::
+
+	QVSubbify "MyScript.qvs"
+
+Behold! Automated qvw generation! See :ref:`examples` for more ways to use Qlik-Script-Tools.
 
 Current Features
 ----------------
