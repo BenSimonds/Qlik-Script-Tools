@@ -1,6 +1,6 @@
 """Tools for manipulating qvd files."""
 import sys,os
-from qvstools.text import detect_encoding
+from qvstools.text import known_encodings
 try:
 	import lxml.etree as ET
 	print("running with lxml.etree")
@@ -42,7 +42,7 @@ class QVD:
 
 	def loadqvdfile(self, infile):
 		# Read the xml header of a qvd file and parse it as xml.
-		encoding = detect_encoding(infile)
+		encoding = known_encodings['qvd']
 		with open(infile,'rb') as qvdfile:
 			startphrase = '<QvdTableHeader>'
 			endphrase =  '</QvdTableHeader>'
@@ -54,5 +54,6 @@ class QVD:
 				start += 1				#increment start by 1
 				qvdfile.seek(start)		#read the new span.
 				span = qvdfile.read(len(endphrase)).decode(encoding) #get new span
-				filedata += span[-1]	#Add last char of span 
+				filedata += span[-1]	#Add last char of span
+			assert isinstance(filedata,str) , "QVD header hasn't been decoded to unicode. oops!" #Unicode dammit!
 		return ET.fromstring(filedata)

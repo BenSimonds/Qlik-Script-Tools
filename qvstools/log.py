@@ -4,7 +4,37 @@ import sys
 import os
 from qvstools.qvd import QVD
 from qvstools.regex_store import searches
-from qvstools.text import detect_encoding, decode_with_detected
+from qvstools.text import known_encodings
+
+def detect_log_encoding(textfile,encodings):
+	"""Tries to open textfile with a variety of encodings and returns the one that works"""
+	if len(encodings) == 1: #Assume that it's the only valid one:
+		return encodings
+
+	with open(textfile,'rb') as f:
+		for e in encodings:
+			#print(e)
+			f.seek(0)	#Could be altered to provide a differnt start position, but fine as is I think.
+			test_bytes = f.read(140)
+			try:
+				test_string = test_bytes.decode(e,'strict').encode('utf-8')
+				# if '\x00' in test_string:
+				# 	print('NULL CHAR')
+				# 	pass
+				# else:
+				return e
+
+			except (UnicodeDecodeError,UnicodeEncodeError):
+				#print('ERROR')
+				pass
+	return None
+
+def decode_log_with_detected(textfile):
+	"""Uses :func:`detect_encoding <qvstools.text.detect_encoding>` to get encoding and returns a unicode string of the text file"""
+	encoding  = detect_log_encoding(textfile,known_encodings['log'])
+	with open(textfile,'r',encoding=encoding,errors='replace') as f:
+		fulltext = f.read()
+		return fulltext
 
 class LogFile:
 	"""Parses a qlikview logfile and creates an object with it's info more easliy accessible."""
@@ -29,7 +59,7 @@ class LogFile:
 			'text':'the remainder of the line'
 			}
 		"""
-		fulltext = decode_with_detected(textfile)
+		fulltext = decode_log_with_detected(textfile)
 		parsed = []
 		lines = fulltext.split('\n')
 		for l in lines:
@@ -123,7 +153,7 @@ class LogFile:
 				return None
 
 
-def build_dependency_graph(path,depth=3,maxfiles=100):
+def build_dependency_graph(path,depth=100,remap_paths=False):
 	"""Recursively looks through log files to build a dependency graph.
 	Steps:
 		1. Start with the logfile, and find all the files it generates.
@@ -136,14 +166,17 @@ def build_dependency_graph(path,depth=3,maxfiles=100):
 		{
 		'depth':'depth of recursion',
 		'maxfiles': 'maximum number of files scanned',
-		'qvw': [list of tuples (basename,abspath) for each qvw logfile scanned or named as a creatordoc],
-		'qvd': [list of tuples (basename,abspath) for each qvd file found],
-		'otherfiles': [list of tuples (basename,abspath) for each non qvd data file found]
-		'creatordocs': [list of tuples (qvd_basename,qvd_abspath,creatordoc_basename,creatordoc_abspath) for each qvd file found],
-		'userdocs':[list of tuples (userdoc_basename,userdoc_abspath,qvd_basename,qvd_abspath) for each qvd file found],
-		'triplets':[list of tuples (userdoc_basename,userdoc_abspath,qvd_basename,qvd_abspathcreatordoc_basename,creatordoc_abspath) for each qvd file found]
+		'qvw': [list of qvds scanned or named as creatordoc]
+		'qvd': [list of each qvd file found],
+		'otherfiles': [list ofeach non qvd data file found]
+		'creatordocs': [list of tuples (qvd,creatordoc) for each qvd file found],
+		'userdocs':[list of tuples (userdoc,qvd) for each qvd file found],
+		'triplets':[list of tuples (userdoc,qvd,creatordoc) for each qvd file found]
 		}
-		
+
+	:param depth: The maximum number of logfiles to scan.
+	:param remap_paths: A dict of paths to replace, where key is the path to replace and value is it's relacement.
+	This is useful for remapping drive names where different users have relaoded different qvws, resulting in mixed drivenames and filepaths.
 	"""
 
 	def gather_deps(logfile_input):
@@ -199,14 +232,14 @@ def build_dependency_graph(path,depth=3,maxfiles=100):
 	logfiles_done = []
 
 	##Results objects:
-	r_qvd = [] 		# QVDs (basename,abspath)
-	r_qvw = [] 	# QVWs (basename,abspath)
-	r_other = [] 	# Other files (excel,csv) (basename,abspath)
-	r_creatordocs = [] # List of tuples: (qvd basename, qvd abspath,creatordoc basename, creatodoc abspath) 
-	r_userdocs = [] #List of tuples (qvw basename, qvw abspath,file basename, file abspath)
-	r_triplets = [] #List of tuples (userdoc basename, userdoc abspath,file basename, file abspath,creatordoc basename, creatordoc abspath)
+	r_qvd = [] 		# QVDs (abspath)
+	r_qvw = [] 	# QVWs (abspath)
+	r_other = [] 	# Other files (excel,csv) (abspath)
+	r_creatordocs = [] # List of tuples: (qvd,creatodoc) 
+	r_userdocs = [] #List of tuples (qvw,file )
+	r_triplets = [] #List of tuples (userdoc,file,creatordoc)
 
-	while counter_depth < depth and counter_files < maxfiles and len(logfiles_working) > 0:
+	while counter_depth < depth and len(logfiles_working) > 0:
 		counter_depth += 1
 		# Pop a logfile from the list to work on.
 		l = logfiles_working.pop()
@@ -216,50 +249,43 @@ def build_dependency_graph(path,depth=3,maxfiles=100):
 
 		#Add the associated qvw to our results.
 		qvw_current = l[0:-4]
-		r_qvw.append((os.path.basename(qvw_current),qvw_current))
+		r_qvw.append(qvw_current)
 
-		#Gather deps on it if we haven't reached maxfiles:
-		if counter_files < maxfiles:
-			counter_files += 1
-			deps = gather_deps(l)
-			#If it has any add them to our results.
-			if deps:
-				# Add the deps triplets to the results.
-				r_qvd += [(os.path.basename(d[1]) , d[1]) for d in deps if d[1].endswith('.qvd')]
-				r_other += [(os.path.basename(d[1]) , d[1]) for d in deps if not d[1].endswith('.qvd')]
-				r_userdocs += [
-					(
-					os.path.basename(d[0]), d[0],
-					os.path.basename(d[1]), d[1]
-					) 
-					for d in deps]
-				r_creatordocs += [
-					(
-					os.path.basename(d[1]), d[1],
-					os.path.basename(d[2]), d[2]
-					)
-					for d in deps]
-				r_triplets += [
-					(
-					os.path.basename(d[0]), d[0],
-					os.path.basename(d[1]), d[1],
-					os.path.basename(d[2]), d[2]
-					)
-					for d in deps]
-				r_qvw += [(os.path.basename(d[2]),d[2]) for d in deps if (os.path.basename(d[2]),d[2]) not in r_qvw]
+		#Gather deps on it.
+		deps = gather_deps(l)
+		#If it has any add them to our results.
+		if deps:
+			# Add the deps triplets to the results.
+			r_qvd += [d[1] for d in deps if d[1].endswith('.qvd')]
+			r_other += [d[1] for d in deps if not d[1].endswith('.qvd')]
+			r_userdocs += [(d[0],d[1]) for d in deps]
+			r_creatordocs += [(d[1],d[2]) for d in deps]
+			r_triplets += [(d[0], d[1], d[2]) for d in deps]
+			r_qvw += [d[2] for d in deps if d[2] not in r_qvw]
 
-				#Add any new creatordocs to logfiles_working.
-				for d in deps:
-					dlog = d[2]+'.log'
-					if dlog not in logfiles_done + logfiles_working:
-						logfiles_working.append(dlog)
+			#Add any new creatordocs to logfiles_working.
+			for d in deps:
+				dlog = d[2]+'.log'
+				if dlog not in logfiles_done + logfiles_working:
+					logfiles_working.append(dlog)
 		else:
 			break
+
+	def remap_path(abspath):
+		for key, value in remap_path.items():
+			if abspath.startswith(key):
+				return value + abspath[len(key):]
+		return abspath
+
+	if remap_paths:
+		#Remap pathnames in each output that requires it.
+		for r in [r_qvd,r_qvw,r_userdocs,r_creatordocs,r_triplets]:
+			r = [tuple(remap_path(x) for x in i) for  i in r] 
+
 
 	#Build a results object:
 	deps_graph = {
 		'depth':depth,
-		'maxfiles':maxfiles,
 		'qvw':list(set(r_qvw)),
 		'qvd':list(set(r_qvd)),
 		'otherfiles':list(set(r_other)),
@@ -270,34 +296,40 @@ def build_dependency_graph(path,depth=3,maxfiles=100):
 	
 	return deps_graph #not interested in duplicates.
 
-def generate_graphviz(path,depth=4,maxfiles=100):
-	"""Takes a logfile and builds a graphviz.it compatible graph of it's dependencies."""
+def generate_graphviz(deps_graph):
+	"""Takes a logfile and returns a graphviz.it compatible graph of it's dependencies."""
 	outputfile = 'depsgraph_graphviz.txt'
-	deps = build_dependency_graph(path,depth=depth,maxfiles=maxfiles)
-	print('###')
-	for w in deps['qvw']:
-		print(w[0],w[1])
-	print('###')
+	# print('###')
+	# for w in deps_graph['qvw']:
+	# 	print(w[0],w[1])
+	# print('###')
 
-	with open(outputfile,'w') as output:
-		output.write('digraph G {\n')
-		index = {}
-		for i, qvw in enumerate(deps['qvw']):
-			name ='qvw' + str(i)
-			index[qvw[1]]=name
-			output.write('{0} [label="{1}",color="yellowgreen",shape=ellipse,style=filled]\n'.format(name,qvw[0]))
-		for i, qvd in enumerate(deps['qvd']):
-			name = 'qvd' + str(i)
-			index[qvd[1]]=name
-			output.write('{0} [label="{1}",color="cornflowerblue",shape=rectangle,style=filled]\n'.format(name,qvd[0]))
-		for i, f in enumerate(deps['otherfiles']):
-			name = 'other' + str(i)
-			index[f[1]]=name
-			output.write('{0} [label="{1}",color="slategray",shape=rectangle],style=filled\n'.format(name,f[0]))
-		print(index)
-		for x in deps['triplets']:
-			ia = index[x[1]]
-			ib = index[x[3]]
-			ic = index[x[5]]
-			output.write('{0} -> {1} -> {2}\n'.format(ia,ib,ic))
-		output.write('}\n')
+	output = ''
+	output+=('digraph G {\n')
+	index = {}
+	print(deps_graph['qvw'])
+	for i, qvw in enumerate(deps_graph['qvw']):
+		name = 'qvw' + str(i)
+		index[qvw]=name
+		if qvw is not 'None':
+			output += '{0} [label="{1}",color="yellowgreen",shape=ellipse,style=filled]\n'.format(name,os.path.basename(qvw))
+	for i, qvd in enumerate(deps_graph['qvd']):
+		name = 'qvd' + str(i)
+		index[qvd]=name
+		output += '{0} [label="{1}",color="cornflowerblue",shape=rectangle,style=filled]\n'.format(name,os.path.basename(qvd))
+	for i, f in enumerate(deps_graph['otherfiles']):
+		name = 'other' + str(i)
+		index[f]=name
+		output += '{0} [label="{1}",color="slategray",shape=rectangle,style=filled]\n'.format(name,os.path.basename(f))
+	print(index)
+	for x in deps_graph['triplets']:
+		ia = index[x[0]]
+		ib = index[x[1]]
+		ic = index[x[2]]
+		if x[2] == 'None':
+			output += '{0} -> {1}\n'.format(ia,ib,ic)
+		else:
+			output += '{0} -> {1} -> {2}\n'.format(ia,ib,ic)
+	output += '}\n'
+
+	return output

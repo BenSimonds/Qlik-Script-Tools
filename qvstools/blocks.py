@@ -6,7 +6,7 @@ except ImportError:
 	import xml.etree.ElementTree as ET
 	print("running with xml.etree")
 import sys, os, unicodedata, re
-from qvstools.text import detect_encoding
+from qvstools.text import known_encodings
 from qvstools.qvd import QVD
 from qvstools.regex_store import searches
 
@@ -42,13 +42,18 @@ class Block:
 		for i  in range(0,len(replacelist)):
 			blocktext = blocktext.replace('@' + str(i),replacelist[i]) #This doesnt seem to be working...
 		#Write output to file.		
-		with open(pathname,mode) as outputfile:
+		with open(pathname,mode,encoding=known_encodings['block_qvs']) as outputfile:
 			outputfile.write(blocktext)
 		return
 
-	def strip_non_unicode(self,string):
+	def strip_non_unicode(self,input_data):
 		#Strip non unicode characters out of weird qlik export text...
-		return ''.join([i for i in string if ord(i)<128])
+		if isinstance(input_data,str):
+			return input_data
+		else:
+			assert isinstance(input_data,bytes), 'Input not byte or string...'
+			print('Converting input text to unicode assuming utf-8. May result in missing characters....')
+			return inputt_data.decode('utf-8',errors='ignore')
 		
 class BlockLibrary:
 	"""Bundles together several blocks and provide methods for working with them.
@@ -118,7 +123,7 @@ class BlockLibrary:
 			block_xml.find('replacelist').append(item_el)
 		tree = ET.ElementTree(element = block_xml)
 		filepath = os.path.join(directory,block.name+'.xml')
-		tree.write(filepath,encoding='UTF-8',short_empty_elements=False)
+		tree.write(filepath,encoding=known_encodings['block_xml'],short_empty_elements=False)
 
 	def add_xml_block(self,filepath):
 		"""Create a block from an xml file and add it to the library."""
