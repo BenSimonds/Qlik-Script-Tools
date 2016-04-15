@@ -7,11 +7,11 @@ Source files for docs can be found [in the docs folder.](docs/index.rst)
 
 ## Installation:
 
-1. Clone repository::
+Clone repository::
   
   git clone https://github.com/BenSimonds/Qlik-Script-Tools
   
-2. Install with setuptools:
+Install with setuptools::
   
   python setup.py install
   
