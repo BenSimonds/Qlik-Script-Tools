@@ -100,6 +100,7 @@ Load a PRJ directory as a python object::
 
 
 Search through the xml file and replace elements with find_replace_elements. Here we replace only caption fonts::
+
 	prj.find_replace_elements(".//CaptionFont/FontName",'Times New Roman')
 	prj.find_replace_elements(".//CaptionFont/Bold",'false')
 
@@ -123,9 +124,9 @@ Build a dependency graph of the logfile, in GraphViz dot format::
 	with open('Output_Demo6_graphviz.txt','w') as f:
 		f.write(generate_graphviz(build_dependency_graph(logfile_path,depth=100)))
 		
-Example output:
+Example output (once the output is pasted into `GraphViz.it <http://GraphViz.it>`_):
 
-..image:: img/example_GraphViz.png
+.. image:: img/example_GraphViz.png
 
 Subbify
 -------
@@ -145,4 +146,4 @@ Subbification can also be done within a python script::
 
 The result is an automatically generated qlikview application that allows you to run your load script in separate subroutines, and that gathers metadata about your load times and table sizes.
 
-..image:: img/example_Subbify.png
+.. image:: img/example_Subbify.png
