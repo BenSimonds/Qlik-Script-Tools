@@ -114,7 +114,7 @@ Create an instance of the logfile class to parse a logfile::
 	logfile_path = r"Data\DepsGraph1.qvw.log"
 	lf = LogFile(logfile_path)
 
-Get a list of files mentioned in the logfile:
+Get a list of files mentioned in the logfile::
 
 	for f in lf.get_file_lines():
 		print(f['file'])
