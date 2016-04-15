@@ -1,12 +1,8 @@
 """Tools for manipulating qvd files."""
 import sys,os
 from qvstools.text import known_encodings
-try:
-	import lxml.etree as ET
-	print("running with lxml.etree")
-except ImportError:
-	import xml.etree.ElementTree as ET
-	print("running with xml.etree")
+import xml.etree.ElementTree as ET
+
 
 class QVD:
 	"""Take a qvd file and make a python class with its xml header info.

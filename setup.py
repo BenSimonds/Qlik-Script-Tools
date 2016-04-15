@@ -9,7 +9,7 @@ config = {
     'url': 'https://github.com/BenSimonds/Qlik-Script-Tools',
     'download_url': 'https://github.com/BenSimonds/Qlik-Script-Tools/archive/master.zip',
     'author_email': 'BSSimonds@gmail.com',
-    'version': '0.1.1dev',
+    'version': '0.1.2dev',
     'packages': ['qvstools','qvstools.tests'],
     'scripts': ['runtests.py'],
     'name': 'Qlik-Script-Tools',
