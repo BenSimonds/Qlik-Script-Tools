@@ -95,6 +95,7 @@ class LogFile:
 			#print('Parsing line {0} of {1}'.format(line,no_of_lines),end='')
 			linetext = self.lines[line]['text']
 			if re.search(storesearch,linetext):
+				
 				optype = 'STORE'
 			if linetext.strip().upper().startswith('DIRECTORY'):
 				workingdir = linetext[10:].strip()

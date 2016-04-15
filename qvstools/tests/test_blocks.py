@@ -52,8 +52,6 @@ class TestBlock(unittest.TestCase):
 		with open('testoutput.txt','r') as comparetext:
 			self.assertEqual(comparetext.read(),'\n///$tab TABNAME\n')
 
-
-
 	def test_QVD_write(self):
 		print('Testing QVD load script writing.')
 		#Load a qvd.
@@ -105,9 +103,6 @@ class TestBlock(unittest.TestCase):
 		self.assertEqual(a.text,b.text)
 		self.assertEqual(a.description,b.description)
 		self.assertEqual(a.replacelist,b.replacelist)
-
-
-
 
 
 if __name__ == '__main__':
