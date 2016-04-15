@@ -1,4 +1,0 @@
-[console_scripts]
-QVReplaceFonts = qvstools.prj:replace_fonts_commandline
-QVSubbify = qvstools.subbify:subbify_comandline
-
