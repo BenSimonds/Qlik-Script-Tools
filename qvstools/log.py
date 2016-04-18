@@ -4,7 +4,7 @@ import sys
 import os
 from qvstools.qvd import QVD
 from qvstools.regex_store import searches
-from qvstools.text import known_encodings
+from qvstools.text import known_encodings, print_progress
 
 def detect_log_encoding(textfile,encodings):
 	"""Tries to open textfile with a variety of encodings and returns the one that works"""
@@ -81,6 +81,8 @@ class LogFile:
 		return parsed
 
 	def tag_file_lines (self):
+		print('Scanning logfile for data files mentioned.')
+
 		#Tag lines that reference qvds or other files within the logfile.
 
 		filesearch = searches['filesearchstring2']	#Finds a qvd. Returns the name in the capture group.
@@ -91,11 +93,12 @@ class LogFile:
 		optype = 'LOAD'	#By default expect matches to be load statements.
 		workingdir = self.dir
 		no_of_lines = len(self.lines)
+		counter = 0
 		for line in range(0,no_of_lines - 1):
-			#print('Parsing line {0} of {1}'.format(line,no_of_lines),end='')
+			#print_progress(counter,no_of_lines)
+			counter += 1 
 			linetext = self.lines[line]['text']
 			if re.search(storesearch,linetext):
-				
 				optype = 'STORE'
 			if linetext.strip().upper().startswith('DIRECTORY'):
 				workingdir = linetext[10:].strip()
@@ -113,7 +116,6 @@ class LogFile:
 				matchlines.append(file)
 			#reset optype
 				optype = 'LOAD'
-		print('Parsed!')
 		return matchlines
 
 	def get_file_lines(self):

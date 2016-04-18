@@ -1,6 +1,9 @@
 import unittest, re, os
 from qvstools.blocks import *
 
+testdata_folder = os.path.join(os.path.dirname(__file__),'testdata')
+
+
 class TestQVD(unittest.TestCase):
 	def setUp(self):
 		print ("SETUP!")
@@ -11,7 +14,8 @@ class TestQVD(unittest.TestCase):
 	def test_QVD(self):
 		print('Testing QVD Class')
 		#Load a qvd.
-		testqvd = QVD(r'qvstools\tests\testdata\Test.qvd')
+		qvd_file = os.path.join(testdata_folder,'Test.qvd')
+		testqvd = QVD(qvd_file)
 
 
 if __name__ == '__main__':

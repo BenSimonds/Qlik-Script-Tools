@@ -29,7 +29,7 @@
     <MarginHeader>120</MarginHeader>
     <MarginFooter>120</MarginFooter>
     <Header_Left_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -37,7 +37,7 @@
       <DropShadow>false</DropShadow>
     </Header_Left_Font>
     <Header_Center_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -45,7 +45,7 @@
       <DropShadow>false</DropShadow>
     </Header_Center_Font>
     <Header_Right_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -53,7 +53,7 @@
       <DropShadow>false</DropShadow>
     </Header_Right_Font>
     <Footer_Left_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -61,7 +61,7 @@
       <DropShadow>false</DropShadow>
     </Footer_Left_Font>
     <Footer_Center_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -69,7 +69,7 @@
       <DropShadow>false</DropShadow>
     </Footer_Center_Font>
     <Footer_Right_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -118,7 +118,7 @@
     <MarginHeader>120</MarginHeader>
     <MarginFooter>120</MarginFooter>
     <Header_Left_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -126,7 +126,7 @@
       <DropShadow>false</DropShadow>
     </Header_Left_Font>
     <Header_Center_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -134,7 +134,7 @@
       <DropShadow>false</DropShadow>
     </Header_Center_Font>
     <Header_Right_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -142,7 +142,7 @@
       <DropShadow>false</DropShadow>
     </Header_Right_Font>
     <Footer_Left_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -150,7 +150,7 @@
       <DropShadow>false</DropShadow>
     </Footer_Left_Font>
     <Footer_Center_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -158,7 +158,7 @@
       <DropShadow>false</DropShadow>
     </Footer_Center_Font>
     <Footer_Right_Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -605,7 +605,7 @@
       <Alpha>255</Alpha>
     </Color>
     <Font>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>8000</PointSize1000>
       <Underline>false</Underline>
       <Bold>false</Bold>
@@ -613,7 +613,7 @@
       <DropShadow>false</DropShadow>
     </Font>
     <CaptionFont>
-      <FontName>Calibri</FontName>
+      <FontName>Tahoma</FontName>
       <PointSize1000>10000</PointSize1000>
       <Underline>false</Underline>
       <Bold>true</Bold>
@@ -909,7 +909,7 @@
       </BkgColor>
       <TextColor></TextColor>
       <Font>
-        <FontName>Calibri</FontName>
+        <FontName>Tahoma</FontName>
         <PointSize1000>9000</PointSize1000>
         <Underline>false</Underline>
         <Bold>false</Bold>
@@ -964,7 +964,7 @@
       </BkgColor>
       <TextColor></TextColor>
       <Font>
-        <FontName>Calibri</FontName>
+        <FontName>Tahoma</FontName>
         <PointSize1000>9000</PointSize1000>
         <Underline>false</Underline>
         <Bold>false</Bold>
@@ -1019,7 +1019,7 @@
       </BkgColor>
       <TextColor></TextColor>
       <Font>
-        <FontName>Calibri</FontName>
+        <FontName>Tahoma</FontName>
         <PointSize1000>9000</PointSize1000>
         <Underline>false</Underline>
         <Bold>false</Bold>
