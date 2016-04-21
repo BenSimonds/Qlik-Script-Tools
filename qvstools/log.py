@@ -2,6 +2,7 @@
 import re
 import sys
 import os
+import codecs
 from qvstools.qvd import QVD
 from qvstools.regex_store import searches
 from qvstools.text import known_encodings, print_progress
@@ -12,28 +13,41 @@ def detect_log_encoding(textfile,encodings):
 		return encodings
 
 	with open(textfile,'rb') as f:
-		for e in encodings:
-			#print(e)
-			f.seek(0)	#Could be altered to provide a differnt start position, but fine as is I think.
-			test_bytes = f.read(140)
-			try:
-				test_string = test_bytes.decode(e,'strict').encode('utf-8')
-				# if '\x00' in test_string:
-				# 	print('NULL CHAR')
-				# 	pass
-				# else:
-				return e
+		f.seek(0)	#Could be altered to provide a differnt start position, but fine as is I think.
+		test_bytes = f.read(140)
+		
+		bom_le = codecs.BOM_UTF16_LE
+		bom_be = codecs.BOM_UTF16_BE 
 
-			except (UnicodeDecodeError,UnicodeEncodeError):
-				#print('ERROR')
-				pass
+		if test_bytes.startswith(bom_le):
+			return 'utf-16'
+		elif test_bytes.startswith(bom_be):
+			return 'utf-16'
+		else:
+			for e in encodings:
+				#print(e)
+				f.seek(0)	#Could be altered to provide a differnt start position, but fine as is I think.
+				test_bytes = f.read(140)
+				try:
+					test_string = test_bytes.decode(e,'strict').encode('utf-8')
+					# if '\x00' in test_string:
+					# 	print('NULL CHAR')
+					# 	pass
+					# else:
+					return e
+
+				except (UnicodeDecodeError,UnicodeEncodeError):
+					#print('ERROR')
+					pass
 	return None
 
 def decode_log_with_detected(textfile):
 	"""Uses :func:`detect_encoding <qvstools.text.detect_encoding>` to get encoding and returns a unicode string of the text file"""
 	encoding  = detect_log_encoding(textfile,known_encodings['log'])
+	print('Decoding with {0}'.format(encoding))
 	with open(textfile,'r',encoding=encoding,errors='replace') as f:
 		fulltext = f.read()
+		#print(fulltext[0:100])
 		return fulltext
 
 class LogFile:
@@ -62,7 +76,11 @@ class LogFile:
 		fulltext = decode_log_with_detected(textfile)
 		parsed = []
 		lines = fulltext.split('\n')
+		nlines = len(lines)
+		i = 0
 		for l in lines:
+			#print_progress (i, nlines)
+			i += 1
 			#First 10 chars are the date:
 			date = l[0:10]
 			#Gap of 1 char, then next 8 are time.
@@ -156,7 +174,7 @@ class LogFile:
 				return None
 
 
-def build_dependency_graph(path,depth=100,remap_paths=False):
+def build_dependency_graph(path,depth=100,remap_paths=False,basepaths_only=False):
 	"""Recursively looks through log files to build a dependency graph.
 	Steps:
 		1. Start with the logfile, and find all the files it generates.
@@ -192,7 +210,12 @@ def build_dependency_graph(path,depth=100,remap_paths=False):
 			qvw = logfile_input[0:-4]
 			lf = LogFile(logfile_input)
 			deps = []
+			print('Gathering info on found files:')
+			i = 0
+			nlines = len(lf.get_file_lines())
 			for l in lf.get_file_lines():
+				#print_progress(i, nlines)
+				i += 1
 				deps_triplet = [qvw,'None','None']
 				l_file = lf.find_file(l)
 				if l_file:
@@ -206,7 +229,24 @@ def build_dependency_graph(path,depth=100,remap_paths=False):
 					deps_triplet[1] = l['file'] + '(UNFOUND)'
 				deps_triplet = tuple(deps_triplet)
 				deps.append(deps_triplet)
+			
+			#Print some handy output:
+			qvds = set([x[1] for x in deps])
+			creatordocs = set([x[2] for x in deps])
+			print('Creator Docs Found:')
+			for x in creatordocs:
+				print(x)
+			print('Data Files Found:')
+			for x in qvds:
+				print(x)
 			return deps
+
+	def remap_path(abspath):
+		if remap_paths:
+			for key, value in remap_paths.items():
+				if abspath.startswith(key):
+					return value + abspath[len(key):]
+		return abspath
 
 	input_error_message = 'This function takes a logfile or a qvw file (that has a log file associated with it). Did you supply a valid qvw or log file?'
 	#Sense check inut:
@@ -246,6 +286,7 @@ def build_dependency_graph(path,depth=100,remap_paths=False):
 		counter_depth += 1
 		# Pop a logfile from the list to work on.
 		l = logfiles_working.pop()
+		print('\n\nGathering deps for {0}'.format(l))
 
 		#Append it to logfiles_done so it won't get done again.
 		logfiles_done.append(l)
@@ -256,6 +297,10 @@ def build_dependency_graph(path,depth=100,remap_paths=False):
 
 		#Gather deps on it.
 		deps = gather_deps(l)
+
+		if remap_paths and deps:
+			deps = [tuple(remap_path(x) for x in d) for d in deps]
+			
 		#If it has any add them to our results.
 		if deps:
 			# Add the deps triplets to the results.
@@ -269,22 +314,26 @@ def build_dependency_graph(path,depth=100,remap_paths=False):
 			#Add any new creatordocs to logfiles_working.
 			for d in deps:
 				dlog = d[2]+'.log'
-				if dlog not in logfiles_done + logfiles_working:
-					logfiles_working.append(dlog)
-		else:
-			break
+				if dlog not in logfiles_done and dlog not in logfiles_working:
+					if  os.path.isfile(dlog):
+						logfiles_working.append(dlog)
+					else:
+						print('Missing Logfile: {0}'.format(dlog))
+						logfiles_working.append(dlog)
 
-	def remap_path(abspath):
-		for key, value in remap_path.items():
-			if abspath.startswith(key):
-				return value + abspath[len(key):]
-		return abspath
+		print('Finished with {0}'.format(l))
+		# print('Still to do:')
+		# for f in logfiles_working:
+		# 	print(f)
+		
 
-	if remap_paths:
-		#Remap pathnames in each output that requires it.
-		for r in [r_qvd,r_qvw,r_userdocs,r_creatordocs,r_triplets]:
-			r = [tuple(remap_path(x) for x in i) for  i in r] 
-
+	if basepaths_only:
+		r_qvd = [os.path.basename(x) for x in r_qvd]
+		r_qvw = [os.path.basename(x) for x in r_qvw]
+		r_other = [os.path.basename(x) for x in r_other]
+		r_userdocs = [tuple(os.path.basename(x) for x in t) for t in r_userdocs]
+		r_creatordocs = [tuple(os.path.basename(x) for x in t) for t in r_creatordocs]
+		r_triplets = [tuple(os.path.basename(x) for x in t) for t in r_triplets]
 
 	#Build a results object:
 	deps_graph = {
@@ -309,8 +358,9 @@ def generate_graphviz(deps_graph):
 
 	output = ''
 	output+=('digraph G {\n')
+	output+=('layout="fdp";\n')
 	index = {}
-	print(deps_graph['qvw'])
+	#print(deps_graph['qvw'])
 	for i, qvw in enumerate(deps_graph['qvw']):
 		name = 'qvw' + str(i)
 		index[qvw]=name
@@ -324,7 +374,7 @@ def generate_graphviz(deps_graph):
 		name = 'other' + str(i)
 		index[f]=name
 		output += '{0} [label="{1}",color="slategray",shape=rectangle,style=filled]\n'.format(name,os.path.basename(f))
-	print(index)
+	#print(index)
 	for x in deps_graph['triplets']:
 		ia = index[x[0]]
 		ib = index[x[1]]
