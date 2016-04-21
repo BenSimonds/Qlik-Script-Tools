@@ -11,12 +11,12 @@ class TestBlock(unittest.TestCase):
 	def tearDown(self):
 		print ("TEAR DOWN!")
 		#Delete output file:
-		outputfiles = ['testoutput.txt','testoutput_deps_graph.txt','testoutput_graphviz.txt']
-		for x in outputfiles:
-			try:
-				os.remove(x)
-			except FileNotFoundError:
-				print('No files to delete.')
+		# outputfiles = ['testoutput.txt','testoutput_deps_graph.txt','testoutput_graphviz.txt']
+		# for x in outputfiles:
+		# 	try:
+		# 		os.remove(x)
+		# 	except FileNotFoundError:
+		# 		print('No files to delete.')
 
 	def test_detect_encoding(self):
 		test_files = [
@@ -44,14 +44,14 @@ class TestBlock(unittest.TestCase):
 			lf = LogFile(log)
 
 			for f in lf.get_file_lines():
-				print(f['file'],' --> ',lf.find_file(f))
+				print(f['file_referenced'],' --> ',f['file_abspath'])
 
 	def test_parse_logfile_remap(self):
 		print('Testing logfile parse with path remapping.')
 		log = os.path.join(testdata_folder,"ETLTubeData_Subbified.qvw.log")
 		lf = LogFile(log)
 		for f in lf.get_file_lines():
-			print(f['file'],' --> ',lf.find_file(f))
+			print(f['file_referenced'],' --> ',f['file_abspath'])
 
 	def test_build_dependency_graph(self):
 		test_input = os.path.join(testdata_folder,"DepsGraph3.qvw")
