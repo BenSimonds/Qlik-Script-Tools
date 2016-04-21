@@ -174,7 +174,7 @@ class LogFile:
 				return None
 
 
-def build_dependency_graph(path,depth=100,remap_paths=False,basepaths_only=False):
+def build_dependency_graph(path,depth=100,remap_paths=False,basepaths_only=False,blacklist=[]):
 	"""Recursively looks through log files to build a dependency graph.
 	Steps:
 		1. Start with the logfile, and find all the files it generates.
@@ -314,7 +314,7 @@ def build_dependency_graph(path,depth=100,remap_paths=False,basepaths_only=False
 			#Add any new creatordocs to logfiles_working.
 			for d in deps:
 				dlog = d[2]+'.log'
-				if dlog not in logfiles_done and dlog not in logfiles_working:
+				if dlog not in logfiles_done and dlog not in logfiles_working and os.path.basename(d[2]) not in blacklist:
 					if  os.path.isfile(dlog):
 						logfiles_working.append(dlog)
 					else:
@@ -380,7 +380,9 @@ def generate_graphviz(deps_graph):
 		ib = index[x[1]]
 		ic = index[x[2]]
 		if x[2] == 'None':
-			output += '{0} -> {1}\n'.format(ia,ib,ic)
+			output += '{0} -> {1}\n'.format(ia,ib)
+		elif x[0] == x[2]: #Circular reference.
+			output += '{0} -> {1}\n'.format(ia,ib)
 		else:
 			output += '{0} -> {1} -> {2}\n'.format(ia,ib,ic)
 	output += '}\n'
