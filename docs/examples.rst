@@ -117,7 +117,7 @@ Create an instance of the logfile class to parse a logfile::
 Get a list of files mentioned in the logfile::
 
 	for f in lf.get_file_lines():
-		print(f['file'])
+		print(f['file_abspath'])
 
 Build a dependency graph of the logfile, in GraphViz dot format::
 
