@@ -384,7 +384,9 @@ def build_dependency_graph(path,depth=100,remap_paths=False,basenames_only=False
 	return deps_graph #not interested in duplicates.
 
 def generate_graphviz(deps_graph):
-	"""Takes a logfile and returns a graphviz.it compatible graph of it's dependencies."""
+	"""Takes a logfile and returns a graphviz.it compatible graph of it's dependencies.
+	
+	A better structure for this graph can be found at http://graphviz.it/#/gallery/tree.gv"""
 	outputfile = 'depsgraph_graphviz.txt'
 	# print('###')
 	# for w in deps_graph['qvw']:
