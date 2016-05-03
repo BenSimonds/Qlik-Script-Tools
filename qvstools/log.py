@@ -383,45 +383,115 @@ def build_dependency_graph(path,depth=100,remap_paths=False,basenames_only=False
 	
 	return deps_graph #not interested in duplicates.
 
-def generate_graphviz(deps_graph):
+def generate_graphviz(deps_graph,style=1) :
 	"""Takes a logfile and returns a graphviz.it compatible graph of it's dependencies.
-	
-	A better structure for this graph can be found at http://graphviz.it/#/gallery/tree.gv"""
-	outputfile = 'depsgraph_graphviz.txt'
-	# print('###')
-	# for w in deps_graph['qvw']:
-	# 	print(w[0],w[1])
-	# print('###')
+		
+	Currently working on a couple of different styles.A better structure for this graph can be found at http://graphviz.it/#/gallery/tree.gv"""
+		
+	def style_1(deps_graph):
+		outputfile = 'depsgraph_graphviz.txt'
+		# print('###')
+		# for w in deps_graph['qvw']:
+		# 	print(w[0],w[1])
+		# print('###')
 
-	output = ''
-	output+=('digraph G {\n')
-	output+=('layout="fdp";\n')
-	index = {}
-	#print(deps_graph['qvw'])
-	for i, qvw in enumerate(deps_graph['qvw']):
-		name = 'qvw' + str(i)
-		index[qvw]=name
-		if qvw is not 'None':
-			output += '{0} [label="{1}",color="yellowgreen",shape=ellipse,style=filled]\n'.format(name,os.path.basename(qvw))
-	for i, qvd in enumerate(deps_graph['qvd']):
-		name = 'qvd' + str(i)
-		index[qvd]=name
-		output += '{0} [label="{1}",color="cornflowerblue",shape=rectangle,style=filled]\n'.format(name,os.path.basename(qvd))
-	for i, f in enumerate(deps_graph['otherfiles']):
-		name = 'other' + str(i)
-		index[f]=name
-		output += '{0} [label="{1}",color="slategray",shape=rectangle,style=filled]\n'.format(name,os.path.basename(f))
-	#print(index)
-	for x in deps_graph['triplets']:
-		ia = index[x[0]]
-		ib = index[x[1]]
-		ic = index[x[2]]
-		if x[2] == 'None':
-			output += '{0} -> {1}\n'.format(ia,ib)
-		elif x[0] == x[2]: #Circular reference.
-			output += '{0} -> {1}\n'.format(ia,ib)
-		else:
-			output += '{0} -> {1} -> {2}\n'.format(ia,ib,ic)
-	output += '}\n'
+		output = ''
+		output+=('digraph G {\n')
+		output+=('layout="fdp";\n')
+		index = {}
+		#print(deps_graph['qvw'])
+		for i, qvw in enumerate(deps_graph['qvw']):
+			name = 'qvw' + str(i)
+			index[qvw]=name
+			if qvw is not 'None':
+				output += '{0} [label="{1}",color="yellowgreen",shape=ellipse,style=filled]\n'.format(name,os.path.basename(qvw))
+		for i, qvd in enumerate(deps_graph['qvd']):
+			name = 'qvd' + str(i)
+			index[qvd]=name
+			output += '{0} [label="{1}",color="cornflowerblue",shape=rectangle,style=filled]\n'.format(name,os.path.basename(qvd))
+		for i, f in enumerate(deps_graph['otherfiles']):
+			name = 'other' + str(i)
+			index[f]=name
+			output += '{0} [label="{1}",color="slategray",shape=rectangle,style=filled]\n'.format(name,os.path.basename(f))
+		#print(index)
+		for x in deps_graph['triplets']:
+			ia = index[x[0]]
+			ib = index[x[1]]
+			ic = index[x[2]]
+			if x[2] == 'None':
+				output += '{0} -> {1}\n'.format(ia,ib)
+			elif x[0] == x[2]: #Circular reference.
+				output += '{0} -> {1}\n'.format(ia,ib)
+			else:
+				output += '{0} -> {1} -> {2}\n'.format(ia,ib,ic)
+		output += '}\n'
 
-	return output
+		return output
+
+	def style_2(deps_graph):
+		"""Takes a logfile and returns a graphviz.it compatible graph of it's dependencies.
+
+		This one is styled to place qvds as sub-nodes of qvws."""
+		# print('###')
+		# for w in deps_graph['qvw']:
+		# 	print(w[0],w[1])
+		# print('###')
+
+		output = ''
+		output+=('digraph g {\n')
+		output+=('rankdir=LR;\n')
+		output+=('node [shape = record,height=.1];\n')
+		
+
+		# To make the nodes, we need an index _of_ creator documents for qvws, and an index _per_ creator document for qvds.
+		index_creatordocs = {}
+		index_max = 0
+		for i, qvw in enumerate(deps_graph['qvw']):
+			print('\n' + qvw + '\n')
+			index_max += 1
+			children = {}
+			child_string = ''
+			#construct dict as key:
+			for j, qvd  in enumerate([x[0] for x in deps_graph['creatordocs'] if x[1] == qvw and x[1] != 'None']):
+				children[qvd] = 'f' + str(j+1)
+				child_string += '| <f' + str(j+1) + '> ' + qvd  
+
+			index_creatordocs[qvw] = {
+				'node':'node'+ str(i+1),
+				'qvds':children
+			}
+
+			node_string = 'node'+ str(i+1) + '[label = "<f0> ' + qvw + child_string + '"];\n'
+			output += node_string
+
+		# To make the edges, we need an index of referenced qvds that points from the user doc to the sub-node of the creator doc.
+		index_edges = {}
+		for i, triplet in enumerate(deps_graph['triplets']):
+			if triplet[0] == triplet[2]:
+				pass
+			else:
+				source_node = index_creatordocs[triplet[0]]['node']
+				try:
+					target_node = index_creatordocs[triplet[2]]['node']
+					target_subnode = index_creatordocs[triplet[2]]['qvds'][triplet[1]]
+					edge_string = '"' + source_node + '":f0 -> "' + target_node + '":' + target_subnode + ';\n'
+					output += edge_string
+				except KeyError:
+					#Node doesn't exist, create one for the qvd.
+					index_max += 1
+					target_node = 'node' + str(index_max)
+					node_string = 'node' + str(index_max) + '[label = "' + triplet[1] + '",shape=box];\n'
+					edge_string = '"' + source_node + '":f0 -> "' + target_node + '";\n'
+					output += node_string
+					output += edge_string
+
+		output += '}\n'
+
+		return output
+
+	if style == 1:
+		return style_1(deps_graph)
+	elif style == 2:
+		return style_2(deps_graph)
+	else:
+		print('Please specify a valid style.')

@@ -62,7 +62,7 @@ class TestBlock(unittest.TestCase):
 	def test_generate_graphviz(self):
 		test_input = os.path.join(testdata_folder,"DepsGraph3.qvw")
 		with open('testoutput_graphviz.txt','w') as f:
-			f.write(generate_graphviz(build_dependency_graph(test_input,depth=100)))
+			f.write(generate_graphviz(build_dependency_graph(test_input,depth=100,basenames_only=True),style=2))
 
 if __name__ == '__main__':
         unittest.main()
