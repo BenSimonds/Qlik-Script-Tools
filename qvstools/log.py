@@ -6,6 +6,7 @@ import codecs
 from qvstools.qvd import QVD
 from qvstools.regex_store import searches
 from qvstools.text import known_encodings, print_progress
+from io import open
 
 def detect_log_encoding(textfile,encodings):
 	"""Tries to open textfile with a variety of encodings and returns the one that works"""
@@ -45,7 +46,7 @@ def decode_log_with_detected(textfile):
 	"""Uses :func:`detect_encoding <qvstools.text.detect_encoding>` to get encoding and returns a unicode string of the text file"""
 	encoding  = detect_log_encoding(textfile,known_encodings['log'])
 	print('Decoding with {0}'.format(encoding))
-	with open(textfile,'r',encoding=encoding,errors='replace') as f:
+	with open(textfile,encoding=encoding) as f:
 		fulltext = f.read()
 		#print(fulltext[0:100])
 		return fulltext
