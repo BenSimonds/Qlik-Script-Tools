@@ -1,4 +1,5 @@
 """Tools for helping with text files, encodings etc."""
+from __future__ import print_function
 import sys
 
 known_encodings = { #Contains known encodings for different file types:
