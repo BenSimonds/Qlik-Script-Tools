@@ -4,7 +4,7 @@ import sys
 import os
 import codecs
 from qvstools.qvd import QVD
-from qvstools.regex_store import searches
+from qvstools.regex_store import patterns, searches
 from qvstools.text import known_encodings, print_progress
 from io import open
 
@@ -496,3 +496,34 @@ def generate_graphviz(deps_graph,style=1) :
 		return style_2(deps_graph)
 	else:
 		print('Please specify a valid style.')
+
+
+def get_referenced_files(logfile, search = '*' , extensions=['qvd','xls','xlsm','xlsb','xlsx','csv']):
+	"""
+	An improved function for grabbing logfiles referenced in log files.
+
+	Takes a full logfile and returns a list of files used by searching for text within 'load ... from` and `store ... into` statements.
+	Currently not compatible with directory statements.
+	:param logfile: logfile to search 
+	:param extensions: optional list of extensions to recognise.
+	:param search: name of search to use. One of from_qvd, from_any, or into_any. Use '*' to match all of these.
+	"""
+	# Get logfile text without op numbers. Easiest to use the log class for this.
+	log = LogFile(logfile)
+
+	# Get the full text to search:
+	log_text = "\n".join([line['text'] for line in log.lines])
+	#print(log_text)
+
+	# Now search within log_text for from and store statements.
+	if search == '*':
+		# Loop through each search option.
+		matches_from_any = [x.group(1) for x in re.finditer(patterns['from_any'],log_text,re.I)]
+		matches_into_any = [x.group(1) for x in re.finditer(patterns['into_any'],log_text,re.I)]
+		return list(set(matches_from_any + matches_into_any))
+	else:
+		matches = [x.group(1) for x in re.finditer(patterns[search],log_text,re.I)]
+		return matches
+
+
+

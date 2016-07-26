@@ -64,6 +64,14 @@ class TestBlock(unittest.TestCase):
 		with open('testoutput_graphviz.txt','w') as f:
 			f.write(generate_graphviz(build_dependency_graph(test_input,depth=100,basenames_only=True),style=2))
 
+
+	def test_get_referenced_files(self):
+		test_input = os.path.join(testdata_folder,"DepsGraph3.qvw.log")
+		self.assertEqual(
+			set(['DepsGraphTable2.qvd', 'DepsGraphTable3.qvd', 'DepsGraphTable1.qvd']), #This is what get referenced files should return.
+			set(get_referenced_files(test_input)) # Get referenced files
+		)
+
 if __name__ == '__main__':
         unittest.main()
 
