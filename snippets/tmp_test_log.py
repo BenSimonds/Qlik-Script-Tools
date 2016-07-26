@@ -2,8 +2,8 @@ import qvstools.log as lg
 from qvstools.regex_store import *
 import re
 
-logfile = r"C:\Users\ben.simonds.KEYRUSCORP\Repositories\qlik-script-tools\qvstools\tests\testdata\DepsGraph3.qvw.log"
-scriptfile = r"C:\Users\ben.simonds.KEYRUSCORP\Repositories\qlik-script-tools\qvstools\tests\testdata\ETLTubeData.qvs"
+logfile = r"..\qvstools\tests\testdata\DepsGraph3.qvw.log"
+scriptfile = r"..\qvstools\tests\testdata\ETLTubeData.qvs"
 
 with open(scriptfile,'r',encoding = 'utf8') as lf:
 	fulltext = lf.read()
