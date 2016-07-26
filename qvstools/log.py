@@ -506,7 +506,7 @@ def get_referenced_files(logfile, search = '*'):
 	Currently not compatible with directory statements.
 	
 	:param logfile: logfile to search 
-	:param search: name of search to use. One of from_qvd, from_any, or into_any. Use '*' to match all of these.
+	:param search: name of search to use. One of `from_qvd`, `from_any`, or `into_any`. Use '*' to match all of these.
 	"""
 	# Get logfile text without op numbers. Easiest to use the log class for this.
 	log = LogFile(logfile)
