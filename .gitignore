@@ -32,3 +32,6 @@ var/
 
 # Sphinx documentation
 docs/_build/
+
+# Snippets
+snippets/
