@@ -504,6 +504,7 @@ def get_referenced_files(logfile, search = '*'):
 
 	Takes a full logfile and returns a list of files used by searching for text within `load ... from` and `store ... into` statements.
 	Currently not compatible with directory statements.
+	
 	:param logfile: logfile to search 
 	:param search: name of search to use. One of from_qvd, from_any, or into_any. Use '*' to match all of these.
 	"""
