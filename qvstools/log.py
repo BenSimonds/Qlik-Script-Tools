@@ -502,7 +502,7 @@ def get_referenced_files(logfile, search = '*' , extensions=['qvd','xls','xlsm',
 	"""
 	An improved function for grabbing logfiles referenced in log files.
 
-	Takes a full logfile and returns a list of files used by searching for text within 'load ... from` and `store ... into` statements.
+	Takes a full logfile and returns a list of files used by searching for text within `load ... from` and `store ... into` statements.
 	Currently not compatible with directory statements.
 	:param logfile: logfile to search 
 	:param extensions: optional list of extensions to recognise.
