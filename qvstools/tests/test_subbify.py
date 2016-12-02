@@ -19,3 +19,6 @@ class TestBlock(unittest.TestCase):
 		shutil.rmtree(os.path.join(testdata_folder,'Subbify_TestInput_Subbified-prj'))
 		os.remove(os.path.join(testdata_folder,'Subbify_TestInput_Subbified.qvw'))
 
+if __name__ == '__main__':
+	print(os.path.join(os.path.dirname(__file__),'testdata'))
+	unittest.main()

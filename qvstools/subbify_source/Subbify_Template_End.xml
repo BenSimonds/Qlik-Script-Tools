@@ -3,9 +3,11 @@
 <description>Runs at end of tab to call Tables Metadata and </description>
 <type>TAB</type>
 <text>
-CALL TablesMetadata
+CALL TablesMetadata ('@1','@0')
 END SUB
 </text>
 <replacelist>
+	<replacelistitem id="@0">Name of sub being run, take from the tab name.</replacelistitem>
+	<replacelistitem id="@1">Name of table to gather metadata about, should be the main table for the tab.</replacelistitem>
 </replacelist>
 </block>

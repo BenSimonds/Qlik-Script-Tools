@@ -15,7 +15,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-SUB TablesMetadata
+SUB TablesMetadata (vTable, vSub)
 
 LET vExtractCurrentEnd = num(Now()); 													// The vExtractCurrentStart must be declared at the beginning of the new tab
 LET vExtractCurrentElapsedTime = ($(vExtractCurrentEnd)-$(vExtractCurrentStart))*86400; // Elapsed time in seconds
@@ -24,10 +24,10 @@ LET vNoOfFields = NoOfFields('$(vTable)'); 												// No of Cols loaded.
 
 Concatenate (Tables_Metadata) // Requires the existance of a table called Tables_Metadata (see tab SmartCall_Init).
 LOAD
-'$(vCurrentSub)' 								AS _KEY_SUB,		// Used as a key, not visible in front end
+'$(vSub)' 								AS _KEY_SUB,		// Used as a key, not visible in front end
 $(vCounter)										AS TM_SubID,
-'$(vCurrentSub)'								AS TM_SubName,
-'$(vCounter)'&amp;' '&amp;'$(vCurrentSub)'		AS TM_Sub,
+'$(vSub)'								AS TM_SubName,
+'$(vCounter)'&amp;' '&amp;'$(vSub)'		AS TM_Sub,
 '$(vTable)' 									AS TM_TableName, 	// Table Name
 Date($(vExtractCurrentStart))					AS TM_Date,			// May want to have start and end date for very long extracts...
 Time($(vExtractCurrentStart)) 					AS TM_StartTime,

@@ -6,9 +6,9 @@
 ///$tab @0
 SUB @0
 
-LET vTable = '@1';
+LET vTable = '@1'; //Main Table Associated with Sub
 LET vCounter = $(vCounter)+1;
-TRACE $(vCounter) - Running tab $(vTable) of document $(vDocumentName) with vSmartVar $(vSmartVar);
+TRACE $(vCounter) - Running tab @0 of document $(vDocumentName) with vSmartVar $(vSmartVar);
 LET vExtractCurrentStart = num(Now());
 
 /*

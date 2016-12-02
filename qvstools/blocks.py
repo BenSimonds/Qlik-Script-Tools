@@ -53,7 +53,7 @@ class Block:
 		else:
 			assert isinstance(input_data,bytes), 'Input not byte or string...'
 			print('Converting input text to unicode assuming utf-8. May result in missing characters....')
-			return inputt_data.decode('utf-8',errors='ignore')
+			return input_data.decode('utf-8',errors='ignore')
 		
 class BlockLibrary:
 	"""Bundles together several blocks and provide methods for working with them.
@@ -81,7 +81,7 @@ class BlockLibrary:
 		:param blocktype: currently not much used, but useful for grouping blocks within a library.
 		:param pathname: filepath of text file (qvs/txt) to turn into a block.
 		"""
-		with open(pathname,'r') as textfile:
+		with open(pathname,'r',encoding=known_encodings['block_qvs']) as textfile:
 			blocktext = textfile.read()
 			replacelist = re.findall(r"//\((@[\d]),\s?\'([\w\s,.?!()$]*)\'\)",blocktext) #Returns a list of tuples. 
 			#Scrub replacelist lines from text file.
