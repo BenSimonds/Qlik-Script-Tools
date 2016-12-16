@@ -35,3 +35,14 @@ docs/_build/
 
 # Snippets
 snippets/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
